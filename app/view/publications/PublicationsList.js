@@ -10,6 +10,7 @@ Ext.define('Cursame.view.publications.PublicationsList', {
 
     config: {
         store: 'Publications',
+        //ui:'publication',
         masked: {
             xtype: 'loadmask',
             message: lang.loading

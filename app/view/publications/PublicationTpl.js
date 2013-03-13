@@ -9,7 +9,7 @@ Ext.define('Cursame.view.publications.PublicationTpl', {
     constructor: function (container) {
         var html;
         html = [
-        '<div class="">',
+        '<div class="publication">',
            '{publication_type}',
         '</div>'
         ];
