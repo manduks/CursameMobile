@@ -1,7 +1,8 @@
 //<debug>
 Ext.Loader.setPath({
     'Ext': '../touch/src',
-    'Cursame': 'app'
+    'Cursame': 'app',
+    'Core':'./core'
 });
 //</debug>
 
@@ -9,11 +10,12 @@ Ext.application({
     name: 'Cursame',
 
     requires: [
-        'Ext.MessageBox'
+        'Core.Lang',
+        'Core.Utils'
     ],
 
-    views: ['Main'],
-
+    profiles: ['Tablet'/*, 'Phone'*/], //aqui por momento solo activamos las vistas de la tablet
+    stores:['Publications'],
     icon: {
         '57': 'resources/icons/Icon.png',
         '72': 'resources/icons/Icon~ipad.png',
