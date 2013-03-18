@@ -20,7 +20,10 @@
         login:'Iniciar Sesión',
         starting :'Iniciando ...',
         passwordRecover:'Recuperar Contraseña',
-        passwordRecoverEmail:'Escribe tu Email'
+        passwordRecoverEmail:'Escribe tu Email',
+        send:'Enviar',
+        courses:'Cursos',
+        loading:'Cargando ...'
     }
 });
 

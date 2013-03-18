@@ -1,15 +1,15 @@
 /**
- * @class Cursame.view.publications.PublicationsList
+ * @class Cursame.view.courses.CoursesList
  * @extends Ext.List
  * This component show the wall of cursame app
  */
- Ext.define('Cursame.view.publications.PublicationsList', {
+ Ext.define('Cursame.view.courses.CoursesList', {
     extend: 'Ext.List',
-    xtype: 'publicationslist',
-    requires:['Cursame.view.publications.PublicationTpl'],
+    xtype: 'courseslist',
+    requires:['Cursame.view.courses.CourseTpl'],
 
     config: {
-        store: 'Publications',
+        store: 'Courses',
         pressedCls:'pressedCls',
         selectedCls :'pressedCls',
         masked: {
@@ -26,6 +26,6 @@
             autoPaging: true,
             loadMoreText: lang.loadMoreText
         }],
-        itemTpl: Ext.create('Cursame.view.publications.PublicationTpl')
+        itemTpl: Ext.create('Cursame.view.courses.CourseTpl')
     }
 });

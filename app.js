@@ -15,7 +15,11 @@ Ext.application({
     ],
 
     profiles: ['Tablet'/*, 'Phone'*/], //aqui por momento solo activamos las vistas de la tablet
-    stores:['Publications'],
+    stores:[
+            'Publications',
+            'Comments',
+            'Courses'
+    ],
     icon: {
         '57': 'resources/icons/Icon.png',
         '72': 'resources/icons/Icon~ipad.png',

@@ -1,12 +1,14 @@
 /**
- * @class Cursame.view.publications.PublicationsList
+ * @class Cursame.view.courses.CourseWall
  * @extends Ext.List
- * This component show the wall of cursame app
+ * Este es el wall del curso
+ * @manduks
  */
- Ext.define('Cursame.view.publications.PublicationsList', {
+Ext.define('Cursame.view.courses.CourseWall', {
     extend: 'Ext.List',
-    xtype: 'publicationslist',
-    requires:['Cursame.view.publications.PublicationTpl'],
+    xtype: 'coursewall',
+
+    requires: ['Cursame.view.publications.PublicationTpl','Cursame.view.courses.CourseContainer'],
 
     config: {
         store: 'Publications',
@@ -20,6 +22,9 @@
             direction: 'vertical',
             directionLock: true
         },
+        items: [{
+            xtype:'coursecontainer'
+        }],
         plugins: [
         'pullrefresh', {
             type: 'listpaging',
