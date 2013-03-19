@@ -25,7 +25,26 @@ Ext.define('Cursame.model.Course', {
             convert: function (coverphoto,r) {
                 return Cursame.URL  + coverphoto.url;
             }
-        } ],
+        },{
+            name:'init_date', convert:function (v,r) {
+                var d = v ? v.split('T'):'';
+                return d[0];
+            }
+        },{
+            name:'finish_date',convert:function (v,r) {
+                var d = v ? v.split('T'):'';
+                return d[0];
+            }
+        },{
+            name:'public_status',
+            type:'string',
+            convert:function(v){
+                var status = {};
+                status['public'] = 'Publico';
+                status['private'] = 'Privado';
+                return status[v];
+            }
+        }],
         proxy: {
             type: 'jsonp',
             url: Cursame.APIURL + 'api/courses.json',

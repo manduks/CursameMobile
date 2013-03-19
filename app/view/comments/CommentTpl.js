@@ -31,6 +31,7 @@ Ext.define('Cursame.view.comments.CommentTpl', {
                 '<div style="clear:both"></div>',
                 '<div class="footer-publication">',
                     '<div class="like">Me gusta</div>',
+                    '<div class="comment">Commentar</div>',
                 '</div>',
             '</div>',
         '</div>'];

@@ -1,9 +1,9 @@
 /**
- * @class Cursame.controller.tablet.Main
+ * @class Cursame.controller.phone.Main
  * @extends Cursame.controller.Main
- * Main controller of the tablet version
+ * Main controller of the phone version
  */
-Ext.define('Cursame.controller.tablet.Main', {
+Ext.define('Cursame.controller.phone.Main', {
     extend: 'Cursame.controller.Main',
 
     config: {

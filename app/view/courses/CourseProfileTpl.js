@@ -16,7 +16,7 @@
             '<div class="profile-info">',
                 '<div class="profile-avatar"><img src="{avatar}"></div>',
                 '<div class="aboutme-course"><b>{title}</b>',
-                    '<p>{silabus}</p>',
+                    '<p>{public_status}</p>',
                 '</div>',
             '</div>',
         '</div>',

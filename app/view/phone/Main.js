@@ -1,9 +1,9 @@
 /**
- * @class Cursame.view.tablet.Main
+ * @class Cursame.view.phone.Main
  * @extends Cursame.view.Main
- * This is the view class for our tablet application
+ * This is the view class for our phone application
  */
- Ext.define('Cursame.view.tablet.Main', {
+ Ext.define('Cursame.view.phone.Main', {
     extend: 'Cursame.view.Main',
     requires: [
         'Cursame.view.LoginForm',

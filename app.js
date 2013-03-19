@@ -14,7 +14,7 @@ Ext.application({
         'Core.Utils'
     ],
 
-    profiles: ['Tablet'/*, 'Phone'*/], //aqui por momento solo activamos las vistas de la tablet
+    profiles: ['Tablet', 'Phone'], //aqui por momento solo activamos las vistas de la tablet
     stores:[
             'Publications',
             'Comments',

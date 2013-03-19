@@ -22,12 +22,12 @@
              { name: 'Jose Armando Gonzalez',   group: 'PERFIL'},
              { name: 'Últimas noticias',     group: 'MURO'},
              // { name: 'Discusiones',     group: 'MURO'},
-             { name: 'Cursos',      group: 'CURSOS'},
-             { name: 'Tareas',   group: 'CURSOS'},
-             { name: 'Discusiones',   group: 'CURSOS'},
+             { name: 'Cursos',      group: 'CURSOS'}
+             // { name: 'Tareas',   group: 'CURSOS'},
+             // { name: 'Discusiones',   group: 'CURSOS'},
              // { name: 'Cuestionarios',    group: 'CURSOS'},
-             { name: 'Tarea 1',   group: 'CALENDARIO'},
-             { name: 'Tarea 2',   group: 'CALENDARIO'}
+             // { name: 'Tarea 1',   group: 'CALENDARIO'},
+             // { name: 'Tarea 2',   group: 'CALENDARIO'}
          ]
      }),
         grouped: true
