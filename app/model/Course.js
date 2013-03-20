@@ -8,6 +8,9 @@ Ext.define('Cursame.model.Course', {
 
     config: {
         fields: [{
+            name:'id',
+            type:'int'
+        },{
             name: 'title',
             type: 'string'
         }, {

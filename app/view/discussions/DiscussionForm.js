@@ -6,7 +6,7 @@
 Ext.define('Cursame.view.discussions.DiscussionForm', {
     extend: 'Ext.form.Panel',
     alias: 'widget.discussionform',
-    
+
     config: {
 		padding: 10,
         modal: true,
@@ -27,13 +27,15 @@ Ext.define('Cursame.view.discussions.DiscussionForm', {
         items: [{
                 xtype: 'titlebar',
                 docked: 'top',
-                title: 'Comentar',
+                title: 'Discusión',
                 items: [{
                         align: 'left',
-                        text:'cancelar'
+                        text:'cancelar',
+                        itemId:'cancelar'
                     },{
                         align: 'right',
-                        text:'publicar'
+                        text:'publicar',
+                        itemId:'submit'
                     }
                 ]
             },{

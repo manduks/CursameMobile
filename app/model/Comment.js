@@ -27,7 +27,6 @@ Ext.define('Cursame.model.Comment', {
             type: 'string',
             mapping:'user',
             convert: function (user,r) {
-                console.log(arguments);
 				return user.first_name+' '+user.last_name;
             }
         }, {

@@ -30,13 +30,13 @@
                 xtype: 'emailfield',
                 name: 'email',
                 placeHolder: lang.email,
-                value: 'iam@armando.mx',
+                value: 'info+pasteje@cursa.me',
                 clearIcon: true
             }, {
                 xtype: 'passwordfield',
                 name: 'password',
                 placeHolder: lang.password,
-                value: 'mmmmmm',
+                value: 'cursamepasteje7',
                 clearIcon: true
             }]
         }, {
@@ -61,8 +61,9 @@
                         },
                         success: function(response) {
                             form.setMasked(false);
-                            console.log(response);
                             localStorage.setItem("Token", response.response.token);
+                            localStorage.setItem("UserId", response.response.user.id);
+                            localStorage.setItem("User", Ext.encode(response.response.user));
                             form.fireEvent("logeado", form);
                         }
                     });

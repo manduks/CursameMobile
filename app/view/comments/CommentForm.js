@@ -31,10 +31,12 @@ Ext.define('Cursame.view.comments.CommentForm', {
                 title: 'Comentar',
                 items: [{
                         align: 'left',
-                        text:'cancelar'
+                        text:'cancelar',
+                        itemId:'cancelar'
                     },{
                         align: 'right',
-                        text:'publicar'
+                        text:'publicar',
+                        itemId:'submit'
                     }
                 ]
             }, {

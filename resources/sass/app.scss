@@ -61,6 +61,8 @@ $list-active-gradient: matte;
    		.tipe-line-discussion{ display: block; width: 100%; height: 3px; background-color: #f0d50b;   opacity: 0.5;}
    		.tipe-line-delivery{ display: block; width: 100%; height: 3px; background-color: #1ca643;   opacity: 0.5;}
    		.tipe-line-course{ display: block; width: 100%; height: 3px; background-color: lighten($cursame-color, 5%);   opacity: 0.5;}
+   		.tipe-line-survey{ display: block; width: 100%; height: 3px; background-color: #F39C20;   opacity: 0.5;}
+   		
    		.header{
    			padding: 20 20px 10px 20px; 
    			width: 100%;
@@ -147,7 +149,7 @@ $list-active-gradient: matte;
 	z-index: 2;
 	.img-header{
 		width: 100%;
-		height: 150px;
+		height: 50px;
 		overflow: hidden;
 		img{
 			width: 100%;

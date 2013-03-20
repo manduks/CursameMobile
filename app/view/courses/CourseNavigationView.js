@@ -16,15 +16,7 @@ Ext.define('Cursame.view.courses.CourseNavigationView', {
 		items: {
 			xtype: 'courseslist',
 			titlle: lang.courses
-		},
-		// navigationBar: {
-		// 	items: [{
-		// 		align: 'left',
-		// 		ui: 'back',
-		// 		itemId:'backBtn',
-		// 		text:'Back'
-		// 	}]
-		// }
+		}
 	},
 	applyLayout: function(config) {
 		config = config || {};

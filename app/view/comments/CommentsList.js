@@ -18,6 +18,7 @@ Ext.define('Cursame.view.comments.CommentsList', {
             xtype: 'loadmask',
             message: lang.loading
         },
+        emptyText: 'No hay comentarios ...',
         scrollable: {
             direction: 'vertical',
             directionLock: true

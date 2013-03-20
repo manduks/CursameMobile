@@ -5,12 +5,12 @@
  */
  Ext.define('Core.Utils', {
     user:undefined,
-    url:'http://localhost:3000/api/',
+    url:Cursame.APIURL,
     src:'/assets/Cursame/',
     requires: ['Ext.data.JsonP'],
 
     ajax :function(obj){
-        var token = localStorage.getItem("token");
+        var token = localStorage.getItem("Token");
         obj.url = this.url + obj.url;
         if (token) {
             obj.params = Ext.applyIf({
@@ -24,6 +24,9 @@
         },obj);
         Ext.data.JsonP.request(o);
         // Ext.data.JsonP.request(o);
+    },
+    toFirstUpperCase:function  (txt) {
+        return txt.charAt(0).toUpperCase()+txt.slice(1);
     }
 });
 

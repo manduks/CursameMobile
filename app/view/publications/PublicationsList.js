@@ -16,6 +16,7 @@
             xtype: 'loadmask',
             message: lang.loading
         },
+        emptyText: 'No hay publicaciones ...',
         scrollable: {
             direction: 'vertical',
             directionLock: true

@@ -16,6 +16,7 @@
             xtype: 'loadmask',
             message: lang.loading
         },
+        emptyText: 'No hay cursos ...',
         scrollable: {
             direction: 'vertical',
             directionLock: true

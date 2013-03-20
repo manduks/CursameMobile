@@ -27,13 +27,15 @@ Ext.define('Cursame.view.deliveries.DeliveryForm',{
         items:[{
                 xtype: 'titlebar',
                 docked: 'top',
-                title: 'Comentar',
+                title: 'Tarea',
                 items: [{
                         align: 'left',
-                        text:'cancelar'
+                        text:'cancelar',
+                        itemId:'cancelar'
                     },{
                         align: 'right',
-                        text:'publicar'
+                        text:'publicar',
+                        itemId:'submit'
                     }
                 ]
             },{

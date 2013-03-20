@@ -14,14 +14,20 @@ Ext.define('Cursame.view.comments.CommentBar', {
         items: [{
             xtype: 'textfield',
             placeHolder: lang.sendComment,
+            itemId:'commentfield',
             flex: 5
         }, {
             xtype: 'button',
             text: lang.send,
-            disabled: true,
+            //disabled: true,
             ui: 'accept',
+            itemId:'submit',
             margin: 5,
-            flex: 1
+            flex: 1,
+            handler:function(btn){
+                var bar = btn.up('commentbar');
+                bar.down('textfield').setValue('');
+            }
         }]
     }
 });
