@@ -157,20 +157,31 @@ Ext.define('Cursame.controller.tablet.Main', {
      * onCommentTap
      */
     onCommentTap: function (dataview, index, target, record, e, opt) {
+        var cComments = Ext.getStore('CommentsComments');
         if (e.getTarget('div.like')) {
             alert('me gusta!');
         }
         if (e.getTarget('div.comment')) {
-            Ext.getStore('Comments').load({
+            var commentsPanel = Ext.create('Cursame.view.comments.CommentsPanel', {
+                objectData: record.getData()
+            });
+
+            commentsPanel.down('commentslist').setStore(cComments);
+
+            cComments.load({
                 params: {
                     comment: record.get('id')
                 },
                 scope: this
             });
-            Ext.create('Cursame.view.comments.CommentsPanel', {
-                objectData: record.getData()
 
-            }).show();
+            cComments.on('beforeload', function (store, operation, eOpts) {
+                store.getProxy().setExtraParams({
+                    auth_token: localStorage.getItem("Token"),
+                    comment: record.get('id')});
+            });
+
+            commentsPanel.show();
         }
     },
     /**

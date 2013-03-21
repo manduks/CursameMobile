@@ -18,6 +18,7 @@ Ext.application({
     stores:[
             'Publications',
             'Comments',
+            'CommentsComments',
             'Courses'
     ],
     icon: {
