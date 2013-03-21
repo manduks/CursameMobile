@@ -27,12 +27,12 @@ Ext.define('Cursame.view.users.UserWall', {
         },{
             xtype: 'commentbar'
         }],
-        // plugins: [
-        // 'pullrefresh', {
-        //     type: 'listpaging',
-        //     autoPaging: true,
-        //     loadMoreText: lang.loadMoreText
-        // }],
+        plugins: [
+        'pullrefresh', {
+            type: 'listpaging',
+            autoPaging: true,
+            loadMoreText: lang.loadMoreText
+        }],
         itemTpl: Ext.create('Cursame.view.comments.CommentTpl')
     }
 });

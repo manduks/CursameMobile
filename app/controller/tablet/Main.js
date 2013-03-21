@@ -16,7 +16,8 @@ Ext.define('Cursame.controller.tablet.Main', {
             courseContainer: 'coursenavigationview coursewall coursecontainer',
             commentField: 'commentspanel commentslist commentbar #commentfield',
             commentFieldUser: 'userwall commentbar #commentfield',
-            userContainer: 'usercontainer'
+            userContainer: 'usercontainer',
+            menu: 'navigationmenu'
         },
         control: {
             'loginform': {
@@ -55,34 +56,58 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
     },
     onUserLogin: function (argument) {
-        var me = this,
-            object, userName;
-        me.getMain().animateActiveItem(1, {
+        var me = this;
+        me.loadMainView();
+    },
+    /**
+     * cuando la aplicación inicia
+     */
+    launch: function () {
+        var object,userName, me = this;
+        if (localStorage.getItem("Token")) {
+            me.loadMainView();
+        }
+    },
+    /**
+     * loads the mains user view
+     */
+    loadMainView:function(){
+        var me = this;
+         me.getMain().animateActiveItem(1, {
             type: 'slide',
             direction: 'left'
         });
-        object = Ext.decode(localStorage.getItem("User"));
-        userName = object.first_name + ' ' + object.last_name;
-        this.getMenu().setData([{
-                name: userName,
-                group: 'PERFIL'
-            }, {
-                name: 'Últimas noticias',
-                group: 'MURO'
-            }, {
-                name: 'Cursos',
-                group: 'CURSOS'
-            }, {
-                name: 'Salir',
-                group: 'AVANZADO'
-            }
-        ]);
+        me.getMenu().setData(me.getData());
+
         //activamos las publicaciones
         me.getCardContainer().animateActiveItem(1, {
             type: 'slide',
             direction: 'left'
         });
         Ext.getStore('Publications').load();
+    },
+    /**
+     * 
+     */
+    getData:function(){
+        var object, userName;
+
+        object = Ext.decode(localStorage.getItem("User"));
+        userName = object.first_name + ' ' + object.last_name;
+        return [{
+                    name: userName,
+                    group: 'PERFIL'
+                }, {
+                    name: 'Últimas noticias',
+                    group: 'MURO'
+                }, {
+                    name: 'Cursos',
+                    group: 'CURSOS'
+                }, {
+                    name: 'Salir',
+                    group: 'AVANZADO'
+                }
+            ];
     },
     /**
      * se ejecuta cuando el usuario selecciona alguna opción del menu
@@ -128,6 +153,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     type: 'slide',
                     direction: 'right'
                 });
+                me.getMenu().getStore().removeAll();
                 break;
             case 4:
                 break;

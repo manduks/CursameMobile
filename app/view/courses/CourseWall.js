@@ -23,7 +23,8 @@ Ext.define('Cursame.view.courses.CourseWall', {
             directionLock: true
         },
         items: [{
-            xtype:'coursecontainer'
+            xtype:'coursecontainer',
+            itemId:'courseCo'
         }],
         plugins: [
         'pullrefresh', {
