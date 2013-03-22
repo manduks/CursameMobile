@@ -5,9 +5,9 @@
  */
 Ext.define('Cursame.store.CommentsComments', {
     extend: 'Core.data.Store',
-    requires:['Cursame.model.Comment'],
+    requires:['Cursame.model.CommentComment'],
     config:{
-        model:'Cursame.model.Comment',
+        model:'Cursame.model.CommentComment',
         autoLoad:false
     }
 });
