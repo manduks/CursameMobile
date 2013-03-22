@@ -1,17 +1,17 @@
 /**
- * @class Cursame.view.courses.CourseWall
+ * @class Cursame.view.discussions.DiscussionWall
  * @extends Ext.List
- * Este es el wall del curso
+ * Este es el wall de la discussion
  * @manduks
  */
-Ext.define('Cursame.view.courses.CourseWall', {
+Ext.define('Cursame.view.discussions.DiscussionWall', {
     extend: 'Ext.List',
-    xtype: 'coursewall',
+    xtype: 'discussionwall',
 
-    requires: ['Cursame.view.publications.PublicationTpl','Cursame.view.courses.CourseContainer'],
+    requires: ['Cursame.view.comments.CommentTpl', 'Cursame.view.comments.CommentBar','Cursame.view.discussions.DiscussionContainer'],
 
     config: {
-        store: 'Publications',
+        store: 'Comments',
         pressedCls:'pressedCls',
         selectedCls :'pressedCls',
         masked: {
@@ -23,8 +23,9 @@ Ext.define('Cursame.view.courses.CourseWall', {
             directionLock: true
         },
         items: [{
-            xtype:'coursecontainer',
-            itemId:'courseCo'
+            xtype:'discussioncontainer'
+        },{
+            xtype: 'commentbar'
         }],
         plugins: [
         'pullrefresh', {
@@ -32,6 +33,6 @@ Ext.define('Cursame.view.courses.CourseWall', {
             autoPaging: true,
             loadMoreText: lang.loadMoreText
         }],
-        itemTpl: Ext.create('Cursame.view.publications.PublicationTpl')
+        itemTpl: Ext.create('Cursame.view.comments.CommentTpl')
     }
 });

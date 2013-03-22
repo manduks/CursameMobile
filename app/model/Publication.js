@@ -26,6 +26,9 @@ Ext.define('Cursame.model.Publication', {
                 name: "publication",
                 type: 'object'
             }, {
+                name: "network",
+                type: 'object'
+            }, {
                 name: 'avatar',
                 type: 'string',
                 mapping: 'publication',

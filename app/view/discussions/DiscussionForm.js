@@ -7,6 +7,8 @@ Ext.define('Cursame.view.discussions.DiscussionForm', {
     extend: 'Ext.form.Panel',
     alias: 'widget.discussionform',
 
+    requires:['Ext.field.TextArea'],
+
     config: {
 		padding: 10,
         modal: true,
