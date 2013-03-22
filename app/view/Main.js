@@ -7,6 +7,17 @@
 Ext.define('Cursame.view.Main', {
     extend: 'Ext.Container',
     xtype:'main',
+
+    requires:[
+		'Ext.plugin.PullRefresh',
+		'Ext.plugin.ListPaging',
+		'Cursame.view.publications.PublicationTpl',
+		'Cursame.view.comments.CommentTpl',
+		'Cursame.view.users.UserProfileTpl',
+		'Cursame.view.courses.CourseTpl',
+		'Cursame.view.courses.CourseProfileTpl',
+		'Cursame.view.discussions.DiscussionTpl'
+    ],
     config: {
         layout: 'card',
         fullscreen: true,
