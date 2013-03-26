@@ -19,7 +19,8 @@ Ext.application({
             'Publications',
             'Comments',
             'CommentsComments',
-            'Courses'
+            'Courses',
+            'Notifications'
     ],
     icon: {
         '57': 'resources/icons/Icon.png',

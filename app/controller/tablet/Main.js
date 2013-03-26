@@ -108,6 +108,9 @@ Ext.define('Cursame.controller.tablet.Main', {
             name: 'Últimas noticias',
             group: 'MURO'
         }, {
+            name: 'Notificaciones',
+            group: 'MURO'
+        }, {
             name: 'Cursos',
             group: 'CURSOS'
         }, {
@@ -150,9 +153,16 @@ Ext.define('Cursame.controller.tablet.Main', {
                     type: 'slide',
                     direction: 'left'
                 });
-                Ext.getStore('Courses').load();
+                Ext.getStore('Notifications').load();
                 break;
             case 3:
+                me.getCardContainer().animateActiveItem(3, {
+                    type: 'slide',
+                    direction: 'left'
+                });
+                Ext.getStore('Courses').load();
+                break;
+            case 4:
                 localStorage.removeItem('User');
                 localStorage.removeItem('Token');
                 localStorage.removeItem('UserId');
@@ -162,7 +172,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 });
                 me.getMenu().getStore().removeAll();
                 break;
-            case 4:
+            case 5:
                 break;
         }
     },
