@@ -134,7 +134,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                         name: object.first_name + ' ' + object.last_name
                     };
                 me.getUserContainer().up('list').commentType = 'User';
-                me.getUserContainer().up('list').comentableId = data.id;
+                me.getUserContainer().up('list').comentableId = object.id;
                 me.getUserContainer().setData(data);
                 break;
             case 1:
@@ -192,8 +192,6 @@ Ext.define('Cursame.controller.tablet.Main', {
      */
     pushPublicationContainer: function (record) {
         var me = this,course,user,publication;
-        console.log(arguments);
-
         publication = record.get('publication');
         course = record.get('course');
         user = record.get('user');
@@ -367,16 +365,6 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
     },
     /**
-     * 
-     */
-    onCommentOnUser: function (btn) {
-        var comment = this.getCommentFieldUser().getValue(),
-            me = this;
-        if (comment) {
-            me.saveComment(comment, 'User', localStorage.getItem("UserId"), null);
-        }
-    },
-    /**
      * Metodo generico  para agregar comentarios a discussiones, usuario, surveys ..
      * @param  {object} btn boton que dispara la acción
      * @return {comment}     comentario guardado
@@ -384,9 +372,6 @@ Ext.define('Cursame.controller.tablet.Main', {
     onComment:function  (btn) {
       var list = btn.up('list'),
         comment = list.down('textfield').getValue();
-      alert(list.commentType);
-      console.log(this.getCommentFieldObject());
-      alert(comment);
       if (comment) {
         this.saveComment(comment, list.commentType, list.comentableId, null);
       }
