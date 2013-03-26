@@ -18,9 +18,8 @@ Ext.define('Cursame.model.Notification', {
             mapping:'kind',
             type: 'string',
             convert:function  (value,r) {
-                var text='';
-                console.log(r.get('user'));
-                console.log(r.get('notificator'));
+                var text='',
+                    notificator = r.get('notificator');
                 switch(value){
                     case 'user_comment_on_network':
                         text = 'Armando ha comentado en al red';
@@ -32,7 +31,7 @@ Ext.define('Cursame.model.Notification', {
                          text = 'Se ha creado una tarea en el curso de Programación';
                     break;
                     case 'new_public_course_on_network':
-                         text = 'Se ha creado el curso de Programación';
+                         text = 'Se ha creado el curso <b>'+notificator.title+'</b>';
                     break;
                     case 'new_survey_on_course':
                          text = 'Se ha creado un cuestionario en el curso de Programación';

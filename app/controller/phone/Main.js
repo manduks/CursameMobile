@@ -384,9 +384,6 @@ Ext.define('Cursame.controller.phone.Main', {
     onComment:function  (btn) {
       var list = btn.up('list'),
         comment = list.down('textfield').getValue();
-      alert(list.commentType);
-      console.log(this.getCommentFieldObject());
-      alert(comment);
       if (comment) {
         this.saveComment(comment, list.commentType, list.comentableId, null);
       }

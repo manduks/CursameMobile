@@ -14,7 +14,6 @@ Ext.define('Cursame.controller.tablet.Main', {
             publicationsList: 'publicationslist',
             cardContainer: 'main #cardcontainer',
             courseNavigationView: 'coursenavigationview',
-            // courseContainer: 'coursenavigationview coursewall coursecontainer',
             commentField: 'commentspanel commentslist commentbar #commentfield',
             commentFieldUser: 'userwall commentbar #commentfield',
             commentFieldObject: 'list commentbar #commentfield',
@@ -24,7 +23,8 @@ Ext.define('Cursame.controller.tablet.Main', {
             discussionContainer: 'discussioncontainer',
             deliveryContainer: 'deliverycontainer',
             commentContainer: 'commentcontainer',
-            courseContainer: 'coursecontainer'
+            courseContainer: 'coursecontainer',
+            notificationNavigationView: 'notificationnavigationview'
         },
         control: {
             'loginform': {
@@ -38,6 +38,9 @@ Ext.define('Cursame.controller.tablet.Main', {
             },
             'courseslist': {
                 itemtap: 'onCourseTap'
+            },
+            'notificationslist':{
+                itemtap:'onNotificationTap'
             },
             'container titlebar #cancelar': { //cancelar par todos los forms
                 tap: 'onCancelForm'
@@ -208,20 +211,18 @@ Ext.define('Cursame.controller.tablet.Main', {
         publication = record.get('publication');
         course = record.get('course');
         user = record.get('user');
-        console.log(course);
-        console.log(user);
         if (course) {
-            publication.wall = course.coverphoto.expanded.url;
-            publication.avatar = course.avatar.profile.url;
+            publication.wall = course.coverphoto.url;
+            publication.coverphoto = course.coverphoto.url;
+            publication.avatar = course.avatar.url;
             publication.courseName = 'Programación';
         } else {
-            publication.wall = user.coverphoto.expanded.url;
-            publication.avatar = user.avatar.profile.url;
+            publication.wall = user.coverphoto.url;
+            publication.coverphoto = user.coverphoto.url;
+            publication.avatar = user.avatar.url;
         }
         publication.user_name = user.first_name + user.last_name;
         publication.timeAgo = Core.timeAgo(publication.created_at);
-
-        console.log(record.get('publication_type'));
 
         switch (record.get('publication_type')) {
             case 'discussion':
@@ -303,11 +304,20 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
     },
     /**
-     * se ejecuta cuando se da click sobre alguna publicacion
+     * se ejecuta cuando se da click sobre algún curso
      */
     onCourseTap: function (dataview, index, target, record, e, opt) {
         var me = this;
         me.pushCourseToView(me.getCourseNavigationView(), record.data);
+    },
+    /**
+     * se ejecuta cuando se le da click a una notificación
+     */
+    onNotificationTap:function  (dataview, index, target, record, e, opt) {
+        var me = this,data = record.get('notificator');
+        data.avatar = data.avatar.url;
+        data.coverphoto = data.coverphoto.url;
+        me.pushCourseToView(me.getNotificationNavigationView(),record.get('notificator'));
     },
     /**
      * push course
@@ -349,6 +359,19 @@ Ext.define('Cursame.controller.tablet.Main', {
             scope: me,
             callback: function (argument) {}
         });
+    },
+    /**
+     * push comment
+     */
+    pushCommentToView:function (view, data) {
+        var me = this;
+        view.push({
+            xtype: 'commentwall',
+            commentType: 'Comment',
+            comentableId: publication.id
+        });
+        me.getCommentContainer().setData(publication);
+        me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
     },
     /**
      * 
@@ -448,7 +471,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         });
     },
     /**
-     * 
+     * metodo para crear la tarea
      */
     onAddDelivery: function (btn) {
         var form = btn.up('formpanel'),
