@@ -34,7 +34,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 itemtap: 'onMenuTap'
             },
             'publicationslist': {
-                itemtap: 'onPublicationTap'
+                itemtap: 'onPublicationPublicationTap'
             },
             'courseslist': {
                 itemtap: 'onCourseTap'
@@ -62,6 +62,9 @@ Ext.define('Cursame.controller.tablet.Main', {
             },
             'userwall': {
                 itemtap: 'onCommentTap'
+            },
+            'coursewall': {
+                itemtap: 'onCoursePublicationTap'
             }
         }
     },
@@ -180,10 +183,19 @@ Ext.define('Cursame.controller.tablet.Main', {
                 break;
         }
     },
+
+    onPublicationPublicationTap:function(dataview, index, target, record, e, opt){
+        this.onPublicationTap(e, record, this.getPublicationNavigationView());
+    },
+
+    onCoursePublicationTap:function(dataview, index, target, record, e, opt){
+        this.onPublicationTap(e, record, this.getCourseNavigationView());
+    },
+
     /**
      * se ejecuta cuando se da click sobre alguna publicacion
      */
-    onPublicationTap: function (dataview, index, target, record, e, opt) {
+    onPublicationTap: function (e, record, navigationView) {
         if (e.getTarget('div.like')) {
             alert('me gusta!');
             return;
@@ -200,12 +212,12 @@ Ext.define('Cursame.controller.tablet.Main', {
             }).show();
             return;
         }
-        this.pushPublicationContainer(record);
+        this.pushPublicationContainer(record, navigationView);
     },
     /**
      * 
      */
-    pushPublicationContainer: function (record) {
+    pushPublicationContainer: function (record, navigationView) {
         var me = this,
             course, user, publication;
         publication = record.get('publication');
@@ -226,7 +238,7 @@ Ext.define('Cursame.controller.tablet.Main', {
 
         switch (record.get('publication_type')) {
             case 'discussion':
-                me.getPublicationNavigationView().push({
+                navigationView.push({
                     xtype: 'discussionwall',
                     commentType: 'Discussion',
                     comentableId: publication.id
@@ -236,7 +248,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
                 break;
             case 'delivery':
-                me.getPublicationNavigationView().push({
+                navigationView.push({
                     xtype: 'deliverywall',
                     commentType: 'Delivery',
                     comentableId: publication.id
@@ -245,7 +257,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
                 break;
             case 'comment':
-                me.getPublicationNavigationView().push({
+                navigationView.push({
                     xtype: 'commentwall',
                     commentType: 'Comment',
                     comentableId: publication.id
@@ -254,7 +266,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
                 break;
             case 'course':
-                me.pushCourseToView(me.getPublicationNavigationView(), publication);
+                me.pushCourseToView(navigationView, publication);
                 break;
             case 'survey':
                 break;
@@ -361,25 +373,12 @@ Ext.define('Cursame.controller.tablet.Main', {
         });
     },
     /**
-     * push comment
-     */
-    pushCommentToView:function (view, data) {
-        var me = this;
-        view.push({
-            xtype: 'commentwall',
-            commentType: 'Comment',
-            comentableId: publication.id
-        });
-        me.getCommentContainer().setData(publication);
-        me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
-    },
-    /**
      * 
      */
     onCourseCreateComment: function (c, data) {
         Ext.create('Cursame.view.comments.CommentForm', {
             objectId: data.id
-        }).show();
+        }).show(''); //Se le pasa el parametro cadena vacia para evitar bug
     },
     /**
      * 
@@ -387,7 +386,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     onCourseCreateHomework: function (c, data) {
         Ext.create('Cursame.view.deliveries.DeliveryForm', {
             objectId: data.id
-        }).show();
+        }).show('');
     },
     /**
      * 
@@ -395,7 +394,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     onCourseCreateDiscussion: function (c, data) {
         Ext.create('Cursame.view.discussions.DiscussionForm', {
             objectId: data.id
-        }).show();
+        }).show('');
     },
     /**
      * 
@@ -403,7 +402,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     onCourseDetails: function (c, data) {
         Ext.create('Cursame.view.courses.CourseDetailsPanel', {
             data: data
-        }).show();
+        }).show('');
     },
     /**
      * 
@@ -471,32 +470,19 @@ Ext.define('Cursame.controller.tablet.Main', {
         });
     },
     /**
-     * metodo para crear la tarea
+     * 
      */
     onAddDelivery: function (btn) {
-        var form = btn.up('formpanel'),
-            values = form.getValues(),
-            me = this;
-        values.courseId = form.objectId;
-
-        form.setMasked({
-            xtype: 'loadmask',
-            message: lang.saving
-        });
-
-        Core.ajax({
-            url: 'api/create_delivery',
-            params: values,
-            success: function (response) {
-                form.setMasked(false);
-                me.onCancelForm(btn);
-            }
-        });
+        this.addElement(btn, 'api/create_delivery');
     },
     /**
      * 
      */
     onAddDiscussion: function (btn) {
+        this.addElement(btn, 'api/create_discussion');
+    },
+
+    addElement:function(btn, url){
         var form = btn.up('formpanel'),
             values = form.getValues(),
             me = this;
@@ -508,13 +494,15 @@ Ext.define('Cursame.controller.tablet.Main', {
         });
 
         Core.ajax({
-            url: 'api/create_discussion',
+            url: url,
             params: values,
             success: function (response) {
                 form.setMasked(false);
                 me.onCancelForm(btn);
             }
         });
+
+        Ext.getStore('Publications').load();
     },
 
     resetNavigationViews:function(){

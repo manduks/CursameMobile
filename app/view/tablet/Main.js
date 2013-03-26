@@ -6,6 +6,8 @@
  Ext.define('Cursame.view.tablet.Main', {
     extend: 'Cursame.view.Main',
     requires: [
+        'Ext.field.TextArea',
+
         'Cursame.view.LoginForm',
         'Cursame.view.publications.PublicationNavigationView',
         'Cursame.view.publications.PublicationsList',
