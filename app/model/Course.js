@@ -20,13 +20,13 @@ Ext.define('Cursame.model.Course', {
             name: 'avatar',
             type: 'string',
             convert: function (avatar,r) {
-				return Cursame.URL  + avatar.url;
+				return avatar.url;
             }
         }, {
             name: 'coverphoto',
             type: 'string',
             convert: function (coverphoto,r) {
-                return Cursame.URL  + coverphoto.url;
+                return coverphoto.url;
             }
         },{
             name:'init_date', convert:function (v,r) {

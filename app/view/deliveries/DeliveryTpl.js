@@ -1,10 +1,10 @@
 /**
- * @class Cursame.view.discussions.DiscussionTpl
+ * @class Cursame.view.deliveries.DeliveryTpl
  * @extends Ext.XTemplate
- * This is the xtemplate for the discussion
+ * This is the xtemplate for the delivery
  * @manduks 
  */
- Ext.define('Cursame.view.discussions.DiscussionTpl', {
+ Ext.define('Cursame.view.deliveries.DeliveryTpl', {
     extend: 'Ext.XTemplate',
     constructor: function () {
         var html;
@@ -15,11 +15,12 @@
             '</div>',
             '<div class="profile-info">',
                 '<div class="profile-avatar"><img src="'+Cursame.URL+'{avatar}"></div>',
-                '<div class="aboutme"><b>{title}</b>',
+                '<div class="aboutme-course"><b>{title}</b> ({end_date})',
                     '<p>{description}</p>',
                 '</div>',
             '</div>',
-        '</div>'
+        '</div>',
+        '<div class="clear:both"></div>'
         ];
         this.callParent(html);
     }

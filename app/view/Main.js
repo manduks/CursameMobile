@@ -16,7 +16,8 @@ Ext.define('Cursame.view.Main', {
 		'Cursame.view.users.UserProfileTpl',
 		'Cursame.view.courses.CourseTpl',
 		'Cursame.view.courses.CourseProfileTpl',
-		'Cursame.view.discussions.DiscussionTpl'
+		'Cursame.view.discussions.DiscussionTpl',
+        'Cursame.view.deliveries.DeliveryTpl'
     ],
     config: {
         layout: 'card',

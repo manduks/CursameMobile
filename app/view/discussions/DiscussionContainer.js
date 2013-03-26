@@ -1,6 +1,6 @@
 /**
  * @class Cursame.view.discussions.DiscussionContainer
- * @extends Ext.List
+ * @extends Ext.Container
  * This is the discussion container
  * @manduks
  */

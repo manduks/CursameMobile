@@ -14,7 +14,7 @@ Ext.define('Cursame.view.courses.CourseTpl', {
                 '<div class="tipe-line-course"></div>',
                 '<div class="header">',
                     '<div class="avatar">',
-                        '<img src="{avatar}">',
+                        '<img src="'+Cursame.URL+'{avatar}">',
                     '</div> ',
                     '<div class="info-user">',
                         '{title}',

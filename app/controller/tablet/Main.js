@@ -11,16 +11,20 @@ Ext.define('Cursame.controller.tablet.Main', {
             main: {
                 selector: 'main'
             },
+            publicationsList: 'publicationslist',
             cardContainer: 'main #cardcontainer',
             courseNavigationView: 'coursenavigationview',
-            courseContainer: 'coursenavigationview coursewall coursecontainer',
+            // courseContainer: 'coursenavigationview coursewall coursecontainer',
             commentField: 'commentspanel commentslist commentbar #commentfield',
             commentFieldUser: 'userwall commentbar #commentfield',
             commentFieldObject: 'list commentbar #commentfield',
             userContainer: 'usercontainer',
             menu: 'navigationmenu',
             publicationNavigationView: 'publicationsnavigationview',
-            discussionContainer:'discussioncontainer'
+            discussionContainer: 'discussioncontainer',
+            deliveryContainer: 'deliverycontainer',
+            commentContainer: 'commentcontainer',
+            courseContainer: 'coursecontainer'
         },
         control: {
             'loginform': {
@@ -50,9 +54,6 @@ Ext.define('Cursame.controller.tablet.Main', {
             'commentspanel commentslist commentbar #submit': {
                 tap: 'onAddCommentComment'
             },
-            // 'userwall commentbar #submit': {
-            //     tap: 'onCommentOnUser'
-            // },
             'commentbar #submit': {
                 tap: 'onComment'
             },
@@ -191,44 +192,72 @@ Ext.define('Cursame.controller.tablet.Main', {
      * 
      */
     pushPublicationContainer: function (record) {
-        var me = this,course,user,publication;
+        var me = this,
+            course, user, publication;
         publication = record.get('publication');
         course = record.get('course');
         user = record.get('user');
+        console.log(course);
+        console.log(user);
+        if (course) {
+            publication.wall = course.coverphoto.expanded.url;
+            publication.avatar = course.avatar.profile.url;
+            publication.courseName = 'Programación';
+        } else {
+            publication.wall = user.coverphoto.expanded.url;
+            publication.avatar = user.avatar.profile.url;
+        }
+        publication.user_name = user.first_name + user.last_name;
+        publication.timeAgo = Core.timeAgo(publication.created_at);
 
-        if(course){
-             publication.wall = course.avatar.modern.url;
-        }
-        else{
-             publication.wall = user.coverphoto.expanded;
-        }
-        publication.avatar = user.avatar.modern.url;
+        console.log(record.get('publication_type'));
 
         switch (record.get('publication_type')) {
             case 'discussion':
                 me.getPublicationNavigationView().push({
                     xtype: 'discussionwall',
-                    commentType:'Discussion',
-                    comentableId:publication.id
+                    commentType: 'Discussion',
+                    comentableId: publication.id
 
                 });
                 me.getDiscussionContainer().setData(publication);
-                Ext.getStore('Comments').load({
-                    params: {
-                        publicacionId: record.get('id')
-                    },
-                    scope: this
-                });
+                me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
                 break;
             case 'delivery':
+                me.getPublicationNavigationView().push({
+                    xtype: 'deliverywall',
+                    commentType: 'Delivery',
+                    comentableId: publication.id
+                });
+                me.getDeliveryContainer().setData(publication);
+                me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
                 break;
             case 'comment':
+                me.getPublicationNavigationView().push({
+                    xtype: 'commentwall',
+                    commentType: 'Comment',
+                    comentableId: publication.id
+                });
+                me.getCommentContainer().setData(publication);
+                me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
                 break;
             case 'course':
+                me.pushCourseToView(me.getPublicationNavigationView(), publication);
                 break;
             case 'survey':
                 break;
         }
+    },
+    /**
+     * load comments by publications
+     */
+    loadCommentsByPublication: function (publicationId) {
+        Ext.getStore('Comments').load({
+            params: {
+                publicacionId: publicationId
+            },
+            scope: this
+        });
     },
     /**
      * onCommentTap
@@ -267,40 +296,47 @@ Ext.define('Cursame.controller.tablet.Main', {
      */
     onCourseTap: function (dataview, index, target, record, e, opt) {
         var me = this;
-        Ext.getStore('Publications').load(function (argument) {
-            me.getCourseNavigationView().push({
-                xtype: 'coursewall',
-                title: record.get('title'),
-                listeners: { //esto no deberia ser asi
-                    painted: function (c) {
-                        if (!c.addedListener) {
-                            c.on('tap', function (e, t) {
-                                if (e.getTarget('div.aboutme-course')) {
-                                    me.onCourseDetails(c, record);
-                                }
-                                if (e.getTarget('div.create-comment')) {
-                                    me.onCourseCreateComment(c, record);
-                                }
-                                if (e.getTarget('div.create-homework')) {
-                                    me.onCourseCreateHomework(c, record);
-                                }
-                                if (e.getTarget('div.create-discussion')) {
-                                    me.onCourseCreateDiscussion(c, record);
-                                }
-                            });
-                            c.addedListener = true;
-                        }
+        me.pushCourseToView(me.getCourseNavigationView(), record.data);
+    },
+    /**
+     * push course
+     */
+    pushCourseToView: function (view, data) {
+        var me = this;
+        view.push({
+            xtype: 'coursewall',
+            title: data.id.title,
+            listeners: { //esto no deberia ser asi
+                painted: function (c) {
+                    if (!c.addedListener) {
+                        c.on('tap', function (e, t) {
+                            if (e.getTarget('div.aboutme-course')) {
+                                me.onCourseDetails(c, record);
+                            }
+                            if (e.getTarget('div.create-comment')) {
+                                me.onCourseCreateComment(c, record);
+                            }
+                            if (e.getTarget('div.create-homework')) {
+                                me.onCourseCreateHomework(c, record);
+                            }
+                            if (e.getTarget('div.create-discussion')) {
+                                me.onCourseCreateDiscussion(c, record);
+                            }
+                        });
+                        c.addedListener = true;
                     }
                 }
-            });
-            me.getCourseContainer().setRecord(record);
-            Ext.getStore('Publications').load({
-                params: {
-                    publicacionId: record.get('id'),
-                    type: 'Course'
-                },
-                scope: this
-            });
+            }
+        });
+        me.getCourseContainer().setData(data);
+        // cargamos las publicaciones del curso
+        Ext.getStore('Publications').load({
+            params: {
+                publicacionId: data.id,
+                type: 'Course'
+            },
+            scope: me,
+            callback: function (argument) {}
         });
     },
     /**
@@ -369,12 +405,12 @@ Ext.define('Cursame.controller.tablet.Main', {
      * @param  {object} btn boton que dispara la acción
      * @return {comment}     comentario guardado
      */
-    onComment:function  (btn) {
-      var list = btn.up('list'),
-        comment = list.down('textfield').getValue();
-      if (comment) {
-        this.saveComment(comment, list.commentType, list.comentableId, null);
-      }
+    onComment: function (btn) {
+        var list = btn.up('list'),
+            comment = list.down('textfield').getValue();
+        if (comment) {
+            this.saveComment(comment, list.commentType, list.comentableId, null);
+        }
     },
     saveComment: function (comment, commentableType, commentableId, form) {
         var me = this;
