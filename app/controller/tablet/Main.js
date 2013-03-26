@@ -120,6 +120,7 @@ Ext.define('Cursame.controller.tablet.Main', {
      */
     onMenuTap: function (list, index, target, record, e, eOpts) {
         var me = this;
+        me.resetNavigationViews();
         switch (index) {
             case 0:
                 me.getCardContainer().animateActiveItem(0, {
@@ -311,16 +312,16 @@ Ext.define('Cursame.controller.tablet.Main', {
                     if (!c.addedListener) {
                         c.on('tap', function (e, t) {
                             if (e.getTarget('div.aboutme-course')) {
-                                me.onCourseDetails(c, record);
+                                me.onCourseDetails(c, data);
                             }
                             if (e.getTarget('div.create-comment')) {
-                                me.onCourseCreateComment(c, record);
+                                me.onCourseCreateComment(c, data);
                             }
                             if (e.getTarget('div.create-homework')) {
-                                me.onCourseCreateHomework(c, record);
+                                me.onCourseCreateHomework(c, data);
                             }
                             if (e.getTarget('div.create-discussion')) {
-                                me.onCourseCreateDiscussion(c, record);
+                                me.onCourseCreateDiscussion(c, data);
                             }
                         });
                         c.addedListener = true;
@@ -342,33 +343,33 @@ Ext.define('Cursame.controller.tablet.Main', {
     /**
      * 
      */
-    onCourseCreateComment: function (c, record) {
+    onCourseCreateComment: function (c, data) {
         Ext.create('Cursame.view.comments.CommentForm', {
-            objectId: record.get('id')
+            objectId: data.id
         }).show();
     },
     /**
      * 
      */
-    onCourseCreateHomework: function (c, record) {
+    onCourseCreateHomework: function (c, data) {
         Ext.create('Cursame.view.deliveries.DeliveryForm', {
-            objectId: record.get('id')
+            objectId: data.id
         }).show();
     },
     /**
      * 
      */
-    onCourseCreateDiscussion: function (c, record) {
+    onCourseCreateDiscussion: function (c, data) {
         Ext.create('Cursame.view.discussions.DiscussionForm', {
-            objectId: record.get('id')
+            objectId: data.id
         }).show();
     },
     /**
      * 
      */
-    onCourseDetails: function (c, record) {
+    onCourseDetails: function (c, data) {
         Ext.create('Cursame.view.courses.CourseDetailsPanel', {
-            data: record.getData()
+            data: data
         }).show();
     },
     /**
@@ -481,5 +482,11 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.onCancelForm(btn);
             }
         });
+    },
+
+    resetNavigationViews:function(){
+        var me = this;
+        me.getCourseNavigationView().reset();
+        me.getPublicationNavigationView().reset();
     }
 });
