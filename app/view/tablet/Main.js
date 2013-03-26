@@ -15,7 +15,9 @@
         'Cursame.view.courses.CourseNavigationView',
         'Cursame.view.comments.CommentForm',
         'Cursame.view.deliveries.DeliveryForm',
-        'Cursame.view.discussions.DiscussionWall'
+        'Cursame.view.discussions.DiscussionWall',
+        'Cursame.view.deliveries.DeliveryWall',
+        'Cursame.view.comments.CommentWall'
     ],
 
     config: {

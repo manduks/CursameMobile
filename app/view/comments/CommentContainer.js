@@ -1,24 +1,27 @@
 /**
- * @class Cursame.view.comments.CommentTpl
- * @extends Ext.XTemplate
- * This is the xtemplate for the comments
+ * @class Cursame.view.comments.CommentContainer
+ * @extends Ext.Container
+ * This is the comment container
  * @manduks
  */
-Ext.define('Cursame.view.comments.CommentTpl', {
-    extend: 'Ext.XTemplate',
-    constructor: function () {
-        var html;
-        html = [
+Ext.define('Cursame.view.comments.CommentContainer', {
+    extend: 'Ext.Container',
+    xtype: 'commentcontainer',
+    requires: ['Cursame.view.comments.CommentTpl'],
+    config: {
+        docked: 'top',
+        addedListener: false,
+        tpl:[
         '<div class="publication">',
             '<div class="content">',
                 '<div class="tipe-line-comment"></div>',
                 '<div class="header">',
                     '<div class="avatar">',
-                        '<img src="'+Cursame.URL+'{user_avatar}">',
+                        '<img src="'+Cursame.URL+'{avatar}">',
                     '</div> ',
                     '<div class="info-user">',
                         '{user_name}',
-                        '<br> <p class="time">Hace una hora</p>',
+                        '<br> <p class="time">Hace {timeAgo}</p>',
                     '</div>',
                 '</div>',
                 '<div style="clear:both"></div>',
@@ -29,12 +32,7 @@ Ext.define('Cursame.view.comments.CommentTpl', {
                     '<p>12 Me gusta</p>',
                 '</div>',
                 '<div style="clear:both"></div>',
-                '<div class="footer-publication">',
-                    '<div class="like">Me gusta</div>',
-                    '<div class="comment">Commentar</div>',
-                '</div>',
             '</div>',
-        '</div>'];
-        this.callParent(html);
+        '</div>'].join('')
     }
 });
