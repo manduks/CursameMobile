@@ -1,4 +1,4 @@
-/**
+/*
  * @class Cursame.model.Notification
  * @extends Ext.data.Model
  * This is the model for the tnotifications
@@ -18,28 +18,42 @@ Ext.define('Cursame.model.Notification', {
             mapping:'kind',
             type: 'string',
             convert:function  (value,r) {
-                var text='',
-                    notificator = r.get('notificator_type').notificator;
+                var text,avatar = './resources/images/curso.jpg',
+                    obj = r.get('notificator_type'),
+                    notificator = obj.notificator,
+                    creator = obj.creator,
+                    course = obj.course;
+
+                    console.log(creator);
                 switch(value){
                     case 'user_comment_on_network':
-                        text = 'Armando ha comentado en al red';
+                        avatar = Cursame.URL+creator.avatar.url;
+                        text = '<a href="">'+creator.first_name+' '+ creator.last_name+'</a> ha comentado en al red';
                     break;
                     case 'user_comment_on_course':
-                         text = 'Armando ha comentado en el curso';
+                        text = 'Armando ha comentado en el curso';
                     break;
                     case 'new_delivery_on_course':
-                         text = 'Se ha creado una tarea en el curso de Programación';
+                        text = 'Se cre&oacute; la tarea <a href="">"'+notificator.title+'"</a> en el curso <a href="">'+course.title+'</a>';
                     break;
                     case 'new_public_course_on_network':
-                         text = 'Se ha creado el curso <b>'+notificator.title+'</b>';
+                        text = 'Se cre&oacute; el curso <a href="">'+notificator.title+'</a>';
                     break;
                     case 'new_survey_on_course':
-                         text = 'Se ha creado un cuestionario en el curso de Programación';
+                        text = 'Se ha creado un cuestionario en el curso de Programación';
                     break;
                 }
-                return text;
+
+                return [
+                    '<div class="avatar-notification">',
+                        '<img style = "width:32px; height:32px" src="'+ avatar +'"> ',
+                    '</div>',
+                    '<div class="post-notification">',
+                        '<p>'+text+'</p>',
+                    '</div>'
+                ].join('');
             }
-        }, {
+        },{
             name: 'created_at',
             type: 'date'
         }, {
@@ -84,5 +98,4 @@ Ext.define('Cursame.model.Notification', {
     t.datetime "created_at",                         :null => false
     t.datetime "updated_at",                         :null => false
     t.boolean  "active",           :default => true
-
- */
+*/

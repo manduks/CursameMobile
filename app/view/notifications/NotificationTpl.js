@@ -10,10 +10,7 @@ Ext.define('Cursame.view.notifications.NotificationTpl', {
         var html;
         html = [
         '<div class="notification">',
-            '<div class="content">',
-                '<div>{text}</div>',
-                '<div style="clear:both"></div>',
-            '</div>',
+            '{text}',
         '</div>'];
         this.callParent(html);
     }

@@ -266,9 +266,47 @@ $list-active-gradient: matte;
 	min-height: 50px;
 }
 
+//notificaciones
 
-
-   
+.notification {
+    width: 100%;
+    height: 100%;
+    font-size: 0.9em;
+    border-bottom: 1px solid #e9e9e9;
+    float: left;
+    margin-top: -10px;
+    padding: 10px;
+    font-family: helvetica;
+    background-image: linear-gradient(bottom, rgb(245, 245, 245) 11% , rgb(255, 255, 255) 56% );
+    background-image: -o-linear-gradient(bottom, rgb(245, 245, 245) 11% , rgb(255, 255, 255) 56% );
+    background-image: -moz-linear-gradient(bottom, rgb(245, 245, 245) 11% , rgb(255, 255, 255) 56% );
+    background-image: -webkit-linear-gradient(bottom, rgb(245, 245, 245) 11% , rgb(255, 255, 255) 56% );
+    background-image: -ms-linear-gradient(bottom, rgb(245, 245, 245) 11% , rgb(255, 255, 255) 56% );
+    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0.11, rgb(245, 245, 245)),color-stop(0.56, rgb(255, 255, 255)));
+    .avatar-notification{
+		float: left;
+		width: 40px;
+		margin-right: 15px;
+	}
+	.post-notification{
+		float: left;
+		width: 80%;
+		height: 100%;
+		margin-top: 10px;
+	}
+    &:hover{
+	    background-image: linear-gradient(bottom, rgb(235, 235, 235) 11% , rgb(250, 250, 250) 56% );
+	    background-image: -o-linear-gradient(bottom, rgb(235, 235, 235) 11% , rgb(250, 250, 250) 56% );
+	    background-image: -moz-linear-gradient(bottom, rgb(235, 235, 235) 11% , rgb(250, 250, 250) 56% );
+	    background-image: -webkit-linear-gradient(bottom, rgb(235, 235, 235) 11% , rgb(250, 250, 250) 56% );
+	    background-image: -ms-linear-gradient(bottom, rgb(235, 235, 235) 11% , rgb(250, 250, 250) 56% );
+	    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0.11, rgb(235, 235, 235)),color-stop(0.56, rgb(250, 250, 250)));
+	}
+	a{
+		color: #0097a7;
+		text-decoration: none;
+	}
+}
    
 
    
