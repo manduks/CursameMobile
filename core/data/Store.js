@@ -5,15 +5,20 @@
  */
 Ext.define('Core.data.Store', {
     extend: 'Ext.data.Store',
+    pageSize: Cursame.pageSize,
 
     config: {
         listeners: {
             beforeload: function (store, operation, ops) {
                 store.getProxy().setExtraParams({
-                    auth_token: localStorage.getItem("Token"),
-                    limit: Core.Utils.pageSize
+                    auth_token: localStorage.getItem("Token")
                 });
             }
         }
+    },
+
+    resetCurrentPage: function() {
+        console.info(this.currentPage);
+        this.currentPage = 1;
     }
 });
