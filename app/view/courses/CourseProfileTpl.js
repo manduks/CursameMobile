@@ -2,7 +2,7 @@
  * @class Cursame.view.courses.CourseProfileTpl
  * @extends Ext.XTemplate
  * This is the xtemplate for the course profile
- * @manduks 
+ * @manduks
  */
  Ext.define('Cursame.view.courses.CourseProfileTpl', {
     extend: 'Ext.XTemplate',
@@ -19,14 +19,26 @@
                     '<p>{public_status}</p>',
                 '</div>',
             '</div>',
-        '</div>',
-        '<div class="creation">',
-            '<div class="create-comment">Comentario</div>',
-            '<div class="create-homework">Tarea</div>',
-            '<div class="create-discussion">Discusi&oacute;n</div>',
-        '</div>',
-        '<div class="clear:both"></div>'
-        ];
+         '</div>',
+         '<tpl if="this.hasPermissions() == true">',
+            '<div class="creation">',
+                '<div class="create-comment">Comentario</div>',
+                '<div class="create-homework">Tarea</div>',
+                '<div class="create-discussion">Discusi&oacute;n</div>',
+            '</div>',
+        '</tpl>',
+        '<div class="clear:both"></div>',
+        {
+            hasPermissions: function () {
+                var user = Ext.decode(localStorage.getItem("User"))
+                if (user.roles[0].id != 2) {
+                    return true;
+                }
+
+                return false;
+            }
+        }];
+
         this.callParent(html);
     }
 });
