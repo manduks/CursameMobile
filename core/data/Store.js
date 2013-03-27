@@ -8,6 +8,7 @@ Ext.define('Core.data.Store', {
 
     config: {
         pageSize: Cursame.pageSize,
+        //storeId: 'coreStore',
         listeners: {
             beforeload: function (store, operation, ops) {
                 store.getProxy().setExtraParams({

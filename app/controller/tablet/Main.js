@@ -135,6 +135,10 @@ Ext.define('Cursame.controller.tablet.Main', {
         if(me.getActiveNavigationView()){//Si ya hay un navigation view lo reseteamos
             me.getActiveNavigationView().reset();
         }
+        Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
+        Ext.getStore('Publications').resetCurrentPage();//Se resetean los filtros de paginado para el store de Publicaciones.
+        Ext.getStore('Notifications').resetCurrentPage();//Se resetean los filtros de paginado para el store de Notificaciones.
+        Ext.getStore('Courses').resetCurrentPage();//Se resetean los filtros de paginado para el store de Cursos.
         switch (index) {
             case 0:
                  var user = Ext.decode(localStorage.getItem("User")),
@@ -196,6 +200,7 @@ Ext.define('Cursame.controller.tablet.Main', {
      * se ejecuta cuando se da click sobre alguna publicacion
      */
     onPublicationTap: function (dataview, index, target, record, e, opt) {
+        Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
             alert('me gusta!');
             return;
@@ -513,6 +518,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     form.hide();
                     form.destroy();
                 }
+                Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
                 Ext.getStore('Comments').load({
                     params: {
                         commentable_type: commentableType,
