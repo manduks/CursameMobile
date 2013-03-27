@@ -136,16 +136,16 @@ Ext.define('Cursame.controller.tablet.Main', {
                     type: 'slide',
                     direction: 'left'
                 });
-                Ext.getStore('Comments').load();
-                var object = Ext.decode(localStorage.getItem("User")),
+                var user = Ext.decode(localStorage.getItem("User")),
                     data = {
-                        wall: object.coverphoto.url,
-                        avatar: object.avatar.url,
-                        bios: object.bios,
-                        name: object.first_name + ' ' + object.last_name
+                        wall: user.coverphoto.url,
+                        avatar: user.avatar.url,
+                        bios: user.bios,
+                        name: user.first_name + ' ' + user.last_name
                     };
                 me.getUserContainer().up('list').commentType = 'User';
-                me.getUserContainer().up('list').comentableId = object.id;
+                me.getUserContainer().up('list').comentableId = user.id;
+                me.loadCommentsByType('User',user.id);
                 me.getUserContainer().setData(data);
                 break;
             case 1:
@@ -227,13 +227,13 @@ Ext.define('Cursame.controller.tablet.Main', {
             publication.wall = course.coverphoto.url;
             publication.coverphoto = course.coverphoto.url;
             publication.avatar = course.avatar.url;
-            publication.courseName = 'Programación';
+            publication.courseName = 'Programación'; //@todo poner bien el titulo ...
         } else {
             publication.wall = user.coverphoto.url;
             publication.coverphoto = user.coverphoto.url;
             publication.avatar = user.avatar.url;
         }
-        publication.user_name = user.first_name + user.last_name;
+        publication.user_name = user.first_name +' '+ user.last_name;
         publication.timeAgo = Core.timeAgo(publication.created_at);
 
         switch (record.get('publication_type')) {
@@ -315,21 +315,40 @@ Ext.define('Cursame.controller.tablet.Main', {
      * se ejecuta cuando se le da click a una notificación
      */
     onNotificationTap:function  (dataview, index, target, record, e, opt) {
-        var me = this,data = record.get('notificator');
-        console.log(data);
+        var me = this,creator,course,
+            data = record.get('notificator'),
+            navigationView = me.getNotificationNavigationView();
         switch(record.get('kind')){
             case 'user_comment_on_network':
-                me.getNotificationNavigationView().push({
+                navigationView.push({
                     xtype: 'commentwall',
                     commentType: 'Comment',
                     comentableId: data.id
                 });
+                creator = record.get('creator');
+                data.user_name = creator.first_name +' '+ creator.last_name;
+                data.timeAgo = Core.timeAgo(data.created_at);
+                data.avatar = creator.avatar.url;
+
                 me.getCommentContainer().setData(data);
                 me.loadCommentsByType('Comment',data.id);
             break;
             case 'user_comment_on_course':
             break;
-            case 'new_delivery_on_course':break;
+            case 'new_delivery_on_course':
+                navigationView.push({
+                    xtype: 'deliverywall',
+                    commentType: 'Delivery',
+                    comentableId: data.id
+                });
+
+                course = record.get('creator');
+                data.wall = course.coverphoto.url;
+                data.avatar = course.avatar.url;
+
+                me.getDeliveryContainer().setData(data);
+                me.loadCommentsByType('Delivery',data.id);
+            break;
             case 'new_public_course_on_network':
                 data.avatar = data.avatar.url;
                 data.coverphoto = data.coverphoto.url;
@@ -340,8 +359,9 @@ Ext.define('Cursame.controller.tablet.Main', {
     },
     /**
      * 
-     * @param  {[type]} publicationId [description]
-     * @return {[type]}               [description]
+     * @param  {string} commentable_type 
+     * @param  {int} commentable_id 
+     * @return 
      */
     loadCommentsByType: function (commentable_type,commentable_id) {
         Ext.getStore('Comments').load({

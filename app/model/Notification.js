@@ -19,7 +19,7 @@ Ext.define('Cursame.model.Notification', {
             type: 'string',
             convert:function  (value,r) {
                 var text='',
-                    notificator = r.get('notificator');
+                    notificator = r.get('notificator_type').notificator;
                 switch(value){
                     case 'user_comment_on_network':
                         text = 'Armando ha comentado en al red';
@@ -47,15 +47,23 @@ Ext.define('Cursame.model.Notification', {
             type: 'int'
         }, {
             name: 'notificator_type',
-            type: 'string'
+            type: 'object'
         }, {
             name: 'user',
             type: 'object',
-            mapping:'user'
+            mapping:'notificator_type.user'
         }, {
             name: 'notificator',
             type: 'object',
-            mapping:'notificator'
+            mapping:'notificator_type.notificator'
+        }, {
+            name: 'creator',
+            type: 'object',
+            mapping:'notificator_type.creator'
+        } , {
+            name: 'course',
+            type: 'object',
+            mapping:'notificator_type.course'
         } ],
         proxy: {
             type: 'jsonp',
