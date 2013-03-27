@@ -6,6 +6,8 @@
  Ext.define('Cursame.view.tablet.Main', {
     extend: 'Cursame.view.Main',
     requires: [
+        'Ext.field.TextArea',
+
         'Cursame.view.LoginForm',
         'Cursame.view.publications.PublicationNavigationView',
         'Cursame.view.publications.PublicationsList',
@@ -17,7 +19,8 @@
         'Cursame.view.deliveries.DeliveryForm',
         'Cursame.view.discussions.DiscussionWall',
         'Cursame.view.deliveries.DeliveryWall',
-        'Cursame.view.comments.CommentWall'
+        'Cursame.view.comments.CommentWall',
+        'Cursame.view.notifications.NotificationNavigationView'
     ],
 
     config: {
@@ -53,6 +56,8 @@
                     xtype:'userwall'
                 },{
                     xtype:'publicationsnavigationview'
+                },{
+                    xtype:'notificationnavigationview'
                 },{
                     xtype:'coursenavigationview'
                 }],

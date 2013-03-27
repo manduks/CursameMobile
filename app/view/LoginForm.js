@@ -30,15 +30,25 @@
                 xtype: 'emailfield',
                 name: 'email',
                 placeHolder: lang.email,
+<<<<<<< HEAD
                 // value: 'info+pasteje@cursa.me',
                 value: 'waldix@code.com',
+=======
+                //value: 'info+pasteje@cursa.me',
+                value: 'iam@armando.mx',
+>>>>>>> 40f5eef92e08d74691045cdd8ae2c19c78488fb7
                 clearIcon: true
             }, {
                 xtype: 'passwordfield',
                 name: 'password',
                 placeHolder: lang.password,
+<<<<<<< HEAD
                 // value: 'cursamepasteje7',
                 value: '123456',
+=======
+                //value: 'cursamepasteje7',
+                value: 'mmmmmm',
+>>>>>>> 40f5eef92e08d74691045cdd8ae2c19c78488fb7
                 clearIcon: true
             }]
         }, {
