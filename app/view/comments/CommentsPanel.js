@@ -7,7 +7,7 @@
 Ext.define('Cursame.view.comments.CommentsPanel', {
     extend: 'Ext.Panel',
     alias: 'widget.commentspanel',
-    requires: ['Cursame.view.comments.CommentsList'],
+    requires: ['Cursame.view.comments.CommentsList', 'Cursame.view.comments.CommentCommentTpl'],
     config: {
         padding: 10,
         modal: true,
@@ -27,7 +27,8 @@ Ext.define('Cursame.view.comments.CommentsPanel', {
             easing: 'ease-out'
         },
         items:[{
-			xtype:'commentslist'
+			xtype:'commentslist',
+            itemTpl: Ext.create('Cursame.view.comments.CommentCommentTpl')
         }]
     }
 });
