@@ -5,12 +5,15 @@
  */
 Ext.define('Core.data.Store', {
     extend: 'Ext.data.Store',
-    
+
     config: {
-        listeners:{
-			beforeload:function(store, operation, ops){
-				store.getProxy().setExtraParam('auth_token',localStorage.getItem("Token"));
-			}
-		}
+        listeners: {
+            beforeload: function (store, operation, ops) {
+                store.getProxy().setExtraParams({
+                    auth_token: localStorage.getItem("Token"),
+                    limit: Core.Utils.pageSize
+                });
+            }
+        }
     }
 });

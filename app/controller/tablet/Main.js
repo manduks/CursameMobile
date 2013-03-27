@@ -200,10 +200,12 @@ Ext.define('Cursame.controller.tablet.Main', {
             alert('me gusta!');
             return;
         }
+        console.info(record);
         if (e.getTarget('div.comment')) {
             Ext.getStore('Comments').load({
                 params: {
-                    publicacionId: record.get('id')
+                    commentable_type: record.data.publication_type,
+                    commentable_id: record.data.publication_id
                 },
                 scope: this
             });
@@ -474,7 +476,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             data = form.objectData,
             me = this;
         if (comment) {
-            me.saveComment(comment, Core.toFirstUpperCase(data.publication_type || 'comment'), data.publication_id || data.id, form);
+            me.saveComment(comment, data.publication_type, data.publication_id, form);
         }
     },
     /**
@@ -484,14 +486,14 @@ Ext.define('Cursame.controller.tablet.Main', {
      */
     onComment: function (btn) {
         var me = this,
-        //comment = this.getCommentField().getValue(),
             list = btn.up('list'),
             comment = list.down('textfield').getValue();
+        console.info(list);
         if (comment) {
-            me.saveComment(comment, list.commentType, list.comentableId, null, list.publicacionId);
+            me.saveComment(comment, list.commentType, list.comentableId, null);
         }
     },
-    saveComment: function (comment, commentableType, commentableId, form, publicacionId) {
+    saveComment: function (comment, commentableType, commentableId, form) {
         var me = this;
         me.getMain().setMasked({
             xtype: 'loadmask',
@@ -505,7 +507,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                 commentable_id: commentableId
             },
             success: function (response) {
-                var params = publicacionId ? { publicacionId: publicacionId } : {};
                 me.getMain().setMasked(false);
 
                 if (form) {
@@ -513,8 +514,11 @@ Ext.define('Cursame.controller.tablet.Main', {
                     form.destroy();
                 }
                 Ext.getStore('Comments').load({
-                    scope: this,
-                    params: params
+                    params: {
+                        commentable_type: commentableType,
+                        commentable_id: commentableId
+                    },
+                    scope: this
                 });
             }
         });

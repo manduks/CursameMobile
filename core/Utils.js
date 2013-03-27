@@ -8,6 +8,7 @@
     url:Cursame.APIURL,
     src:'/assets/Cursame/',
     requires: ['Ext.data.JsonP'],
+    pageSize: 4,
 
     ajax :function(obj){
         var token = localStorage.getItem("Token");
