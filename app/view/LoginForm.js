@@ -31,14 +31,14 @@
                 name: 'email',
                 placeHolder: lang.email,
                 // value: 'info+pasteje@cursa.me',
-                value: 'iam@armando.mx',
+                value: 'waldix@code.com',
                 clearIcon: true
             }, {
                 xtype: 'passwordfield',
                 name: 'password',
                 placeHolder: lang.password,
                 // value: 'cursamepasteje7',
-                value: 'mmmmmm',
+                value: '123456',
                 clearIcon: true
             }]
         }, {
