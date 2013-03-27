@@ -292,7 +292,8 @@ Ext.define('Cursame.controller.tablet.Main', {
 
             cComments.load({
                 params: {
-                    comment: record.get('id')
+                    commentType: 'Comment',
+                    comentableId: record.get('id')
                 },
                 scope: this
             });
@@ -300,7 +301,8 @@ Ext.define('Cursame.controller.tablet.Main', {
             cComments.on('beforeload', function (store, operation, eOpts) {
                 store.getProxy().setExtraParams({
                     auth_token: localStorage.getItem("Token"),
-                    comment: record.get('id')
+                    commentType: 'Comment',
+                    comentableId: record.get('id')
                 });
             });
 
@@ -476,7 +478,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             data = form.objectData,
             me = this;
         if (comment) {
-            me.saveComment(comment, data.publication_type, data.publication_id, form);
+            me.saveComment(comment, 'Comment', data.id, Ext.getStore('CommentsComments'));
         }
     },
     /**
@@ -489,11 +491,11 @@ Ext.define('Cursame.controller.tablet.Main', {
             list = btn.up('list'),
             comment = list.down('textfield').getValue();
         console.info(list);
-        if (comment) {
-            me.saveComment(comment, list.commentType, list.comentableId, null);
+        if (comment && list.commentType && list.comentableId) {
+            me.saveComment(comment, list.commentType, list.comentableId, Ext.getStore('Comments'));
         }
     },
-    saveComment: function (comment, commentableType, commentableId, form) {
+    saveComment: function (comment, commentableType, commentableId, store) {
         var me = this;
         me.getMain().setMasked({
             xtype: 'loadmask',
@@ -509,11 +511,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             success: function (response) {
                 me.getMain().setMasked(false);
 
-                if (form) {
-                    form.hide();
-                    form.destroy();
-                }
-                Ext.getStore('Comments').load({
+                store.load({
                     params: {
                         commentable_type: commentableType,
                         commentable_id: commentableId
