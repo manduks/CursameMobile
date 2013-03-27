@@ -245,7 +245,7 @@ Ext.define('Cursame.controller.tablet.Main', {
 
                 });
                 me.getDiscussionContainer().setData(publication);
-                me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
+                me.loadCommentsByType('Discussion',publication.id);
                 break;
             case 'delivery':
                 navigationView.push({
@@ -254,7 +254,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     comentableId: publication.id
                 });
                 me.getDeliveryContainer().setData(publication);
-                me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
+                me.loadCommentsByType('Delivery',publication.id);
                 break;
             case 'comment':
                 navigationView.push({
@@ -263,7 +263,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     comentableId: publication.id
                 });
                 me.getCommentContainer().setData(publication);
-                me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
+                me.loadCommentsByType('Comment',publication.id);
                 break;
             case 'course':
                 me.pushCourseToView(navigationView, publication);
@@ -271,17 +271,6 @@ Ext.define('Cursame.controller.tablet.Main', {
             case 'survey':
                 break;
         }
-    },
-    /**
-     * load comments by publications
-     */
-    loadCommentsByPublication: function (publicationId) {
-        Ext.getStore('Comments').load({
-            params: {
-                publicacionId: publicationId
-            },
-            scope: this
-        });
     },
     /**
      * onCommentTap
@@ -327,9 +316,41 @@ Ext.define('Cursame.controller.tablet.Main', {
      */
     onNotificationTap:function  (dataview, index, target, record, e, opt) {
         var me = this,data = record.get('notificator');
-        data.avatar = data.avatar.url;
-        data.coverphoto = data.coverphoto.url;
-        me.pushCourseToView(me.getNotificationNavigationView(),record.get('notificator'));
+        console.log(data);
+        switch(record.get('kind')){
+            case 'user_comment_on_network':
+                me.getNotificationNavigationView().push({
+                    xtype: 'commentwall',
+                    commentType: 'Comment',
+                    comentableId: data.id
+                });
+                me.getCommentContainer().setData(data);
+                me.loadCommentsByType('Comment',data.id);
+            break;
+            case 'user_comment_on_course':
+            break;
+            case 'new_delivery_on_course':break;
+            case 'new_public_course_on_network':
+                data.avatar = data.avatar.url;
+                data.coverphoto = data.coverphoto.url;
+                me.pushCourseToView(me.getNotificationNavigationView(),record.get('notificator'));
+            break;
+            case 'new_survey_on_course':break;
+        }
+    },
+    /**
+     * 
+     * @param  {[type]} publicationId [description]
+     * @return {[type]}               [description]
+     */
+    loadCommentsByType: function (commentable_type,commentable_id) {
+        Ext.getStore('Comments').load({
+            params: {
+                commentable_type: commentable_type,
+                commentable_id: commentable_id
+            },
+            scope: this
+        });
     },
     /**
      * push course
