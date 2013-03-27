@@ -7,6 +7,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     extend: 'Cursame.controller.Main',
 
     config: {
+        activeNavigationView: undefined, //Referencia al Navigation View Activo
         refs: {
             main: {
                 selector: 'main'
@@ -34,7 +35,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 itemtap: 'onMenuTap'
             },
             'publicationslist': {
-                itemtap: 'onPublicationPublicationTap'
+                itemtap: 'onPublicationTap'
             },
             'courseslist': {
                 itemtap: 'onCourseTap'
@@ -64,7 +65,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 itemtap: 'onCommentTap'
             },
             'coursewall': {
-                itemtap: 'onCoursePublicationTap'
+                itemtap: 'onPublicationTap'
             }
         }
     },
@@ -129,7 +130,9 @@ Ext.define('Cursame.controller.tablet.Main', {
      */
     onMenuTap: function (list, index, target, record, e, eOpts) {
         var me = this;
-        me.resetNavigationViews();
+        if(me.getActiveNavigationView()){//Si ya hay un navigation view lo reseteamos
+            me.getActiveNavigationView().reset();
+        }
         switch (index) {
             case 0:
                 me.getCardContainer().animateActiveItem(0, {
@@ -154,6 +157,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     direction: 'left'
                 });
                 Ext.getStore('Publications').load();
+                me.setActiveNavigationView(me.getPublicationNavigationView());
                 break;
             case 2:
                 me.getCardContainer().animateActiveItem(2, {
@@ -161,6 +165,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     direction: 'left'
                 });
                 Ext.getStore('Notifications').load();
+                me.setActiveNavigationView(me.getNotificationNavigationView());
                 break;
             case 3:
                 me.getCardContainer().animateActiveItem(3, {
@@ -168,6 +173,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     direction: 'left'
                 });
                 Ext.getStore('Courses').load();
+                me.setActiveNavigationView(me.getCourseNavigationView());
                 break;
             case 4:
                 localStorage.removeItem('User');
@@ -184,18 +190,10 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
     },
 
-    onPublicationPublicationTap:function(dataview, index, target, record, e, opt){
-        this.onPublicationTap(e, record, this.getPublicationNavigationView());
-    },
-
-    onCoursePublicationTap:function(dataview, index, target, record, e, opt){
-        this.onPublicationTap(e, record, this.getCourseNavigationView());
-    },
-
     /**
      * se ejecuta cuando se da click sobre alguna publicacion
      */
-    onPublicationTap: function (e, record, navigationView) {
+    onPublicationTap: function (dataview, index, target, record, e, opt) {
         if (e.getTarget('div.like')) {
             alert('me gusta!');
             return;
@@ -212,12 +210,12 @@ Ext.define('Cursame.controller.tablet.Main', {
             }).show();
             return;
         }
-        this.pushPublicationContainer(record, navigationView);
+        this.pushPublicationContainer(record);
     },
     /**
      * 
      */
-    pushPublicationContainer: function (record, navigationView) {
+    pushPublicationContainer: function (record) {
         var me = this,
             course, user, publication;
         publication = record.get('publication');
@@ -238,7 +236,7 @@ Ext.define('Cursame.controller.tablet.Main', {
 
         switch (record.get('publication_type')) {
             case 'discussion':
-                navigationView.push({
+                me.getActiveNavigationView().push({
                     xtype: 'discussionwall',
                     commentType: 'Discussion',
                     comentableId: publication.id
@@ -248,7 +246,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
                 break;
             case 'delivery':
-                navigationView.push({
+                me.getActiveNavigationView().push({
                     xtype: 'deliverywall',
                     commentType: 'Delivery',
                     comentableId: publication.id
@@ -257,7 +255,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
                 break;
             case 'comment':
-                navigationView.push({
+                me.getActiveNavigationView().push({
                     xtype: 'commentwall',
                     commentType: 'Comment',
                     comentableId: publication.id
@@ -266,7 +264,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.loadCommentsByPublication(record.get('id')); //cargamos los comentarios
                 break;
             case 'course':
-                me.pushCourseToView(navigationView, publication);
+                me.pushCourseToView(me.getActiveNavigationView(), publication);
                 break;
             case 'survey':
                 break;
@@ -503,11 +501,5 @@ Ext.define('Cursame.controller.tablet.Main', {
         });
 
         Ext.getStore('Publications').load();
-    },
-
-    resetNavigationViews:function(){
-        var me = this;
-        me.getCourseNavigationView().reset();
-        me.getPublicationNavigationView().reset();
     }
 });
