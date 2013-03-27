@@ -5,9 +5,9 @@
  */
 Ext.define('Core.data.Store', {
     extend: 'Ext.data.Store',
-    pageSize: Cursame.pageSize,
 
     config: {
+        pageSize: Cursame.pageSize,
         listeners: {
             beforeload: function (store, operation, ops) {
                 store.getProxy().setExtraParams({
