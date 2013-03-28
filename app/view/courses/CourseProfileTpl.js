@@ -30,11 +30,11 @@
         '<div class="clear:both"></div>',
         {
             hasPermissions: function () {
-                var user = Ext.decode(localStorage.getItem("User"))
+                var user = Ext.decode(localStorage.getItem("User"));
                 if (user.roles[0].id != 2) {
                     return true;
                 }
-
+                
                 return false;
             }
         }];
