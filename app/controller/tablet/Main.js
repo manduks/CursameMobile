@@ -217,7 +217,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         var me = this;
         Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'publication');
+            me.onLike(record, 'publication', Ext.getStore('Publications'));
             return;
         }
         console.info(record);
@@ -227,14 +227,19 @@ Ext.define('Cursame.controller.tablet.Main', {
                     commentable_type: record.data.publication_type,
                     commentable_id: record.data.publication_id
                 },
-                scope: this
+                scope: me
             });
             Ext.create('Cursame.view.comments.CommentsPanel', {
-                objectData: record.getData()
+                objectData: record.getData(),
+                listeners:{
+                    hide:function(t){
+                        t.destroy();
+                    }
+                }
             }).show();
             return;
         }
-        this.pushPublicationContainer(record);
+        me.pushPublicationContainer(record);
     },
     /**
      *
@@ -302,12 +307,17 @@ Ext.define('Cursame.controller.tablet.Main', {
         var me = this,
             cComments = Ext.getStore('CommentsComments');
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'comment');
+            me.onLike(record, 'comment', Ext.getStore('Comments'));
             return;
         }
         if (e.getTarget('div.comment')) {
             var commentsPanel = Ext.create('Cursame.view.comments.CommentsPanel', {
-                objectData: record.getData()
+                objectData: record.getData(),
+                listeners:{
+                    hide:function(t){
+                        t.destroy();
+                    }
+                }
             });
 
             commentsPanel.down('commentslist').setStore(cComments);
@@ -505,9 +515,21 @@ Ext.define('Cursame.controller.tablet.Main', {
         var comment = this.getCommentField().getValue(),
             form = btn.up('commentspanel'),
             data = form.objectData,
-            me = this;
+            me = this,
+            type, id, store;
+
         if (comment) {
-            me.saveComment(comment, 'Comment', data.id, Ext.getStore('CommentsComments'));
+            if(data.publication_type && data.publication_id){
+                type = data.publication_type;
+                id = data.publication_id;
+                store = Ext.getStore('Comments');
+            } else {
+                type = 'Comment';
+                id = data.id;
+                store = Ext.getStore('CommentsComments');
+            }
+
+            me.saveComment(comment, type, id, store);
         }
     },
     /**
@@ -519,6 +541,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         var me = this,
             list = btn.up('list'),
             comment = list.down('textfield').getValue();
+
         if (comment && list.commentable_type && list.commentable_id) {
             me.saveComment(comment, list.commentable_type, list.commentable_id, Ext.getStore('Comments'));
         }
@@ -627,14 +650,15 @@ Ext.define('Cursame.controller.tablet.Main', {
     onCommentTap:function(dataview, index, target, record, e, opt) {
         var me = this;
         if (e.getTarget('div.comment-like') || e.getTarget('div.like')) {
-            me.onLike(record, 'comment');
+            me.onLike(record, 'comment', Ext.getStore('Comments'));
             return;
         }
     },
 
-    onLike:function(record, likeOn){
-        var type, id;
-        alert(8888);
+    onLike:function(record, likeOn, store){
+        var me = this,
+            type, id;
+
         switch(likeOn){
             case 'comment':
                 type = 'comment';
@@ -645,6 +669,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                 id = record.data.publication_id;
                 break;
         }
-       this.saveLike(Core.toFirstUpperCase(type),id);
+       me.saveLike(Core.toFirstUpperCase(type),id, store);
     }
 });
