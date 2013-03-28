@@ -14,7 +14,7 @@
     'Ext.Img'],
 
     config: {
-        ui: 'login',
+        //ui: 'login',
         padding: '15 15 15 15',
         baseCls: 'background',
         items: [{

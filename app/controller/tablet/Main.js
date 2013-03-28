@@ -62,10 +62,19 @@ Ext.define('Cursame.controller.tablet.Main', {
                 tap: 'onAddCommentComment'
             },
             'userwall': {
-                itemtap: 'onCommentTap'
+                itemtap: 'onCommentUserTap'
             },
             'coursewall': {
                 itemtap: 'onPublicationTap'
+            },
+            'commentslist': {
+                itemtap: 'onCommentTap'
+            },
+            'commentwall': {
+                itemtap: 'onCommentTap'
+            },
+            'deliverywall': {
+                itemtap: 'onCommentTap'
             }
         }
     },
@@ -142,10 +151,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         if(me.getActiveNavigationView()){//Si ya hay un navigation view lo reseteamos
             me.getActiveNavigationView().reset();
         }
-        Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
-        Ext.getStore('Publications').resetCurrentPage();//Se resetean los filtros de paginado para el store de Publicaciones.
-        Ext.getStore('Notifications').resetCurrentPage();//Se resetean los filtros de paginado para el store de Notificaciones.
-        Ext.getStore('Courses').resetCurrentPage();//Se resetean los filtros de paginado para el store de Cursos.
+        me.resetCurrentPageOnStores(); //Reseteamos todos los currentPage de los stores
         switch (index) {
             case 0:
                  var user = Ext.decode(localStorage.getItem("User")),
@@ -207,9 +213,10 @@ Ext.define('Cursame.controller.tablet.Main', {
      * se ejecuta cuando se da click sobre alguna publicacion
      */
     onPublicationTap: function (dataview, index, target, record, e, opt) {
+        var me = this;
         Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
-            alert('me gusta!');
+            me.onLike(record, 'publication');
             return;
         }
         console.info(record);
@@ -290,10 +297,12 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
     },
 
-    onCommentTap: function (dataview, index, target, record, e, opt) {
-        var cComments = Ext.getStore('CommentsComments');
+    onCommentUserTap: function (dataview, index, target, record, e, opt) {
+        var me = this,
+            cComments = Ext.getStore('CommentsComments');
         if (e.getTarget('div.like')) {
-            alert('me gusta!');
+            me.onLike(record, 'comment');
+            return;
         }
         if (e.getTarget('div.comment')) {
             var commentsPanel = Ext.create('Cursame.view.comments.CommentsPanel', {
@@ -486,7 +495,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             comment = form.down('textareafield').getValue(),
             me = this,
             list = btn.up('list');
-        me.saveComment(comment, 'Course', form.objectId, form, null);
+        me.saveComment(comment, 'Course', form.objectId, Ext.getStore('Publications'));
     },
     /**
      *
@@ -540,6 +549,38 @@ Ext.define('Cursame.controller.tablet.Main', {
         });
     },
     /**
+     * Este metodo guarda los likes
+     * @param  {String} type  tipo de elemento qeu obtiene el like
+     * @param  {int} id    identificador del evento
+     * @param  {object} store el store a recargar para ver los likes
+     * @return {object}       el store del like
+     */
+    saveLike: function (type, id, store) {
+        var me = this;
+        me.getMain().setMasked({
+            xtype: 'loadmask',
+            message: lang.saving
+        });
+        Core.ajax({
+            url: 'api/create_like',
+            params: {
+                type: type,
+                id: id
+            },
+            success: function (response) {
+                me.getMain().setMasked(false);
+                store.resetCurrentPage();
+                store.load({
+                    params: {
+                        commentable_type: type,
+                        commentable_id: id
+                    },
+                    scope: this
+                });
+            }
+        });
+    },
+    /**
      *
      */
     onAddDelivery: function (btn) {
@@ -573,5 +614,36 @@ Ext.define('Cursame.controller.tablet.Main', {
         });
 
         Ext.getStore('Publications').load();
+    },
+
+    resetCurrentPageOnStores:function(){
+        Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
+        Ext.getStore('Publications').resetCurrentPage();//Se resetean los filtros de paginado para el store de Publicaciones.
+        Ext.getStore('Notifications').resetCurrentPage();//Se resetean los filtros de paginado para el store de Notificaciones.
+        Ext.getStore('Courses').resetCurrentPage();//Se resetean los filtros de paginado para el store de Cursos.
+    },
+
+    onCommentTap:function(dataview, index, target, record, e, opt) {
+        var me = this;
+        if (e.getTarget('div.comment-like') || e.getTarget('div.like')) {
+            me.onLike(record, 'comment');
+            return;
+        }
+    },
+
+    onLike:function(record, likeOn){
+        var type, id;
+        alert(8888);
+        switch(likeOn){
+            case 'comment':
+                type = 'comment';
+                id = record.data.id;
+                break;
+            case 'publication':
+                type = record.data.publication_type;
+                id = record.data.publication_id;
+                break;
+        }
+       this.saveLike(Core.toFirstUpperCase(type),id);
     }
 });

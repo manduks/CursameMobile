@@ -31,6 +31,16 @@ $list-active-gradient: matte;
 @include sencha-form;
 @include sencha-msgbox;
 @include sencha-loading-spinner;
+
+//botones
+@include sencha-button-ui('decline', $base-color, 'matte');
+@include sencha-button-ui('accept', $active-color, 'matte');
+
+//login form styles
+.background{
+	background-image:url('../images/background-login.jpg');
+}
+
 //Lis generic styles
 .pressedCls {
   display: block;
