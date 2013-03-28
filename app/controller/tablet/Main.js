@@ -118,7 +118,6 @@ Ext.define('Cursame.controller.tablet.Main', {
         user = Ext.decode(localStorage.getItem("User"));
         userName = user.first_name + ' ' + user.last_name;
 
-        console.info(user);
         return [{
             name: userName,
             icon: Cursame.URL+user.avatar.url,
@@ -219,7 +218,6 @@ Ext.define('Cursame.controller.tablet.Main', {
             me.onLike(record, 'publication', Ext.getStore('Publications'));
             return;
         }
-        console.info(record);
         if (e.getTarget('div.comment')) {
             Ext.getStore('Comments').load({
                 params: {
@@ -228,14 +226,16 @@ Ext.define('Cursame.controller.tablet.Main', {
                 },
                 scope: me
             });
-            Ext.create('Cursame.view.comments.CommentsPanel', {
+            var panel = Ext.create('Cursame.view.comments.CommentsPanel', {
                 objectData: record.getData(),
                 listeners:{
                     hide:function(t){
                         t.destroy();
                     }
                 }
-            }).show();
+            });
+            Ext.Viewport.add(panel);
+            panel.show();
             return;
         }
         me.pushPublicationContainer(record);
@@ -336,7 +336,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     commentable_id: record.get('id')
                 });
             });
-
+            Ext.Viewport.add(commentsPanel);
             commentsPanel.show();
         }
     },
@@ -461,33 +461,41 @@ Ext.define('Cursame.controller.tablet.Main', {
      *
      */
     onCourseCreateComment: function (c, data) {
-        Ext.create('Cursame.view.comments.CommentForm', {
+        var panel = Ext.create('Cursame.view.comments.CommentForm', {
             objectId: data.id
-        }).show(''); //Se le pasa el parametro cadena vacia para evitar bug
+        });
+        Ext.Viewport.add(panel);
+        panel.show('');
     },
     /**
      *
      */
     onCourseCreateHomework: function (c, data) {
-        Ext.create('Cursame.view.deliveries.DeliveryForm', {
+        var panel = Ext.create('Cursame.view.deliveries.DeliveryForm', {
             objectId: data.id
-        }).show('');
+        });
+        Ext.Viewport.add(panel);
+        panel.show('');
     },
     /**
      *
      */
     onCourseCreateDiscussion: function (c, data) {
-        Ext.create('Cursame.view.discussions.DiscussionForm', {
+        var panel = Ext.create('Cursame.view.discussions.DiscussionForm', {
             objectId: data.id
-        }).show('');
+        });
+        Ext.Viewport.add(panel);
+        panel.show('');
     },
     /**
      *
      */
     onCourseDetails: function (c, data) {
-        Ext.create('Cursame.view.courses.CourseDetailsPanel', {
+        var panel = Ext.create('Cursame.view.courses.CourseDetailsPanel', {
             data: data
-        }).show('');
+        });
+        Ext.Viewport.add(panel);
+        panel.show('');
     },
     /**
      *

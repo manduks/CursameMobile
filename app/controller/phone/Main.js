@@ -192,7 +192,6 @@ Ext.define('Cursame.controller.phone.Main', {
      */
     pushPublicationContainer: function (record) {
         var me = this,course,user,publication;
-        console.log(arguments);
 
         publication = record.get('publication');
         course = record.get('course');
