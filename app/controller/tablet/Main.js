@@ -44,6 +44,9 @@ Ext.define('Cursame.controller.tablet.Main', {
             'notificationslist':{
                 itemtap:'onNotificationTap'
             },
+            'userslist':{
+                itemtap:'onUserTap'
+            },
             'container titlebar #cancelar': { //cancelar par todos los forms
                 tap: 'onCancelForm'
             },
@@ -102,23 +105,10 @@ Ext.define('Cursame.controller.tablet.Main', {
             direction: 'left'
         });
         me.getMenu().setData(me.getData());
-
-        //activamos las publicaciones
-        me.getCardContainer().animateActiveItem(1, {
-            type: 'slide',
-            direction: 'left'
-        });
-
-        function loadPublications(){
-            if(Ext.data.JsonP){
-                Ext.getStore('Publications').load();
-            } else {
-                setTimeout(loadPublications, 50);
-            }
-        }
-        setTimeout(function () {
-            loadPublications();
-        }, 100);
+        //activamos publicaciones
+        setTimeout(function(){
+            me.onMenuTap(me.getMenu(), 1);
+        }, 500);
     },
     /**
      *
@@ -477,6 +467,25 @@ Ext.define('Cursame.controller.tablet.Main', {
             callback: function (argument) {
             }
         });
+    },
+
+    onUserTap:function  (dataview, index, target, record, e, opt) {
+        var user =  record.getData(),data, me = this;
+        data = {
+            wall: user.coverphoto,
+            avatar: user.avatar,
+            bios: user.bios,
+            name: user.first_name + ' ' + user.last_name
+        };
+        me.getUserNavigationView().push({
+            xtype: 'userwall',
+            title: data.name
+        });
+        me.getUserContainer().up('list').commentable_type = 'User';
+        me.getUserContainer().up('list').commentable_id = user.id;
+        me.loadCommentsByType('User',user.id);
+        me.getUserContainer().setData(data);
+        console.log(me.getUserContainer());
     },
     /**
      *

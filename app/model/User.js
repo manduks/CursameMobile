@@ -8,11 +8,23 @@ Ext.define('Cursame.model.User', {
 
     config: {
         fields: [{
+            name: 'id',
+            type: 'int'
+        }, {
             name: 'first_name',
             type: 'string'
         }, {
             name: 'last_name',
             type: 'string'
+        }, {
+            name: 'bios',
+            type: 'string'
+        }, {
+            name: 'coverphoto',
+            type: 'string',
+            convert:function (val,r) {
+                return val.url;
+            }
         }, {
             name: 'avatar',
             type: 'string',
