@@ -34,7 +34,7 @@ Ext.define('Cursame.model.CommentComment', {
             type: 'string',
             mapping:'user',
             convert: function (user,r) {
-                return Cursame.URL  + user.avatar.url;
+                return user.avatar.url;
             }
         },{
             name: 'num_comments',
