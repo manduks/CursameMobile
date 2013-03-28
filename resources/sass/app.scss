@@ -30,7 +30,6 @@ $list-active-gradient: matte;
 @include sencha-form;
 @include sencha-msgbox;
 @include sencha-loading-spinner;
-
 //botones
 @include sencha-button-ui('decline', $base-color, 'matte');
 @include sencha-button-ui('accept', $active-color, 'matte');
@@ -431,10 +430,9 @@ $list-active-gradient: matte;
     width: 25px;
   }
   .fontmenu {
-    color: #000;
-    //font-family: helvbold;
     font-size:10pt;
     position: relative;
+    top: 6px;
     left: 10px;
   }
 }
