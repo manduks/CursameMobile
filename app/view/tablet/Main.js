@@ -22,7 +22,8 @@
         'Cursame.view.discussions.DiscussionWall',
         'Cursame.view.deliveries.DeliveryWall',
         'Cursame.view.comments.CommentWall',
-        'Cursame.view.notifications.NotificationNavigationView'
+        'Cursame.view.notifications.NotificationNavigationView',
+        'Cursame.view.users.UserNavigationView'
     ],
 
     config: {
@@ -62,6 +63,8 @@
                     xtype:'notificationnavigationview'
                 },{
                     xtype:'coursenavigationview'
+                },{
+                    xtype:'usernavigationview'
                 }],
                 flex:4
             }]

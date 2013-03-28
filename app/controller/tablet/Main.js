@@ -25,7 +25,8 @@ Ext.define('Cursame.controller.tablet.Main', {
             deliveryContainer: 'deliverycontainer',
             commentContainer: 'commentcontainer',
             courseContainer: 'coursecontainer',
-            notificationNavigationView: 'notificationnavigationview'
+            notificationNavigationView: 'notificationnavigationview',
+            userNavigationView: 'usernavigationview'
         },
         control: {
             'loginform': {
@@ -112,7 +113,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             if(Ext.data.JsonP){
                 Ext.getStore('Publications').load();
             } else {
-                setTimeout(loadPublications, 50)
+                setTimeout(loadPublications, 50);
             }
         }
         setTimeout(function () {
@@ -145,6 +146,10 @@ Ext.define('Cursame.controller.tablet.Main', {
             name: 'Cursos',
             icon: 'resources/images/cursos.png',
             group: 'CURSOS'
+        }, {
+            name: 'Comunidad',
+            icon: 'resources/images/cursos.png',
+            group: 'COMUNIDAD'
         }, {
             name: 'Salir',
             icon: 'resources/images/salir.png',
@@ -204,6 +209,14 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.setActiveNavigationView(me.getCourseNavigationView());
                 break;
             case 4:
+                me.getCardContainer().animateActiveItem(4, {
+                    type: 'slide',
+                    direction: 'left'
+                });
+                Ext.getStore('Users').load();
+                me.setActiveNavigationView(me.getUserNavigationView());
+                break;
+            case 5:
                 localStorage.removeItem('User');
                 localStorage.removeItem('Token');
                 localStorage.removeItem('UserId');
@@ -212,8 +225,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                     direction: 'right'
                 });
                 me.getMenu().getStore().removeAll();
-                break;
-            case 5:
                 break;
         }
     },
