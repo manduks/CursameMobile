@@ -34,7 +34,6 @@
                 if (user.roles[0].id != 2) {
                     return true;
                 }
-                
                 return false;
             }
         }];
