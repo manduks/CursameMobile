@@ -381,6 +381,13 @@ Ext.define('Cursame.controller.tablet.Main', {
             },
             scope: this
         });
+
+        Ext.getStore('Comments').on('beforeload', function (store, operation, eOpts) {
+            store.getProxy().setExtraParams({
+                commentable_type: commentableType,
+                commentable_id: commentableId
+            });
+        });
     },
     /**
      * push course
@@ -495,7 +502,6 @@ Ext.define('Cursame.controller.tablet.Main', {
         var me = this,
             list = btn.up('list'),
             comment = list.down('textfield').getValue();
-        console.info(list);
         if (comment && list.commentable_type && list.commentable_id) {
             me.saveComment(comment, list.commentable_type, list.commentable_id, Ext.getStore('Comments'));
         }

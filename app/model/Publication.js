@@ -130,7 +130,14 @@ Ext.define('Cursame.model.Publication', {
                         return '';
                     }
                 }
+            },{
+            name: 'num_comments',
+            type: 'int',
+            mapping: 'comments',
+            convert: function (comments, r){
+                return comments.length;
             }
+        }
         ],
         proxy: {
             type: 'jsonp',

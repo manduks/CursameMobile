@@ -29,12 +29,19 @@ Ext.define('Cursame.model.Comment', {
             convert: function (user,r) {
 				return user.first_name+' '+user.last_name;
             }
-        }, {
+        },{
             name: 'user_avatar',
             type: 'string',
             mapping:'user',
             convert: function (user,r) {
                 return user.avatar.url;
+            }
+        },{
+            name: 'num_comments',
+            type: 'int',
+            mapping: 'comments',
+            convert: function (comments, r){
+                return comments.length;
             }
         } ],
         proxy: {
