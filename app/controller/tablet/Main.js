@@ -208,7 +208,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     onPublicationTap: function (dataview, index, target, record, e, opt) {
         Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
-            alert('me gusta!');
+            this.saveLike(type, id, store);
             return;
         }
         console.info(record);
@@ -532,6 +532,38 @@ Ext.define('Cursame.controller.tablet.Main', {
                     params: {
                         commentable_type: commentableType,
                         commentable_id: commentableId
+                    },
+                    scope: this
+                });
+            }
+        });
+    },
+    /**
+     * Este metodo guarda los likes
+     * @param  {String} type  tipo de elemento qeu obtiene el like
+     * @param  {int} id    identificador del evento
+     * @param  {object} store el store a recargar para ver los likes
+     * @return {object}       el store del like
+     */
+    saveLike: function (type, id, store) {
+        var me = this;
+        me.getMain().setMasked({
+            xtype: 'loadmask',
+            message: lang.saving
+        });
+        Core.ajax({
+            url: 'api/create_like',
+            params: {
+                type: type,
+                id: id
+            },
+            success: function (response) {
+                me.getMain().setMasked(false);
+                store.resetCurrentPage();
+                store.load({
+                    params: {
+                        commentable_type: type,
+                        commentable_id: id
                     },
                     scope: this
                 });
