@@ -113,15 +113,16 @@ Ext.define('Cursame.controller.tablet.Main', {
      *
      */
     getData: function () {
-        var user, userName;
+        var user, userName, avatar;
 
         user = Ext.decode(localStorage.getItem("User"));
         userName = user.first_name + ' ' + user.last_name;
+        avatar = user.avatar.url ? Cursame.URL+user.avatar.url : 'resources/images/curso.jpg';
 
         console.info(user);
         return [{
             name: userName,
-            icon: Cursame.URL+user.avatar.url,
+            icon: avatar,
             group: 'PERFIL'
         }, {
             name: 'Últimas noticias',
