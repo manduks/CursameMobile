@@ -206,9 +206,10 @@ Ext.define('Cursame.controller.tablet.Main', {
      * se ejecuta cuando se da click sobre alguna publicacion
      */
     onPublicationTap: function (dataview, index, target, record, e, opt) {
+        var me = this;
         Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'publication');
+            me.onLike(record, 'publication', Ext.getStore('Publications'));
             return;
         }
         console.info(record);
@@ -218,14 +219,14 @@ Ext.define('Cursame.controller.tablet.Main', {
                     commentable_type: record.data.publication_type,
                     commentable_id: record.data.publication_id
                 },
-                scope: this
+                scope: me
             });
             Ext.create('Cursame.view.comments.CommentsPanel', {
                 objectData: record.getData()
             }).show();
             return;
         }
-        this.pushPublicationContainer(record);
+        me.pushPublicationContainer(record);
     },
     /**
      *
@@ -293,7 +294,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         var me = this,
             cComments = Ext.getStore('CommentsComments');
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'comment');
+            me.onLike(record, 'comment', Ext.getStore('Comments'));
             return;
         }
         if (e.getTarget('div.comment')) {
@@ -618,14 +619,15 @@ Ext.define('Cursame.controller.tablet.Main', {
     onCommentTap:function(dataview, index, target, record, e, opt) {
         var me = this;
         if (e.getTarget('div.comment-like') || e.getTarget('div.like')) {
-            me.onLike(record, 'comment');
+            me.onLike(record, 'comment', Ext.getStore('Comments'));
             return;
         }
     },
 
-    onLike:function(record, likeOn){
-        var type, id;
-        alert(8888);
+    onLike:function(record, likeOn, store){
+        var me = this,
+            type, id;
+
         switch(likeOn){
             case 'comment':
                 type = 'comment';
@@ -636,6 +638,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                 id = record.data.publication_id;
                 break;
         }
-       this.saveLike(Core.toFirstUpperCase(type),id);
+       me.saveLike(Core.toFirstUpperCase(type),id, store);
     }
 });
