@@ -222,7 +222,12 @@ Ext.define('Cursame.controller.tablet.Main', {
                 scope: me
             });
             Ext.create('Cursame.view.comments.CommentsPanel', {
-                objectData: record.getData()
+                objectData: record.getData(),
+                listeners:{
+                    hide:function(t){
+                        t.destroy();
+                    }
+                }
             }).show();
             return;
         }
@@ -299,7 +304,12 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
         if (e.getTarget('div.comment')) {
             var commentsPanel = Ext.create('Cursame.view.comments.CommentsPanel', {
-                objectData: record.getData()
+                objectData: record.getData(),
+                listeners:{
+                    hide:function(t){
+                        t.destroy();
+                    }
+                }
             });
 
             commentsPanel.down('commentslist').setStore(cComments);
@@ -497,9 +507,21 @@ Ext.define('Cursame.controller.tablet.Main', {
         var comment = this.getCommentField().getValue(),
             form = btn.up('commentspanel'),
             data = form.objectData,
-            me = this;
+            me = this,
+            type, id, store;
+
         if (comment) {
-            me.saveComment(comment, 'Comment', data.id, Ext.getStore('CommentsComments'));
+            if(data.publication_type && data.publication_id){
+                type = data.publication_type;
+                id = data.publication_id;
+                store = Ext.getStore('Comments');
+            } else {
+                type = 'Comment';
+                id = data.id;
+                store = Ext.getStore('CommentsComments');
+            }
+
+            me.saveComment(comment, type, id, store);
         }
     },
     /**
@@ -511,6 +533,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         var me = this,
             list = btn.up('list'),
             comment = list.down('textfield').getValue();
+
         if (comment && list.commentable_type && list.commentable_id) {
             me.saveComment(comment, list.commentable_type, list.commentable_id, Ext.getStore('Comments'));
         }
