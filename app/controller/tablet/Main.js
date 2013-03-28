@@ -102,22 +102,9 @@ Ext.define('Cursame.controller.tablet.Main', {
         });
         me.getMenu().setData(me.getData());
 
-        //activamos las publicaciones
-        me.getCardContainer().animateActiveItem(1, {
-            type: 'slide',
-            direction: 'left'
-        });
-
-        function loadPublications(){
-            if(Ext.data.JsonP){
-                Ext.getStore('Publications').load();
-            } else {
-                setTimeout(loadPublications, 50)
-            }
-        }
-        setTimeout(function () {
-            loadPublications();
-        }, 100);
+        setTimeout(function(){
+            me.onMenuTap(me.getMenu(), 1)
+        }, 500);
     },
     /**
      *
