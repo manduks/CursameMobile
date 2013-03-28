@@ -21,7 +21,8 @@ Ext.define('Cursame.view.comments.CommentCommentTpl', {
                 '</div>',
                 '<div class="comment-like">Me gusta</div>',
                 '<div class="comment-time">hace 1 hora</div>',
-                '<div style="clear:both"></div>'
+                '<div style="clear:both"></div>',
+            '</div>'
             ];
         this.callParent(html);
     }

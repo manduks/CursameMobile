@@ -24,7 +24,6 @@ Ext.define('Cursame.model.Notification', {
                     creator = obj.creator,
                     course = obj.course;
 
-                    console.log(creator);
                 switch(value){
                     case 'user_comment_on_network':
                         avatar = Cursame.URL+creator.avatar.url;
