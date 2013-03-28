@@ -208,7 +208,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     onPublicationTap: function (dataview, index, target, record, e, opt) {
         Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
-            alert('me gusta!');
+            me.onLike(record, 'publication');
             return;
         }
         console.info(record);
@@ -290,9 +290,11 @@ Ext.define('Cursame.controller.tablet.Main', {
     },
 
     onCommentUserTap: function (dataview, index, target, record, e, opt) {
-        var cComments = Ext.getStore('CommentsComments');
+        var me = this,
+            cComments = Ext.getStore('CommentsComments');
         if (e.getTarget('div.like')) {
-            alert('me gusta!');
+            me.onLike(record, 'comment');
+            return;
         }
         if (e.getTarget('div.comment')) {
             var commentsPanel = Ext.create('Cursame.view.comments.CommentsPanel', {
@@ -485,7 +487,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             comment = form.down('textareafield').getValue(),
             me = this,
             list = btn.up('list');
-        me.saveComment(comment, 'Course', form.objectId, Ext.getStore('Comments'));
+        me.saveComment(comment, 'Course', form.objectId, Ext.getStore('Publications'));
     },
     /**
      *
@@ -582,9 +584,27 @@ Ext.define('Cursame.controller.tablet.Main', {
     },
 
     onCommentTap:function(dataview, index, target, record, e, opt) {
+        var me = this;
         if (e.getTarget('div.comment-like') || e.getTarget('div.like')) {
-            alert('me gusta!');
+            me.onLike(record, 'comment');
             return;
         }
+    },
+
+    onLike:function(record, likeOn){
+        var type, id;
+
+        switch(likeOn){
+            case 'comment':
+                type = 'comment';
+                id = record.data.id;
+                break;
+            case 'publication':
+                type = record.data.publication_type;
+                id = record.data.publication_id;
+                break;
+        }
+
+        //Do something with type and id
     }
 });
