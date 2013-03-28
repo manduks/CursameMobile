@@ -206,6 +206,7 @@ Ext.define('Cursame.controller.tablet.Main', {
      * se ejecuta cuando se da click sobre alguna publicacion
      */
     onPublicationTap: function (dataview, index, target, record, e, opt) {
+        var me = this;
         Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
             me.onLike(record, 'publication');
