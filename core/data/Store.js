@@ -8,18 +8,14 @@ Ext.define('Core.data.Store', {
 
     config: {
         pageSize: Cursame.pageSize,
-        //storeId: 'coreStore',
         listeners: {
             beforeload: function (store, operation, ops) {
-                store.getProxy().setExtraParams({
-                    auth_token: localStorage.getItem("Token")
-                });
+                store.getProxy().setExtraParam('auth_token', localStorage.getItem("Token"));
             }
         }
     },
 
     resetCurrentPage: function() {
-        console.info(this.currentPage);
         this.currentPage = 1;
     }
 });

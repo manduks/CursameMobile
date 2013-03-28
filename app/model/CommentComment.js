@@ -36,7 +36,14 @@ Ext.define('Cursame.model.CommentComment', {
             convert: function (user,r) {
                 return Cursame.URL  + user.avatar.url;
             }
-        } ],
+        },{
+            name: 'num_comments',
+            type: 'int',
+            mapping: 'comments',
+            convert: function (comments, r){
+                return comments.length;
+            }
+        }],
         proxy: {
             type: 'jsonp',
             url: Cursame.APIURL + 'api/comments.json',
