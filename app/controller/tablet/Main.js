@@ -485,7 +485,6 @@ Ext.define('Cursame.controller.tablet.Main', {
         me.getUserContainer().up('list').commentable_id = user.id;
         me.loadCommentsByType('User',user.id);
         me.getUserContainer().setData(data);
-        console.log(me.getUserContainer());
     },
     /**
      *
