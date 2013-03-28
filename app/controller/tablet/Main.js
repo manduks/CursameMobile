@@ -25,7 +25,8 @@ Ext.define('Cursame.controller.tablet.Main', {
             deliveryContainer: 'deliverycontainer',
             commentContainer: 'commentcontainer',
             courseContainer: 'coursecontainer',
-            notificationNavigationView: 'notificationnavigationview'
+            notificationNavigationView: 'notificationnavigationview',
+            userNavigationView: 'usernavigationview'
         },
         control: {
             'loginform': {
@@ -42,6 +43,9 @@ Ext.define('Cursame.controller.tablet.Main', {
             },
             'notificationslist':{
                 itemtap:'onNotificationTap'
+            },
+            'userslist':{
+                itemtap:'onUserTap'
             },
             'container titlebar #cancelar': { //cancelar par todos los forms
                 tap: 'onCancelForm'
@@ -101,9 +105,9 @@ Ext.define('Cursame.controller.tablet.Main', {
             direction: 'left'
         });
         me.getMenu().setData(me.getData());
-
+        //activamos publicaciones
         setTimeout(function(){
-            me.onMenuTap(me.getMenu(), 1)
+            me.onMenuTap(me.getMenu(), 1);
         }, 500);
     },
     /**
@@ -132,6 +136,10 @@ Ext.define('Cursame.controller.tablet.Main', {
             name: 'Cursos',
             icon: 'resources/images/cursos.png',
             group: 'CURSOS'
+        }, {
+            name: 'Comunidad',
+            icon: 'resources/images/cursos.png',
+            group: 'COMUNIDAD'
         }, {
             name: 'Salir',
             icon: 'resources/images/salir.png',
@@ -194,6 +202,14 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.setActiveNavigationView(me.getCourseNavigationView());
                 break;
             case 4:
+                me.getCardContainer().animateActiveItem(4, {
+                    type: 'slide',
+                    direction: 'left'
+                });
+                Ext.getStore('Users').load();
+                me.setActiveNavigationView(me.getUserNavigationView());
+                break;
+            case 5:
                 localStorage.removeItem('User');
                 localStorage.removeItem('Token');
                 localStorage.removeItem('UserId');
@@ -202,8 +218,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                     direction: 'right'
                 });
                 me.getMenu().getStore().removeAll();
-                break;
-            case 5:
                 break;
         }
     },
@@ -453,6 +467,24 @@ Ext.define('Cursame.controller.tablet.Main', {
         });
         // cargamos las publicaciones del curso
         publicationsStore.load();
+    },
+
+    onUserTap:function  (dataview, index, target, record, e, opt) {
+        var user =  record.getData(),data, me = this;
+        data = {
+            wall: user.coverphoto,
+            avatar: user.avatar,
+            bios: user.bios,
+            name: user.first_name + ' ' + user.last_name
+        };
+        me.getUserNavigationView().push({
+            xtype: 'userwall',
+            title: data.name
+        });
+        me.getUserContainer().up('list').commentable_type = 'User';
+        me.getUserContainer().up('list').commentable_id = user.id;
+        me.loadCommentsByType('User',user.id);
+        me.getUserContainer().setData(data);
     },
     /**
      *
