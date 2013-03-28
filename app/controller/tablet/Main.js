@@ -121,7 +121,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         console.info(user);
         return [{
             name: userName,
-            icon: user.avatar.url,
+            icon: Cursame.URL+user.avatar.url,
             group: 'PERFIL'
         }, {
             name: 'Últimas noticias',
