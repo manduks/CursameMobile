@@ -107,7 +107,17 @@ Ext.define('Cursame.controller.tablet.Main', {
             type: 'slide',
             direction: 'left'
         });
-        Ext.getStore('Publications').load();
+
+        function loadPublications(){
+            if(Ext.data.JsonP){
+                Ext.getStore('Publications').load();
+            } else {
+                setTimeout(loadPublications, 50)
+            }
+        }
+        setTimeout(function () {
+            loadPublications();
+        }, 100);
     },
     /**
      *
