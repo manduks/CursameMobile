@@ -113,25 +113,32 @@ Ext.define('Cursame.controller.tablet.Main', {
      *
      */
     getData: function () {
-        var object, userName;
+        var user, userName;
 
-        object = Ext.decode(localStorage.getItem("User"));
-        userName = object.first_name + ' ' + object.last_name;
+        user = Ext.decode(localStorage.getItem("User"));
+        userName = user.first_name + ' ' + user.last_name;
 
+        console.info(user);
         return [{
             name: userName,
+            icon: Cursame.URL+user.avatar.url,
             group: 'PERFIL'
         }, {
             name: 'Últimas noticias',
+            icon: 'resources/images/muro.png',
             group: 'MURO'
         }, {
             name: 'Notificaciones',
+            icon: 'resources/images/notification.png',
+            numNotifications: user.notifications.length,
             group: 'MURO'
         }, {
             name: 'Cursos',
+            icon: 'resources/images/cursos.png',
             group: 'CURSOS'
         }, {
             name: 'Salir',
+            icon: 'resources/images/salir.png',
             group: 'AVANZADO'
         }];
 
