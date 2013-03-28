@@ -11,7 +11,7 @@ Ext.define('Cursame.view.comments.CommentCommentTpl', {
         html = [
             '<div class="comments">',
                 '<div class="avatar-comment">',
-                    '<img src="{user_avatar}">',
+                    '<img src="'+Cursame.URL+'{user_avatar}">',
                 '</div>',
                 '<div class="comment-name">',
                     '{user_name}',

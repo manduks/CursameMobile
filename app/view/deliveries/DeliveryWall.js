@@ -33,6 +33,6 @@ Ext.define('Cursame.view.deliveries.DeliveryWall', {
             autoPaging: true,
             loadMoreText: lang.loadMoreText
         }],
-        itemTpl: Ext.create('Cursame.view.comments.CommentTpl')
+        itemTpl: Ext.create('Cursame.view.comments.CommentCommentTpl')
     }
 });
