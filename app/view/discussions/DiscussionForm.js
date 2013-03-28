@@ -33,10 +33,12 @@ Ext.define('Cursame.view.discussions.DiscussionForm', {
                 items: [{
                         align: 'left',
                         text:'cancelar',
+                        ui:'decline',
                         itemId:'cancelar'
                     },{
                         align: 'right',
                         text:'publicar',
+                        ui:'accept',
                         itemId:'submit'
                     }
                 ]
