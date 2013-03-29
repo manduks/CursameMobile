@@ -21,8 +21,7 @@
             direction: 'vertical',
             directionLock: true
         },
-        plugins: [
-        'pullrefresh', {
+        plugins: [{
             type: 'listpaging',
             autoPaging: true,
             loadMoreText: lang.loadMoreText

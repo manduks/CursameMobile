@@ -27,8 +27,7 @@ Ext.define('Cursame.view.deliveries.DeliveryWall', {
         },{
             xtype: 'commentbar'
         }],
-        plugins: [
-        'pullrefresh', {
+        plugins: [{
             type: 'listpaging',
             autoPaging: true,
             loadMoreText: lang.loadMoreText

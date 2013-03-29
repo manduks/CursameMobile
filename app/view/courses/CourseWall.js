@@ -26,8 +26,7 @@ Ext.define('Cursame.view.courses.CourseWall', {
             xtype:'coursecontainer',
             itemId:'courseCo'
         }],
-        plugins: [
-        'pullrefresh', {
+        plugins: [{
             type: 'listpaging',
             autoPaging: true,
             loadMoreText: lang.loadMoreText
