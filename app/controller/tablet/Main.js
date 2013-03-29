@@ -560,7 +560,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             type, id, store;
 
         if (comment) {
-            if(data.publication_type && data.publication_id){
+            if(data && data.publication_type && data.publication_id){
                 type = data.publication_type;
                 id = data.publication_id;
                 store = Ext.getStore('Comments');
