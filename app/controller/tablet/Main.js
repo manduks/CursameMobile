@@ -139,7 +139,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             group: 'CURSOS'
         }, {
             name: 'Comunidad',
-            icon: 'resources/images/cursos.png',
+            icon: 'resources/images/comunidad.png',
             group: 'COMUNIDAD'
         }, {
             name: 'Salir',
@@ -631,12 +631,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.getMain().setMasked(false);
                 record.set('likes','1');
                 record.commit();
-                store.resetCurrentPage();
-                store.SetParams({
-                    commentable_type: type,
-                    commentable_id: id
-                });
-                store.load();
+                console.info(record);
             }
         });
     },
@@ -691,7 +686,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
     },
 
-    onLike:function(record, likeOn, store){
+    onLike:function(record, likeOn){
         var me = this,
             type, id;
         switch(likeOn){
