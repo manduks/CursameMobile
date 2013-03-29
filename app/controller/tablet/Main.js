@@ -206,6 +206,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     type: 'slide',
                     direction: 'left'
                 });
+                Ext.getStore('Users').setParams({});
                 Ext.getStore('Users').load();
                 me.setActiveNavigationView(me.getUserNavigationView());
                 break;
