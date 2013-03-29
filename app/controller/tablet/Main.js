@@ -119,7 +119,6 @@ Ext.define('Cursame.controller.tablet.Main', {
         user = Ext.decode(localStorage.getItem("User"));
         userName = user.first_name + ' ' + user.last_name;
         avatar = user.avatar.url ? Cursame.URL+user.avatar.url : 'resources/images/curso.jpg';
-
         return [{
             name: userName,
             icon: avatar,
@@ -546,7 +545,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             comment = form.down('textareafield').getValue(),
             me = this,
             list = btn.up('list');
-        me.saveComment(comment, 'Course', form.objectId, Ext.getStore('Publications'));
+        me.saveComment(comment, 'Course', form.objectId, Ext.getStore('Publications'), form);
     },
     /**
      *
@@ -586,7 +585,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             me.saveComment(comment, list.commentable_type, list.commentable_id, Ext.getStore('Comments'));
         }
     },
-    saveComment: function (comment, commentableType, commentableId, store) {
+    saveComment: function (comment, commentableType, commentableId, store, form) {
         var me = this;
         me.getMain().setMasked({
             xtype: 'loadmask',
@@ -600,6 +599,10 @@ Ext.define('Cursame.controller.tablet.Main', {
                 commentable_id: commentableId
             },
             success: function (response) {
+                if (form){
+                    form.hide();
+                    form.destroy();
+                }
                 me.getMain().setMasked(false);
                 store.resetCurrentPage();
                 store.setParams({
@@ -633,7 +636,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.getMain().setMasked(false);
                 record.set('likes','1');
                 record.commit();
-                console.info(record);
             }
         });
     },
