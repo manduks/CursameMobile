@@ -118,7 +118,7 @@ Ext.define('Cursame.controller.tablet.Main', {
 
         user = Ext.decode(localStorage.getItem("User"));
         userName = user.first_name + ' ' + user.last_name;
-        avatar = user.avatar.url ? Cursame.URL+user.avatar.url : 'resources/images/curso.jpg';
+        avatar = user.avatar.url ? Cursame.URL+user.avatar.url : Cursame.ASSETSURL+'resources/images/curso.jpg';
 
         return [{
             name: userName,

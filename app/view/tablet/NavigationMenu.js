@@ -10,22 +10,11 @@ Ext.define('Cursame.view.tablet.NavigationMenu', {
         itemTpl: new Ext.XTemplate(
             '<div class="menu">',
             '<img src="{icon}">',
-            '<tpl else>',
-            '<img src="'+Cursame.ASSETSURL+'resources/images/curso.jpg">',
-            '</tpl>',
             '<div class="fontmenu">{name}',
             '<tpl if="this.validateNotifications(numNotifications) == true ">',
             '<div class="avisoNot">{numNotifications}</div></div>',
             '</tpl>',
             '</div>', {
-                validateImage: function (icon) {
-                    if (icon === null) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }
-            }, {
                 validateNotifications: function (numNotifications) {
                     if (numNotifications !== undefined) {
                         return true;
