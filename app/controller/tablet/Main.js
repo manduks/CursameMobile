@@ -482,10 +482,12 @@ Ext.define('Cursame.controller.tablet.Main', {
             xtype: 'userwall',
             title: data.name
         });
-        me.getUserContainer().up('list').commentable_type = 'User';
-        me.getUserContainer().up('list').commentable_id = user.id;
+        me.getUserNavigationView().down('userwall').commentable_type = 'User';
+        me.getUserNavigationView().down('userwall').commentable_id = user.id;
+
+        Ext.getStore('Comments').resetCurrentPage();
         me.loadCommentsByType('User',user.id);
-        me.getUserContainer().setData(data);
+        me.getUserNavigationView().down('userwall').down('usercontainer').setData(data);
     },
     /**
      *
