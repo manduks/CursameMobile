@@ -9,7 +9,6 @@ Ext.define('Cursame.view.tablet.NavigationMenu', {
     config: {
         itemTpl: new Ext.XTemplate(
             '<div class="menu">',
-            '<tpl if="this.validateImage(icon) == true ">',
             '<img src="{icon}">',
             '<tpl else>',
             '<img src="'+Cursame.ASSETSURL+'resources/images/curso.jpg">',

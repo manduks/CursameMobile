@@ -137,6 +137,19 @@ Ext.define('Cursame.model.Publication', {
             convert: function (comments, r){
                 return comments.length;
             }
+        },{
+            name: 'likes',
+            type: 'object',
+            mapping: 'publication',
+            convert: function (publication, r){
+                var likes;
+                if(publication.votes){
+                    likes =  publication.votes.length
+                } else {
+                    likes = publication;
+                }
+                return likes;
+            }
         }
         ],
         proxy: {

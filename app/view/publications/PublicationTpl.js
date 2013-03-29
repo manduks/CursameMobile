@@ -27,7 +27,7 @@
                     // '<img src="http://1.bp.blogspot.com/-L3PW_oxd7wE/TlPVPK50HwI/AAAAAAAALn8/RN4UpwowJek/s1600/Paisaje-Monta%25C3%25B1a-1600x1200.jpg">',
                 '</div>',
                 '<div class="likes-comments">',
-                    '<p>12 Me gusta</p><p>-</p><p>{num_comments} Comentarios</p>',
+                    '<p>{likes} Me Gusta - {num_comments} Comentarios</p>',
                 '</div>',
                 '<div style="clear:both"></div>',
                 '<div class="footer-publication">',
