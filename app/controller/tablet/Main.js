@@ -119,7 +119,6 @@ Ext.define('Cursame.controller.tablet.Main', {
         userName = user.first_name + ' ' + user.last_name;
         avatar = user.avatar.url ? Cursame.URL+user.avatar.url : 'resources/images/curso.jpg';
 
-        console.info(user);
         return [{
             name: userName,
             icon: avatar,
@@ -217,7 +216,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         var me = this;
         Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'publication', Ext.getStore('Publications'));
+            me.onLike(record, 'publication');//, Ext.getStore('Publications'));
             return;
         }
         console.info(record);
@@ -307,7 +306,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         var me = this,
             cComments = Ext.getStore('CommentsComments');
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'comment', Ext.getStore('Comments'));
+            me.onLike(record, 'comment');//, Ext.getStore('Comments'));
             return;
         }
         if (e.getTarget('div.comment')) {
@@ -579,7 +578,7 @@ Ext.define('Cursame.controller.tablet.Main', {
      * @param  {object} store el store a recargar para ver los likes
      * @return {object}       el store del like
      */
-    saveLike: function (type, id, store) {
+    saveLike: function (type, id, record){//, store) {
         var me = this;
         me.getMain().setMasked({
             xtype: 'loadmask',
@@ -593,14 +592,8 @@ Ext.define('Cursame.controller.tablet.Main', {
             },
             success: function (response) {
                 me.getMain().setMasked(false);
-                store.resetCurrentPage();
-                store.load({
-                    params: {
-                        commentable_type: type,
-                        commentable_id: id
-                    },
-                    scope: this
-                });
+                record.set('likes','1');
+                record.commit();
             }
         });
     },
@@ -650,7 +643,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     onCommentTap:function(dataview, index, target, record, e, opt) {
         var me = this;
         if (e.getTarget('div.comment-like') || e.getTarget('div.like')) {
-            me.onLike(record, 'comment', Ext.getStore('Comments'));
+            me.onLike(record, 'comment');//, Ext.getStore('Comments'));
             return;
         }
     },
@@ -658,7 +651,6 @@ Ext.define('Cursame.controller.tablet.Main', {
     onLike:function(record, likeOn, store){
         var me = this,
             type, id;
-
         switch(likeOn){
             case 'comment':
                 type = 'comment';
@@ -669,6 +661,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                 id = record.data.publication_id;
                 break;
         }
-       me.saveLike(Core.toFirstUpperCase(type),id, store);
+       me.saveLike(Core.toFirstUpperCase(type),id,record);//, store);
     }
 });
