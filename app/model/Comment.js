@@ -43,6 +43,13 @@ Ext.define('Cursame.model.Comment', {
             convert: function (comments, r){
                 return comments.length;
             }
+        },{
+            name: 'likes',
+            type: 'int',
+            mapping: 'votes',
+            convert: function (votes, r){
+                return votes.length;
+            }
         } ],
         proxy: {
             type: 'jsonp',
