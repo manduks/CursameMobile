@@ -11,15 +11,12 @@ Ext.define('Cursame.view.Main', {
     requires:[
 		'Ext.plugin.PullRefresh',
 		'Ext.plugin.ListPaging',
-		'Cursame.view.publications.PublicationTpl',
-		'Cursame.view.comments.CommentTpl',
 		'Cursame.view.users.UserProfileTpl',
 		'Cursame.view.courses.CourseTpl',
 		'Cursame.view.courses.CourseProfileTpl',
 		'Cursame.view.discussions.DiscussionTpl',
         'Cursame.view.deliveries.DeliveryTpl',
         'Cursame.view.notifications.NotificationTpl',
-        'Cursame.view.comments.CommentCommentTpl',
         'Cursame.view.users.UserTpl'
     ],
     config: {

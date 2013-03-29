@@ -11,7 +11,10 @@ Ext.application({
 
     requires: [
         'Core.Lang',
-        'Core.Utils'
+        'Cursame.view.publications.PublicationTpl',
+        'Cursame.view.comments.CommentTpl',
+        'Cursame.view.comments.CommentCommentTpl',
+        'Ext.data.Store'
     ],
 
     profiles: ['Tablet', 'Phone'], //aqui por momento solo activamos las vistas de la tablet
