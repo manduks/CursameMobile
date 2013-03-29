@@ -124,25 +124,25 @@ Ext.define('Cursame.controller.tablet.Main', {
             icon: Cursame.URL+user.avatar.url,
             group: 'PERFIL'
         }, {
-            name: 'Últimas noticias',
-            icon: 'resources/images/muro.png',
+            name: 'Inicio',
+            icon: Cursame.ASSETSURL+'resources/images/muro.png',
             group: 'MURO'
         }, {
             name: 'Notificaciones',
-            icon: 'resources/images/notification.png',
+            icon: Cursame.ASSETSURL+'resources/images/notification.png',
             numNotifications: user.notifications.length,
             group: 'MURO'
         }, {
             name: 'Cursos',
-            icon: 'resources/images/cursos.png',
+            icon: Cursame.ASSETSURL+'resources/images/cursos.png',
             group: 'CURSOS'
         }, {
             name: 'Comunidad',
-            icon: 'resources/images/cursos.png',
+            icon: Cursame.ASSETSURL+'resources/images/cursos.png',
             group: 'COMUNIDAD'
         }, {
             name: 'Salir',
-            icon: 'resources/images/salir.png',
+            icon: Cursame.ASSETSURL+'resources/images/salir.png',
             group: 'AVANZADO'
         }];
 
@@ -292,6 +292,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     commentable_id: publication.id,
                     publicacionId: publicationId
                 });
+                publication.end_date = Core.timeAgo(publication.end_date);
                 me.getDeliveryContainer().setData(publication);
                 me.loadCommentsByType('Delivery',publication.id);
                 break;

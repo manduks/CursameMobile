@@ -18,7 +18,7 @@ Ext.define('Cursame.model.Notification', {
             mapping:'kind',
             type: 'string',
             convert:function  (value,r) {
-                var text,avatar = './resources/images/curso.jpg',
+                var text,avatar = Cursame.ASSETSURL+'resources/images/curso.jpg',
                     obj = r.get('notificator_type'),
                     notificator = obj.notificator,
                     creator = obj.creator,

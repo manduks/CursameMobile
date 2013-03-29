@@ -12,7 +12,7 @@ Ext.define('Cursame.view.tablet.NavigationMenu', {
             '<tpl if="this.validateImage(icon) == true ">',
             '<img src="{icon}">',
             '<tpl else>',
-            '<img src="resources/images/curso.jpg">',
+            '<img src="'+Cursame.ASSETSURL+'resources/images/curso.jpg">',
             '</tpl>',
             '<div class="fontmenu">{name}',
             '<tpl if="this.validateNotifications(numNotifications) == true ">',
@@ -20,7 +20,7 @@ Ext.define('Cursame.view.tablet.NavigationMenu', {
             '</tpl>',
             '</div>', {
                 validateImage: function (icon) {
-                    if (icon == null) {
+                    if (icon === null) {
                         return false;
                     } else {
                         return true;
@@ -28,7 +28,7 @@ Ext.define('Cursame.view.tablet.NavigationMenu', {
                 }
             }, {
                 validateNotifications: function (numNotifications) {
-                    if (numNotifications != undefined) {
+                    if (numNotifications !== undefined) {
                         return true;
                     } else {
                         return false;
