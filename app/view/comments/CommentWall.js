@@ -27,8 +27,7 @@ Ext.define('Cursame.view.comments.CommentWall', {
         },{
             xtype: 'commentbar'
         }],
-        plugins: [
-        'pullrefresh', {
+        plugins: [{
             type: 'listpaging',
             autoPaging: true,
             loadMoreText: lang.loadMoreText
