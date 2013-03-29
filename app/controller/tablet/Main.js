@@ -25,7 +25,8 @@ Ext.define('Cursame.controller.tablet.Main', {
             deliveryContainer: 'deliverycontainer',
             commentContainer: 'commentcontainer',
             courseContainer: 'coursecontainer',
-            notificationNavigationView: 'notificationnavigationview'
+            notificationNavigationView: 'notificationnavigationview',
+            userNavigationView: 'usernavigationview'
         },
         control: {
             'loginform': {
@@ -42,6 +43,9 @@ Ext.define('Cursame.controller.tablet.Main', {
             },
             'notificationslist':{
                 itemtap:'onNotificationTap'
+            },
+            'userslist':{
+                itemtap:'onUserTap'
             },
             'container titlebar #cancelar': { //cancelar par todos los forms
                 tap: 'onCancelForm'
@@ -101,13 +105,10 @@ Ext.define('Cursame.controller.tablet.Main', {
             direction: 'left'
         });
         me.getMenu().setData(me.getData());
-
-        //activamos las publicaciones
-        me.getCardContainer().animateActiveItem(1, {
-            type: 'slide',
-            direction: 'left'
-        });
-        Ext.getStore('Publications').load();
+        //activamos publicaciones
+        setTimeout(function(){
+            me.onMenuTap(me.getMenu(), 1);
+        }, 500);
     },
     /**
      *
@@ -136,6 +137,10 @@ Ext.define('Cursame.controller.tablet.Main', {
             name: 'Cursos',
             icon: 'resources/images/cursos.png',
             group: 'CURSOS'
+        }, {
+            name: 'Comunidad',
+            icon: 'resources/images/cursos.png',
+            group: 'COMUNIDAD'
         }, {
             name: 'Salir',
             icon: 'resources/images/salir.png',
@@ -175,6 +180,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     type: 'slide',
                     direction: 'left'
                 });
+                Ext.getStore('Publications').setParams({});
                 Ext.getStore('Publications').load();
                 me.setActiveNavigationView(me.getPublicationNavigationView());
                 break;
@@ -183,6 +189,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     type: 'slide',
                     direction: 'left'
                 });
+                Ext.getStore('Notifications').setParams({});
                 Ext.getStore('Notifications').load();
                 me.setActiveNavigationView(me.getNotificationNavigationView());
                 break;
@@ -191,10 +198,20 @@ Ext.define('Cursame.controller.tablet.Main', {
                     type: 'slide',
                     direction: 'left'
                 });
+                Ext.getStore('Courses').setParams({});
                 Ext.getStore('Courses').load();
                 me.setActiveNavigationView(me.getCourseNavigationView());
                 break;
             case 4:
+                me.getCardContainer().animateActiveItem(4, {
+                    type: 'slide',
+                    direction: 'left'
+                });
+                Ext.getStore('Users').setParams({});
+                Ext.getStore('Users').load();
+                me.setActiveNavigationView(me.getUserNavigationView());
+                break;
+            case 5:
                 localStorage.removeItem('User');
                 localStorage.removeItem('Token');
                 localStorage.removeItem('UserId');
@@ -204,8 +221,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                 });
                 me.getMenu().getStore().removeAll();
                 break;
-            case 5:
-                break;
         }
     },
 
@@ -213,29 +228,31 @@ Ext.define('Cursame.controller.tablet.Main', {
      * se ejecuta cuando se da click sobre alguna publicacion
      */
     onPublicationTap: function (dataview, index, target, record, e, opt) {
-        var me = this;
-        Ext.getStore('Comments').resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
+        var me = this,
+        commentsStore = Ext.getStore('Comments'),
+        publicationsStore = Ext.getStore('Publications');
+        commentsStore.resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
             me.onLike(record, 'publication');//, Ext.getStore('Publications'));
             return;
         }
-        console.info(record);
         if (e.getTarget('div.comment')) {
-            Ext.getStore('Comments').load({
-                params: {
-                    commentable_type: record.data.publication_type,
-                    commentable_id: record.data.publication_id
-                },
-                scope: me
+            commentsStore.setParams({
+                commentable_type: record.data.publication_type,
+                commentable_id: record.data.publication_id
             });
-            Ext.create('Cursame.view.comments.CommentsPanel', {
+            commentsStore.load();
+
+            var panel = Ext.create('Cursame.view.comments.CommentsPanel', {
                 objectData: record.getData(),
                 listeners:{
                     hide:function(t){
                         t.destroy();
                     }
                 }
-            }).show();
+            });
+            Ext.Viewport.add(panel);
+            panel.show();
             return;
         }
         me.pushPublicationContainer(record);
@@ -321,22 +338,20 @@ Ext.define('Cursame.controller.tablet.Main', {
 
             commentsPanel.down('commentslist').setStore(cComments);
 
-            cComments.load({
-                params: {
-                    commentable_type: 'Comment',
-                    commentable_id: record.get('id')
-                },
-                scope: this
+            cComments.setParams({
+                commentable_type: 'Comment',
+                commentable_id: record.get('id')
             });
+            cComments.load();
 
-            cComments.on('beforeload', function (store, operation, eOpts) {
+            /*cComments.on('beforeload', function (store, operation, eOpts) {
                 store.getProxy().setExtraParams({
                     auth_token: localStorage.getItem("Token"),
                     commentable_type: 'Comment',
                     commentable_id: record.get('id')
                 });
-            });
-
+            });*/
+            Ext.Viewport.add(commentsPanel);
             commentsPanel.show();
         }
     },
@@ -400,26 +415,28 @@ Ext.define('Cursame.controller.tablet.Main', {
      * @return 
      */
     loadCommentsByType: function (commentableType,commentableId) {
-        Ext.getStore('Comments').load({
-            params: {
-                commentable_type: commentableType,
-                commentable_id: commentableId
-            },
-            scope: this
-        });
+        var me = this,
+            commentsStore = Ext.getStore('Comments');
 
-        Ext.getStore('Comments').on('beforeload', function (store, operation, eOpts) {
+        commentsStore.setParams({
+            commentable_type: commentableType,
+            commentable_id: commentableId
+        });
+        commentsStore.load();
+
+        /*commentsStore.on('beforeload', function (store, operation, eOpts) {
             store.getProxy().setExtraParams({
                 commentable_type: commentableType,
                 commentable_id: commentableId
             });
-        });
+        });*/
     },
     /**
      * push course
      */
     pushCourseToView: function (view, data) {
-        var me = this;
+        var me = this,
+            publicationsStore = Ext.getStore('Publications');
         view.push({
             xtype: 'coursewall',
             title: data.id.title,
@@ -446,48 +463,70 @@ Ext.define('Cursame.controller.tablet.Main', {
             }
         });
         me.getCourseContainer().setData(data);
-        // cargamos las publicaciones del curso
-        Ext.getStore('Publications').load({
-            params: {
-                publicacionId: data.id,
-                type: 'Course'
-            },
-            scope: me,
-            callback: function (argument) {
-            }
+        publicationsStore.setParams({
+            publicacionId: data.id,
+            type: 'Course'
         });
+        // cargamos las publicaciones del curso
+        publicationsStore.load();
+    },
+
+    onUserTap:function  (dataview, index, target, record, e, opt) {
+        var user =  record.getData(),data, me = this;
+        data = {
+            wall: user.coverphoto,
+            avatar: user.avatar,
+            bios: user.bios,
+            name: user.first_name + ' ' + user.last_name
+        };
+        me.getUserNavigationView().push({
+            xtype: 'userwall',
+            title: data.name
+        });
+        me.getUserContainer().up('list').commentable_type = 'User';
+        me.getUserContainer().up('list').commentable_id = user.id;
+        me.loadCommentsByType('User',user.id);
+        me.getUserContainer().setData(data);
     },
     /**
      *
      */
     onCourseCreateComment: function (c, data) {
-        Ext.create('Cursame.view.comments.CommentForm', {
+        var panel = Ext.create('Cursame.view.comments.CommentForm', {
             objectId: data.id
-        }).show(''); //Se le pasa el parametro cadena vacia para evitar bug
+        });
+        Ext.Viewport.add(panel);
+        panel.show('');
     },
     /**
      *
      */
     onCourseCreateHomework: function (c, data) {
-        Ext.create('Cursame.view.deliveries.DeliveryForm', {
+        var panel = Ext.create('Cursame.view.deliveries.DeliveryForm', {
             objectId: data.id
-        }).show('');
+        });
+        Ext.Viewport.add(panel);
+        panel.show('');
     },
     /**
      *
      */
     onCourseCreateDiscussion: function (c, data) {
-        Ext.create('Cursame.view.discussions.DiscussionForm', {
+        var panel = Ext.create('Cursame.view.discussions.DiscussionForm', {
             objectId: data.id
-        }).show('');
+        });
+        Ext.Viewport.add(panel);
+        panel.show('');
     },
     /**
      *
      */
     onCourseDetails: function (c, data) {
-        Ext.create('Cursame.view.courses.CourseDetailsPanel', {
+        var panel = Ext.create('Cursame.view.courses.CourseDetailsPanel', {
             data: data
-        }).show('');
+        });
+        Ext.Viewport.add(panel);
+        panel.show('');
     },
     /**
      *
@@ -561,13 +600,11 @@ Ext.define('Cursame.controller.tablet.Main', {
             success: function (response) {
                 me.getMain().setMasked(false);
                 store.resetCurrentPage();
-                store.load({
-                    params: {
-                        commentable_type: commentableType,
-                        commentable_id: commentableId
-                    },
-                    scope: this
+                store.setParams({
+                    commentable_type: commentableType,
+                    commentable_id: commentableId
                 });
+                store.load();
             }
         });
     },
@@ -594,6 +631,12 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.getMain().setMasked(false);
                 record.set('likes','1');
                 record.commit();
+                store.resetCurrentPage();
+                store.SetParams({
+                    commentable_type: type,
+                    commentable_id: id
+                });
+                store.load();
             }
         });
     },
@@ -629,7 +672,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.onCancelForm(btn);
             }
         });
-
+        Ext.getStore('Publications').setParams({});
         Ext.getStore('Publications').load();
     },
 

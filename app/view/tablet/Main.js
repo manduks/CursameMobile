@@ -7,7 +7,8 @@
     extend: 'Cursame.view.Main',
     requires: [
         'Ext.field.TextArea',
-
+        'Ext.field.DatePicker',
+        'Ext.field.Number',
         'Cursame.view.LoginForm',
         'Cursame.view.publications.PublicationNavigationView',
         'Cursame.view.publications.PublicationsList',
@@ -17,10 +18,12 @@
         'Cursame.view.courses.CourseNavigationView',
         'Cursame.view.comments.CommentForm',
         'Cursame.view.deliveries.DeliveryForm',
+        'Cursame.view.discussions.DiscussionForm',
         'Cursame.view.discussions.DiscussionWall',
         'Cursame.view.deliveries.DeliveryWall',
         'Cursame.view.comments.CommentWall',
-        'Cursame.view.notifications.NotificationNavigationView'
+        'Cursame.view.notifications.NotificationNavigationView',
+        'Cursame.view.users.UserNavigationView'
     ],
 
     config: {
@@ -60,6 +63,8 @@
                     xtype:'notificationnavigationview'
                 },{
                     xtype:'coursenavigationview'
+                },{
+                    xtype:'usernavigationview'
                 }],
                 flex:4
             }]

@@ -27,6 +27,6 @@
     }
 });
 
- var Lang = Ext.create('Core.Lang'),
- lang = Lang.es;
+ // var Lang = Ext.create('Core.Lang'),
+ // lang = Lang.es;
 
