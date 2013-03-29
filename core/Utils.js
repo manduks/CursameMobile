@@ -37,16 +37,16 @@
             str;
 
             if (diff < 60) {
-                return String(diff) + ' s';
+                return String(diff) + ' segundos';
             } else if (diff < 3600) {
                 str = String(Math.ceil(diff / (60)));
-                return str + (str == "1" ? ' m' : ' m');
+                return str + (str == "1" ? ' minutos' : ' minutos');
             } else if (diff < 86400) {
                 str = String(Math.ceil(diff / (3600)));
-                return str + (str == "1" ? ' h' : ' h');
+                return str + (str == "1" ? ' horas' : ' horas');
             } else if (diff < 60 * 60 * 24 * 365) {
                 str = String(Math.ceil(diff / (60 * 60 * 24)));
-                return str + (str == "1" ? ' d' : ' d');
+                return str + (str == "1" ? ' días' : ' días');
             } else {
                 return Ext.Date.format(new Date(date), 'jS M \'y');
             }

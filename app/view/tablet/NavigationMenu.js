@@ -16,7 +16,7 @@ Ext.define('Cursame.view.tablet.NavigationMenu', {
             '</tpl>',
             '</div>', {
                 validateNotifications: function (numNotifications) {
-                    if (numNotifications != undefined) {
+                    if (numNotifications !== undefined) {
                         return true;
                     } else {
                         return false;
