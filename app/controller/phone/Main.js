@@ -182,7 +182,7 @@ Ext.define('Cursame.controller.phone.Main', {
                     type: 'slide',
                     direction: 'left'
                 });
-                Ext.getStore('Publications').setParams({});
+                Ext.getStore('Publications').setParams({}, true);
                 Ext.getStore('Publications').load();
                 me.setActiveNavigationView(me.getPublicationNavigationView());
                 break;

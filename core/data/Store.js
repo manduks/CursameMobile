@@ -7,6 +7,7 @@ Ext.define('Core.data.Store', {
     extend: 'Ext.data.Store',
 
     params: {},
+    resetParams: undefined,
     config: {
         pageSize: Cursame.pageSize,
         listeners: {
@@ -14,8 +15,13 @@ Ext.define('Core.data.Store', {
                 var me = this,
                     extraParams = store.getProxy().getExtraParams();
                 me.params.auth_token = localStorage.getItem("Token");
+                if(me.resetParams){
+                    store.getProxy().setExtraParams(me.params);
+                    me.resetParams = false;
+                } else {
+                    store.getProxy().setExtraParams(me.mergePropertiesObject(extraParams, me.params));
+                }
 
-                store.getProxy().setExtraParams(me.mergePropertiesObject(extraParams, me.params));
             }
         }
     },
@@ -24,9 +30,10 @@ Ext.define('Core.data.Store', {
         this.currentPage = 1;
     },
 
-    setParams:function(params){
+    setParams:function(params, resetParams){
         var me = this;
         me.params = params;
+        me.resetParams = resetParams;
     },
 
     mergePropertiesObject: function (obj1, obj2) {
