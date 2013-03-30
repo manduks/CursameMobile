@@ -11,6 +11,7 @@ Ext.application({
 
     requires: [
         'Core.Lang',
+        'Core.Utils',
         'Cursame.view.publications.PublicationTpl',
         'Cursame.view.comments.CommentTpl',
         'Cursame.view.comments.CommentCommentTpl',

@@ -559,8 +559,10 @@ Ext.define('Cursame.controller.tablet.Main', {
             me = this,
             type, id, store;
 
-        if (comment) {
-            if(data && data.publication_type && data.publication_id){
+        if (data && comment) {
+            console.log(data);
+            console.log(comment);
+            if(data.publication_type && data.publication_id){
                 type = data.publication_type;
                 id = data.publication_id;
                 store = Ext.getStore('Comments');
@@ -570,7 +572,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 store = Ext.getStore('CommentsComments');
             }
 
-            me.saveComment(comment, type, id, store);
+            //me.saveComment(comment, type, id, store);
         }
     },
     /**
