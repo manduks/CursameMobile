@@ -161,8 +161,9 @@ Ext.define('Cursame.controller.phone.Main', {
         switch (index) {
             case 0:
                  var user = Ext.decode(localStorage.getItem("User")),
+                    wall = user.coverphoto.url = null ? user.coverphoto.url : '/assets/portada.png',
                     data = {
-                        wall: user.coverphoto.url,
+                        wall: wall,
                         avatar: user.avatar.url,
                         bios: user.bios,
                         name: user.first_name + ' ' + user.last_name

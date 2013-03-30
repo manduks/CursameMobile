@@ -11,10 +11,10 @@
         html = [
         '<div class="profile-header">',
             '<div class="img-header">',
-                '<img src="'+Cursame.URL+'{coverphoto}">',
+                '<img src="'+Cursame.URL+'/assets/imagecoursex.png">',
             '</div>',
             '<div class="profile-info">',
-                '<div class="profile-avatar"><img src="'+Cursame.URL+'{avatar}"></div>',
+                '<div class="profile-avatar"><img src="'+Cursame.URL+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png"></div>',
                 '<div class="aboutme-course"><b>{title}</b>',
                     '<p>{public_status}</p>',
                 '</div>',
