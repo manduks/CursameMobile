@@ -332,6 +332,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         if (e.getTarget('div.comment')) {
             var commentsPanel = Ext.create('Cursame.view.comments.CommentsPanel', {
                 objectData: record.getData(),
+                dummy:'no sirve para nada',
                 listeners:{
                     hide:function(t){
                         t.destroy();
