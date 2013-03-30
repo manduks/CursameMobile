@@ -8,9 +8,8 @@ Ext.define('Cursame.view.comments.CommentsPanel', {
     extend: 'Ext.Panel',
     alias: 'widget.commentspanel',
     requires: ['Cursame.view.comments.CommentsList', 'Cursame.view.comments.CommentCommentTpl'],
-    objectData:undefined,
     config: {
-        dummy:undefined,
+        objectData:undefined,
         padding: 10,
         modal: true,
         centered: true,
