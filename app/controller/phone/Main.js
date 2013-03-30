@@ -246,7 +246,7 @@ Ext.define('Cursame.controller.phone.Main', {
             commentsStore.load();
 
             var panel = Ext.create('Cursame.view.comments.CommentsPanel', {
-                objectData: record.getData(),
+                objectData: record.data,
                 listeners:{
                     hide:function(t){
                         t.destroy();
@@ -331,7 +331,7 @@ Ext.define('Cursame.controller.phone.Main', {
         }
         if (e.getTarget('div.comment')) {
             var commentsPanel = Ext.create('Cursame.view.comments.CommentsPanel', {
-                objectData: record.getData(),
+                objectData: record.data,
                 listeners:{
                     hide:function(t){
                         t.destroy();
@@ -340,7 +340,7 @@ Ext.define('Cursame.controller.phone.Main', {
             });
 
             console.log('onCommentUserTap');
-            console.log(record);
+            console.log(record.getData());
             console.log(commentsPanel);
             console.log(this.getCommentsPanel());
 
