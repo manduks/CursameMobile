@@ -246,7 +246,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             commentsStore.load();
 
             var panel = Ext.create('Cursame.view.comments.CommentsPanel', {
-                objectData: record.data,
+                objectData: record.getData(),
                 listeners:{
                     hide:function(t){
                         t.destroy();
@@ -331,7 +331,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
         if (e.getTarget('div.comment')) {
             var commentsPanel = Ext.create('Cursame.view.comments.CommentsPanel', {
-                objectData: record.data,
+                objectData: record.getData(),
                 listeners:{
                     hide:function(t){
                         t.destroy();
