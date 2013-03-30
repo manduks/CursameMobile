@@ -14,7 +14,11 @@ Ext.define('Cursame.view.courses.CourseTpl', {
                 '<div class="tipe-line-course"></div>',
                 '<div class="header">',
                     '<div class="avatar">',
-                        '<img src="'+Cursame.URL+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png">',
+                        '<tpl if="this.validateAvatar(avatar) == true">',
+                            '<img src="'+Cursame.URL+'{avatar}">',
+                        '<tpl else>',
+                            '<img src="'+Cursame.URL+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png">',
+                        '</tpl>',
                     '</div> ',
                     '<div class="info-user">',
                         '{title}',
@@ -27,7 +31,15 @@ Ext.define('Cursame.view.courses.CourseTpl', {
                 '</div>',
                 '<div style="clear:both"></div>',
             '</div>',
-        '</div>'];
+        '</div>', {
+                validateAvatar: function (avatar) {
+                    if (avatar !== null) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }];
         this.callParent(html);
     }
 });
