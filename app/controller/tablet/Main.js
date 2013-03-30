@@ -339,11 +339,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                 }
             });
 
-            console.log('onCommentUserTap');
-            console.log(record.getData());
-            console.log(commentsPanel);
-            console.log(this.getCommentsPanel());
-
             commentsPanel.down('commentslist').setStore(cComments);
 
             cComments.setParams({
@@ -551,10 +546,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             data = form.getObjectData(),
             me = this,
             type, id, store;
-console.log('tablet');
-        console.log(form);
-        console.log(this.getCommentsPanel());
-        console.log(data);
+
         if (comment) {
             if(data.publication_type && data.publication_id){
                 type = data.publication_type;
