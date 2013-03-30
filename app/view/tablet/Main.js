@@ -33,20 +33,6 @@
             xtype:'container',
             layout:'hbox',
             items:[
-            // {
-            //     xtype : 'titlebar',
-            //     docked: 'top',
-            //     title : 'Cursame',
-            //     items: {
-            //         xtype : 'button',
-            //         id: 'viewSourceButton',
-            //         hidden: true,
-            //         align : 'right',
-            //         ui    : 'action',
-            //         action: 'viewSource',
-            //         text  : 'Source'
-            //     }
-            // },
             {
                 xtype:'navigationmenu',
                 flex:1

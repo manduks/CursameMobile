@@ -233,7 +233,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         publicationsStore = Ext.getStore('Publications');
         commentsStore.resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'publication');//, Ext.getStore('Publications'));
+            me.onLike(record, 'publication');
             return;
         }
         if (e.getTarget('div.comment')) {
@@ -324,7 +324,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         var me = this,
             cComments = Ext.getStore('CommentsComments');
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'comment');//, Ext.getStore('Comments'));
+            me.onLike(record, 'comment');
             return;
         }
         if (e.getTarget('div.comment')) {
@@ -345,13 +345,6 @@ Ext.define('Cursame.controller.tablet.Main', {
             });
             cComments.load();
 
-            /*cComments.on('beforeload', function (store, operation, eOpts) {
-                store.getProxy().setExtraParams({
-                    auth_token: localStorage.getItem("Token"),
-                    commentable_type: 'Comment',
-                    commentable_id: record.get('id')
-                });
-            });*/
             Ext.Viewport.add(commentsPanel);
             commentsPanel.show();
         }
@@ -424,13 +417,6 @@ Ext.define('Cursame.controller.tablet.Main', {
             commentable_id: commentableId
         });
         commentsStore.load();
-
-        /*commentsStore.on('beforeload', function (store, operation, eOpts) {
-            store.getProxy().setExtraParams({
-                commentable_type: commentableType,
-                commentable_id: commentableId
-            });
-        });*/
     },
     /**
      * push course
@@ -559,9 +545,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             me = this,
             type, id, store;
 
-        if (data && comment) {
-            console.log(data);
-            console.log(comment);
+        if (comment) {
             if(data.publication_type && data.publication_id){
                 type = data.publication_type;
                 id = data.publication_id;
@@ -572,7 +556,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 store = Ext.getStore('CommentsComments');
             }
 
-            //me.saveComment(comment, type, id, store);
+            me.saveComment(comment, type, id, store);
         }
     },
     /**
@@ -624,7 +608,7 @@ Ext.define('Cursame.controller.tablet.Main', {
      * @param  {object} store el store a recargar para ver los likes
      * @return {object}       el store del like
      */
-    saveLike: function (type, id, record){//, store) {
+    saveLike: function (type, id, record){
         var me = this;
         me.getMain().setMasked({
             xtype: 'loadmask',
@@ -689,7 +673,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     onCommentTap:function(dataview, index, target, record, e, opt) {
         var me = this;
         if (e.getTarget('div.comment-like') || e.getTarget('div.like')) {
-            me.onLike(record, 'comment');//, Ext.getStore('Comments'));
+            me.onLike(record, 'comment');
             return;
         }
     },
@@ -707,6 +691,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                 id = record.data.publication_id;
                 break;
         }
-       me.saveLike(Core.toFirstUpperCase(type),id,record);//, store);
+       me.saveLike(Core.toFirstUpperCase(type),id,record);
     }
 });
