@@ -339,6 +339,11 @@ Ext.define('Cursame.controller.phone.Main', {
                 }
             });
 
+            console.log('onCommentUserTap');
+            console.log(record);
+            console.log(commentsPanel);
+            console.log(this.getCommentsPanel());
+
             commentsPanel.down('commentslist').setStore(cComments);
 
             cComments.setParams({
