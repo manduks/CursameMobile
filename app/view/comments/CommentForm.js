@@ -8,6 +8,7 @@ Ext.define('Cursame.view.comments.CommentForm', {
     alias: 'widget.commentform',
 
     config: {
+        objectId:undefined,
         padding: 10,
         modal: true,
         centered: true,

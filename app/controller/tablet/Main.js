@@ -535,7 +535,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             comment = form.down('textareafield').getValue(),
             me = this,
             list = btn.up('list');
-        me.saveComment(comment, 'Course', form.objectId, Ext.getStore('Publications'), form);
+        me.saveComment(comment, 'Course', form.getObjectId(), Ext.getStore('Publications'), form);
     },
     /**
      *
@@ -646,7 +646,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         var form = btn.up('formpanel'),
             values = form.getValues(),
             me = this;
-        values.courseId = form.objectId;
+        values.courseId = form.getObjectId();
 
         form.setMasked({
             xtype: 'loadmask',

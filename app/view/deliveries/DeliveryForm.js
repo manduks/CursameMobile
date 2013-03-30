@@ -8,6 +8,7 @@ Ext.define('Cursame.view.deliveries.DeliveryForm',{
     alias: 'widget.deliveryform',
 
     config: {
+        objectId:undefined,
         padding: 10,
         modal: true,
         centered: true,

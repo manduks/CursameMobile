@@ -10,6 +10,7 @@ Ext.define('Cursame.view.discussions.DiscussionForm', {
     requires:['Ext.field.TextArea'],
 
     config: {
+        objectId:undefined,
 		padding: 10,
         modal: true,
         centered: true,
