@@ -26,7 +26,8 @@ Ext.define('Cursame.controller.phone.Main', {
             commentContainer: 'commentcontainer',
             courseContainer: 'coursecontainer',
             notificationNavigationView: 'notificationnavigationview',
-            userNavigationView: 'usernavigationview'
+            userNavigationView: 'usernavigationview',
+            commentsPanel: 'commentspanel'
         },
         control: {
             'loginform': {
@@ -544,7 +545,9 @@ Ext.define('Cursame.controller.phone.Main', {
             data = form.objectData,
             me = this,
             type, id, store;
-
+        console.log('phone');
+        console.log(form);
+        console.log(this.getCommentsPanel());
         if (comment) {
             if(data.publication_type && data.publication_id){
                 type = data.publication_type;
@@ -668,6 +671,7 @@ Ext.define('Cursame.controller.phone.Main', {
         Ext.getStore('Publications').resetCurrentPage();//Se resetean los filtros de paginado para el store de Publicaciones.
         Ext.getStore('Notifications').resetCurrentPage();//Se resetean los filtros de paginado para el store de Notificaciones.
         Ext.getStore('Courses').resetCurrentPage();//Se resetean los filtros de paginado para el store de Cursos.
+        Ext.getStore('Users').resetCurrentPage();//Se resetean los filtros de paginado para el store de Usuarios.
     },
 
     onCommentTap:function(dataview, index, target, record, e, opt) {
