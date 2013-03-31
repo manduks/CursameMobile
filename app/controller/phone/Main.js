@@ -161,10 +161,11 @@ Ext.define('Cursame.controller.phone.Main', {
         switch (index) {
             case 0:
                  var user = Ext.decode(localStorage.getItem("User")),
-                    wall = user.coverphoto.url = null ? user.coverphoto.url : '/assets/portada.png',
+                    wall = user.coverphoto.url = null ? user.coverphoto.url : Cursame.URL+'/assets/portada.png',
+                    avatar = user.avatar.url = null ? user.avatar.url : Cursame.URL+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png',
                     data = {
                         wall: wall,
-                        avatar: user.avatar.url,
+                        avatar: avatar,
                         bios: user.bios,
                         name: user.first_name + ' ' + user.last_name
                     };
@@ -235,7 +236,7 @@ Ext.define('Cursame.controller.phone.Main', {
         publicationsStore = Ext.getStore('Publications');
         commentsStore.resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'publication');//, Ext.getStore('Publications'));
+            me.onLike(record, 'publication');
             return;
         }
         if (e.getTarget('div.comment')) {

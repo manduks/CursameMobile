@@ -14,7 +14,11 @@ Ext.define('Cursame.view.comments.CommentTpl', {
                 '<div class="tipe-line-comment"></div>',
                 '<div class="header">',
                     '<div class="avatar">',
-                        '<img src="'+Cursame.URL+'{user_avatar}">',
+                        '<tpl if="this.validateUserAvatar(user_avatar) == true">',
+                            '<img src="'+Cursame.URL+'{user_avatar}">',
+                        '<tpl else>',
+                            '<img src="'+Cursame.URL+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png">',
+                        '</tpl>',
                     '</div> ',
                     '<div class="info-user">',
                         '{user_name}',
@@ -34,7 +38,15 @@ Ext.define('Cursame.view.comments.CommentTpl', {
                     '<div class="comment">Commentar</div>',
                 '</div>',
             '</div>',
-        '</div>'];
+        '</div>', {
+                validateUserAvatar: function (user_avatar) {
+                    if (user_avatar !== null) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }];
         this.callParent(html);
     }
 });

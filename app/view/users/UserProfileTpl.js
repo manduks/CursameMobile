@@ -11,10 +11,10 @@
         html = [
         '<div class="profile-header">',
             '<div class="img-header">',
-                '<img src="'+Cursame.URL+'{wall}">',
+                '<img src="{wall}">',
             '</div>',
             '<div class="profile-info">',
-                '<div class="profile-avatar"><img src="'+Cursame.URL+'{avatar}"></div>',
+                '<div class="profile-avatar"><img src="{avatar}"></div>',
                 '<div class="aboutme"><b>{name}</b>',
                     '<p>{bios}</p>',
                 '</div>',

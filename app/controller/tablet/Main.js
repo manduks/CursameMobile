@@ -161,10 +161,11 @@ Ext.define('Cursame.controller.tablet.Main', {
         switch (index) {
             case 0:
                  var user = Ext.decode(localStorage.getItem("User")),
-                     wall = user.coverphoto.url = null ? user.coverphoto.url : '/assets/portada.png',
-                     data = {
-                         wall: wall,
-                        avatar: user.avatar.url,
+                    wall = user.coverphoto.url = null ? user.coverphoto.url : Cursame.URL+'/assets/portada.png',
+                    avatar = user.avatar.url = null ? user.avatar.url : Cursame.URL+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png',
+                    data = {
+                        wall: wall,
+                        avatar: avatar,
                         bios: user.bios,
                         name: user.first_name + ' ' + user.last_name
                     };
@@ -405,10 +406,10 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
     },
     /**
-     * 
+     *
      * @param  {string} commentableType
      * @param  {int} commentableId
-     * @return 
+     * @return
      */
     loadCommentsByType: function (commentableType,commentableId) {
         var me = this,

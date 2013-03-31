@@ -11,7 +11,11 @@ Ext.define('Cursame.view.comments.CommentCommentTpl', {
         html = [
             '<div class="comments">',
                 '<div class="avatar-comment">',
-                    '<img src="'+Cursame.URL+'{user_avatar}">',
+                    '<tpl if="this.validateUserAvatar(user_avatar) == true">',
+                        '<img src="'+Cursame.URL+'{user_avatar}">',
+                    '<tpl else>',
+                        '<img src="'+Cursame.URL+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png">',
+                    '</tpl>',
                 '</div>',
                 '<div class="comment-name">',
                     '{user_name}',
@@ -22,8 +26,15 @@ Ext.define('Cursame.view.comments.CommentCommentTpl', {
                 '<div class="comment-like">Me gusta</div>',
                 '<div class="comment-time">hace 1 hora</div>',
                 '<div style="clear:both"></div>',
-            '</div>'
-            ];
+            '</div>', {
+                validateUserAvatar: function (user_avatar) {
+                    if (user_avatar !== null) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }];
         this.callParent(html);
     }
 });
