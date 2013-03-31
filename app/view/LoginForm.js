@@ -71,7 +71,7 @@
                     });
                 }
             }]
-        }, {
+        }/*, {
             xtype: 'button',
             text: '<div class = "movi-color" style = "color:white;">' + lang.passwordRecover + '</div>',
             baseCls: 'empty',
@@ -79,6 +79,6 @@
             handler: function (btn) {
                 alert('recuperar contraseña');
             }
-        }]
+        }*/]
     }
 });

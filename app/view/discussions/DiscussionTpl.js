@@ -11,7 +11,7 @@
         html = [
         '<div class="profile-header">',
             '<div class="img-header">',
-                '<img src="'+Cursame.URL+'{wall}">',
+                '<img src="'+Cursame.URL+'/assets/imagecoursex.png">',
             '</div>',
             '<div class="profile-info">',
                 '<div class="profile-avatar">',

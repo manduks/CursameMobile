@@ -120,7 +120,6 @@ Ext.define('Cursame.controller.tablet.Main', {
         user = Ext.decode(localStorage.getItem("User"));
         userName = user.first_name + ' ' + user.last_name;
         avatar = user.avatar.url ? Cursame.URL+user.avatar.url : Cursame.ASSETSURL+'resources/images/curso.jpg';
-
         return [{
             name: userName,
             icon: avatar,
@@ -161,11 +160,11 @@ Ext.define('Cursame.controller.tablet.Main', {
         switch (index) {
             case 0:
                  var user = Ext.decode(localStorage.getItem("User")),
-                    wall = user.coverphoto.url = null ? user.coverphoto.url : Cursame.URL+'/assets/portada.png',
-                    avatar = user.avatar.url = null ? user.avatar.url : Cursame.URL+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png',
-                    data = {
-                        wall: wall,
-                        avatar: avatar,
+                    wall = user.coverphoto.url == null ? '/assets/portada.png' : user.coverphoto.url,
+                    avatar = user.avatar.url == null ? '/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png' : user.avatar.url,
+                data = {
+                        wall: Cursame.URL+wall,
+                        avatar: Cursame.URL+avatar,
                         bios: user.bios,
                         name: user.first_name + ' ' + user.last_name
                     };
@@ -270,6 +269,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         publicationId = record.get('id');
         course = record.get('course');
         user = record.get('user');
+        console.info(publication);
         if (course) {
             publication.wall = course.coverphoto.url;
             publication.coverphoto = course.coverphoto.url;
