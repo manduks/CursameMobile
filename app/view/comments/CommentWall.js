@@ -13,7 +13,6 @@ Ext.define('Cursame.view.comments.CommentWall', {
     config: {
         commentableType:undefined,
         commentableId:undefined,
-        publicacionId:undefined,
         store: 'Comments',
         pressedCls:'pressedCls',
         selectedCls :'pressedCls',
