@@ -11,6 +11,9 @@ Ext.define('Cursame.view.deliveries.DeliveryWall', {
     requires: ['Cursame.view.comments.CommentTpl', 'Cursame.view.comments.CommentBar','Cursame.view.deliveries.DeliveryContainer'],
 
     config: {
+        commentableType:undefined,
+        commentableId:undefined,
+        publicacionId:undefined,
         store: 'Comments',
         pressedCls:'pressedCls',
         selectedCls :'pressedCls',

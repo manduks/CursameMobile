@@ -264,9 +264,8 @@ Ext.define('Cursame.controller.phone.Main', {
      */
     pushPublicationContainer: function (record) {
         var me = this,
-            course, user, publication, publicationId;
+            course, user, publication;
         publication = record.get('publication');
-        publicationId = record.get('id');
         course = record.get('course');
         user = record.get('user');
         console.info(publication);
@@ -287,9 +286,8 @@ Ext.define('Cursame.controller.phone.Main', {
             case 'discussion':
                 me.getActiveNavigationView().push({
                     xtype: 'discussionwall',
-                    commentable_type: 'Discussion',
-                    commentable_id: publication.id,
-                    publicacionId: publicationId
+                    commentableType: 'Discussion',
+                    commentableId: publication.id
                 });
                 me.getDiscussionContainer().setData(publication);
                 me.loadCommentsByType('Discussion',publication.id);
@@ -297,9 +295,8 @@ Ext.define('Cursame.controller.phone.Main', {
             case 'delivery':
                 me.getActiveNavigationView().push({
                     xtype: 'deliverywall',
-                    commentable_type: 'Delivery',
-                    commentable_id: publication.id,
-                    publicacionId: publicationId
+                    commentableType: 'Delivery',
+                    commentableId: publication.id
                 });
                 publication.end_date = Core.timeAgo(publication.end_date);
                 me.getDeliveryContainer().setData(publication);
@@ -308,9 +305,8 @@ Ext.define('Cursame.controller.phone.Main', {
             case 'comment':
                 me.getActiveNavigationView().push({
                     xtype: 'commentwall',
-                    commentable_type: 'Comment',
-                    commentable_id: publication.id,
-                    publicacionId: publicationId
+                    commentableType: 'Comment',
+                    commentableId: publication.id
                 });
                 me.getCommentContainer().setData(publication);
                 me.loadCommentsByType('Comment',publication.id);
@@ -370,8 +366,8 @@ Ext.define('Cursame.controller.phone.Main', {
             case 'user_comment_on_network':
                 navigationView.push({
                     xtype: 'commentwall',
-                    commentable_type: 'Comment',
-                    commentable_id: data.id
+                    commentableType: 'Comment',
+                    commentableId: data.id
                 });
                 creator = record.get('creator');
                 data.user_name = creator.first_name +' '+ creator.last_name;
@@ -386,8 +382,8 @@ Ext.define('Cursame.controller.phone.Main', {
             case 'new_delivery_on_course':
                 navigationView.push({
                     xtype: 'deliverywall',
-                    commentable_type: 'Delivery',
-                    commentable_id: data.id
+                    commentableType: 'Delivery',
+                    commentableId: data.id
                 });
 
                 course = record.get('creator');
@@ -572,8 +568,8 @@ Ext.define('Cursame.controller.phone.Main', {
             list = btn.up('list'),
             comment = list.down('textfield').getValue();
 
-        if (comment && list.commentable_type && list.commentable_id) {
-            me.saveComment(comment, list.commentable_type, list.commentable_id, Ext.getStore('Comments'));
+        if (comment && list.getCommentableType() && list.getCommentableId()) {
+            me.saveComment(comment, list.getCommentableType(), list.getCommentableType(), Ext.getStore('Comments'));
         }
     },
     saveComment: function (comment, commentableType, commentableId, store, form) {

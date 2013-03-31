@@ -11,6 +11,9 @@ Ext.define('Cursame.view.comments.CommentWall', {
     requires: ['Cursame.view.comments.CommentTpl', 'Cursame.view.comments.CommentBar','Cursame.view.comments.CommentContainer'],
 
     config: {
+        commentableType:undefined,
+        commentableId:undefined,
+        publicacionId:undefined,
         store: 'Comments',
         pressedCls:'pressedCls',
         selectedCls :'pressedCls',

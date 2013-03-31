@@ -11,6 +11,9 @@ Ext.define('Cursame.view.discussions.DiscussionWall', {
     requires: ['Cursame.view.comments.CommentTpl', 'Cursame.view.comments.CommentBar','Cursame.view.discussions.DiscussionContainer'],
 
     config: {
+        commentableType:undefined,
+        commentableId:undefined,
+        publicacionId:undefined,
         store: 'Comments',
         pressedCls:'pressedCls',
         selectedCls :'pressedCls',
@@ -32,6 +35,6 @@ Ext.define('Cursame.view.discussions.DiscussionWall', {
             autoPaging: true,
             loadMoreText: lang.loadMoreText
         }],
-        itemTpl: Ext.create('Cursame.view.comments.CommentTpl')
+        itemTpl: Ext.create('Cursame.view.comments.CommentCommentTpl')
     }
 });
