@@ -321,7 +321,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     onCommentUserTap: function (dataview, index, target, record, e, opt) {
         var me = this,
             cComments = Ext.getStore('CommentsComments');
-        Ext.getStore('CommentsComments').resetCurrentPage();//Se resetea el store de Comments Comments para inicializar la paginación.
+        Ext.getStore('CommentsComments').resetCurrentPage();//Se resetea el store de Comments Comments para inicializar la paginación
         if (e.getTarget('div.like')) {
             me.onLike(record, 'comment');
             return;

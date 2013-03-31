@@ -571,7 +571,7 @@ Ext.define('Cursame.controller.phone.Main', {
             comment = list.down('textfield').getValue();
 
         if (comment && list.getCommentableType() && list.getCommentableId()) {
-            me.saveComment(comment, list.getCommentableType(), list.getCommentableType(), Ext.getStore('Comments'));
+            me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'));
         }
     },
     saveComment: function (comment, commentableType, commentableId, store, form) {
