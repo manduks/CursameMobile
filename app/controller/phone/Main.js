@@ -269,7 +269,6 @@ Ext.define('Cursame.controller.phone.Main', {
         publicationId = record.get('id');
         course = record.get('course');
         user = record.get('user');
-        console.info(publication);
         if (course) {
             publication.wall = course.coverphoto.url;
             publication.coverphoto = course.coverphoto.url;
@@ -326,6 +325,7 @@ Ext.define('Cursame.controller.phone.Main', {
     onCommentUserTap: function (dataview, index, target, record, e, opt) {
         var me = this,
             cComments = Ext.getStore('CommentsComments');
+        Ext.getStore('CommentsComments').resetCurrentPage();//Se resetea el store de Comments Comments para inicializar la paginación
         if (e.getTarget('div.like')) {
             me.onLike(record, 'comment');
             return;
@@ -347,6 +347,8 @@ Ext.define('Cursame.controller.phone.Main', {
                 commentable_id: record.get('id')
             });
             cComments.load();
+            //console.info(cComments);
+            //console.info(record);
 
             Ext.Viewport.add(commentsPanel);
             commentsPanel.show();
