@@ -570,7 +570,8 @@ Ext.define('Cursame.controller.phone.Main', {
             list = btn.up('list'),
             comment = list.down('textfield').getValue();
 
-        if (comment && list.getCommentableType() && list.getCommentableId()) {
+        if (comment && list.getCommentableType && list.getCommentableId
+            && list.getCommentableType() && list.getCommentableId()) {
             me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'));
         }
     },
