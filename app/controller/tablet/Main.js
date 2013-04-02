@@ -18,13 +18,11 @@ Ext.define('Cursame.controller.tablet.Main', {
             commentField: 'commentspanel commentslist commentbar #commentfield',
             commentFieldUser: 'userwall commentbar #commentfield',
             commentFieldObject: 'list commentbar #commentfield',
-            //userContainer: 'usercontainer',
             menu: 'navigationmenu',
             publicationNavigationView: 'publicationsnavigationview',
             discussionContainer: 'discussioncontainer',
             deliveryContainer: 'deliverycontainer',
             commentContainer: 'commentcontainer',
-            //courseContainer: 'coursecontainer',
             notificationNavigationView: 'notificationnavigationview',
             userNavigationView: 'usernavigationview',
             commentsPanel: 'commentspanel',
@@ -439,28 +437,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             publicationsStore = Ext.getStore('Publications');
         view.push({
             xtype: 'coursewall',
-            title: data.id.title/*,
-            listeners: { //esto no deberia ser asi
-                painted: function (c) {
-                    if (!c.addedListener) {
-                        c.on('tap', function (e, t) {
-                            if (e.getTarget('div.aboutme-course')) {
-                                me.onCourseDetails(c, data);
-                            }
-                            if (e.getTarget('div.create-comment')) {
-                                me.onCourseCreateComment(c, data);
-                            }
-                            if (e.getTarget('div.create-homework')) {
-                                me.onCourseCreateHomework(c, data);
-                            }
-                            if (e.getTarget('div.create-discussion')) {
-                                me.onCourseCreateDiscussion(c, data);
-                            }
-                        });
-                        c.addedListener = true;
-                    }
-                }
-            }*/
+            title: data.id.title
         });
         //me.getCourseContainer().setData(data);
         publicationsStore.setParams({
@@ -672,7 +649,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.onCancelForm(btn);
             }
         });
-        Ext.getStore('Publications').resetCurrentPage();
         Ext.getStore('Publications').setParams({});
         Ext.getStore('Publications').load();
     },
