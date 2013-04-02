@@ -19,9 +19,9 @@
         baseCls: 'background',
         items: [{
             xtype: 'image',
-            margin: '30 0 0 0',
-            height: 80//,
-            //src: '/resources/images/cursame.png'
+            margin: '0 0 10 0',
+            height: 80,
+            src: Cursame.ASSETSURL+'resources/images/cursame.png'
         }, {
             xtype: 'fieldset',
             defaults: {

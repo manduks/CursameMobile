@@ -40,7 +40,7 @@ Ext.define('Cursame.model.Publication', {
                 type: 'string',
                 mapping: 'publication',
                 convert: function (v, r) {
-                    return Cursame.ASSETSURL + 'resources/images/curso.jpg';
+                    return Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
                 }
             },
             {
