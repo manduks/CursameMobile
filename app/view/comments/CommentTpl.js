@@ -12,27 +12,20 @@ Ext.define('Cursame.view.comments.CommentTpl', {
             '<tpl if = "this.isFirstRecord(values) == true">',
                 '<div class="profile-header">',
                     '<div class="img-header">',
-                        '<tpl if="this.validateWall(wall) == true">',
-                            '<img src="{wall}">',
-                        '<tpl else>',
-                            '<img src="{wall}'+'/assets/portada.png">',
-                        '</tpl>',
+                        '<img src="{headerWall}">',
                     '</div>',
                 '<div class="profile-info">',
                     '<div class="profile-avatar">',
-                        '<tpl if="this.validateAvatar(avatar) == true">',
-                            '<img src="{avatar}">',
-                        '<tpl else>',
-                            '<img src="{avatar}'+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png">',
-                        '</tpl>',
+                        '<img src="{headerAvatar}">',
                     '</div>',
-                '<div class="aboutme"><b>{name}</b>',
-                    '<p>{bios}</p>',
+                '<div class="aboutme"><b>{headerName}</b>',
+                    '<p>{headerBios}</p>',
                 '</div>',
             '</div>',
             '</div><br>',
             '</tpl>',
-        '<div class="publication">',
+        '<tpl if = "!emptyStore">',
+            '<div class="publication">',
             '<div class="content">',
                 '<div class="tipe-line-comment"></div>',
                 '<div class="header">',
@@ -61,7 +54,8 @@ Ext.define('Cursame.view.comments.CommentTpl', {
                     '<div class="comment">Commentar</div>',
                 '</div>',
             '</div>',
-        '</div>', {
+         '</div>',
+        '</tpl>', {
                 validateUserAvatar: function (user_avatar) {
                     if (user_avatar !== null) {
                         return true;
@@ -71,8 +65,6 @@ Ext.define('Cursame.view.comments.CommentTpl', {
                 },
                 isFirstRecord: function (values){
                     var record = Ext.getStore('Comments').getAt(0);
-                    console.info(record);
-                    console.info(values);
                     if (record.internalId == values.id){
                         return true;
                     } else {

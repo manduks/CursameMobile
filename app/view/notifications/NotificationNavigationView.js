@@ -12,6 +12,7 @@ Ext.define('Cursame.view.notifications.NotificationNavigationView', {
 		'Cursame.view.notifications.NotificationsList'
 	],
 	config: {
+        defaultBackButtonText: lang.back,
 		items: {
 			xtype: 'notificationslist',
 			titlle: lang.notifications

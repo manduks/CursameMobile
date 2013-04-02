@@ -27,7 +27,8 @@ Ext.define('Cursame.controller.tablet.Main', {
             courseContainer: 'coursecontainer',
             notificationNavigationView: 'notificationnavigationview',
             userNavigationView: 'usernavigationview',
-            commentsPanel: 'commentspanel'
+            commentsPanel: 'commentspanel',
+            userWall: 'userwall'
         },
         control: {
             'loginform': {
@@ -160,22 +161,19 @@ Ext.define('Cursame.controller.tablet.Main', {
         switch (index) {
             case 0:
                  var user = Ext.decode(localStorage.getItem("User")),
-                    wall = user.coverphoto.url == null ? '/assets/portada.png' : user.coverphoto.url,
-                    avatar = user.avatar.url == null ? '/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png' : user.avatar.url,
-                data = {
-                        wall: Cursame.URL+wall,
-                        avatar: Cursame.URL+avatar,
-                        bios: user.bios,
-                        name: user.first_name + ' ' + user.last_name
+                    data = {
+                        headerWall: user.coverphoto.url,
+                        headerAvatar: user.avatar.url,
+                        headerBios: user.bios,
+                        headerName: user
                     };
                 me.getCardContainer().animateActiveItem(0, {
                     type: 'slide',
                     direction: 'left'
                 });
-                me.getUserContainer().up('list').setCommentableType('User');
-                me.getUserContainer().up('list').setCommentableId(user.id);
-                me.loadCommentsByType('User',user.id);
-                //me.getUserContainer().setData(data);
+                me.getUserWall().setCommentableType('User');
+                me.getUserWall().setCommentableId(user.id);
+                me.loadCommentsByType('User',user.id,me.addHeaderToComments.bind(me,[data]));
                 break;
             case 1:
                 me.getCardContainer().animateActiveItem(1, {
@@ -409,7 +407,7 @@ Ext.define('Cursame.controller.tablet.Main', {
      * @param  {int} commentableId
      * @return
      */
-    loadCommentsByType: function (commentableType,commentableId) {
+    loadCommentsByType: function (commentableType,commentableId, callback) {
         var me = this,
             commentsStore = Ext.getStore('Comments');
 
@@ -417,7 +415,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             commentable_type: commentableType,
             commentable_id: commentableId
         });
-        commentsStore.load();
+        commentsStore.load(callback);
     },
     /**
      * push course
@@ -462,10 +460,10 @@ Ext.define('Cursame.controller.tablet.Main', {
     onUserTap:function  (dataview, index, target, record, e, opt) {
         var user =  record.getData(),data, me = this;
         data = {
-            wall: user.coverphoto,
-            avatar: user.avatar,
-            bios: user.bios,
-            name: user.first_name + ' ' + user.last_name
+            headerWall: user.coverphoto,
+            headerAvatar: user.avatar,
+            headerBios: user.bios,
+            headerName: user
         };
         me.getUserNavigationView().push({
             xtype: 'userwall',
@@ -475,8 +473,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         me.getUserNavigationView().down('userwall').setCommentableId(user.id);
 
         Ext.getStore('Comments').resetCurrentPage();
-        me.loadCommentsByType('User',user.id);
-        me.getUserNavigationView().down('userwall').down('usercontainer').setData(data);
+        me.loadCommentsByType('User',user.id,me.addHeaderToComments.bind(me,[data]));
     },
     /**
      *
@@ -695,5 +692,22 @@ Ext.define('Cursame.controller.tablet.Main', {
                 break;
         }
        me.saveLike(Core.toFirstUpperCase(type),id,record);
+    },
+
+    addHeaderToComments:function(params){
+        var commentsStore = Ext.getStore('Comments'),
+            firstCommentRecord = commentsStore.getAt(0),
+            data = params[0];
+        if(firstCommentRecord){
+            firstCommentRecord.set('headerWall', data.headerWall);
+            firstCommentRecord.set('headerAvatar', data.headerAvatar);
+            firstCommentRecord.set('headerName', data.headerName);
+            firstCommentRecord.set('headerBios', data.headerBios);
+            firstCommentRecord.commit();
+        } else {
+            data.emptyStore = true;
+            commentsStore.add(data);
+        }
+
     }
 });

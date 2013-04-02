@@ -12,6 +12,7 @@ Ext.define('Cursame.view.publications.PublicationNavigationView', {
 		'Cursame.view.publications.PublicationsList'
 	],
 	config: {
+        defaultBackButtonText: lang.back,
 		items: {
 			xtype: 'publicationslist',
 			titlle: lang.courses

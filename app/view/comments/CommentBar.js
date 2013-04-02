@@ -9,7 +9,6 @@ Ext.define('Cursame.view.comments.CommentBar', {
 
     config: {
         docked: 'bottom',
-        ui: 'accept',
         layout: 'hbox',
         items: [{
             xtype: 'textfield',

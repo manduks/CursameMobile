@@ -13,6 +13,7 @@ Ext.define('Cursame.view.courses.CourseNavigationView', {
 		'Cursame.view.courses.CourseWall'
 	],
 	config: {
+        defaultBackButtonText: lang.back,
 		items: {
 			xtype: 'courseslist',
 			titlle: lang.courses

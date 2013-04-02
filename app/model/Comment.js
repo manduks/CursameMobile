@@ -27,30 +27,83 @@ Ext.define('Cursame.model.Comment', {
             type: 'string',
             mapping:'user',
             convert: function (user,r) {
-				return user.first_name+' '+user.last_name;
+                var name = 'Usuario';
+                if(user && user.first_name && user.last_name){
+                    name = user.first_name+' '+user.last_name;
+                }
+				return name;
             }
         },{
             name: 'user_avatar',
             type: 'string',
             mapping:'user',
             convert: function (user,r) {
-                return user.avatar.url;
+                var url = '';
+                if(user && user.avatar){
+                    url = user.avatar.url;
+                }
+                return url;
             }
         },{
             name: 'num_comments',
             type: 'int',
             mapping: 'comments',
             convert: function (comments, r){
-                return comments.length;
+                var length = comments? comments.length: 0;
+                return length;
             }
         },{
             name: 'likes',
             type: 'int',
             mapping: 'votes',
             convert: function (votes, r){
-                return votes.length;
+                var length = votes? votes.length: 0;
+                return length;
             }
-        } ],
+        },
+        {
+            name:'headerWall',
+            type:'string',
+            convert:function(headerWall, r){
+                var url = Cursame.URL+'/assets/portada.png';
+                if(headerWall){
+                    url = Cursame.URL+headerWall
+                }
+                return url;
+            }
+        },
+        {
+            name:'headerAvatar',
+            type:'string',
+            convert:function(headerAvatar, r){
+                var url = Cursame.URL+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png';
+                if(headerAvatar){
+                    url = Cursame.URL+headerAvatar
+                }
+                return url;
+            }
+        },
+        {
+            name:'headerName',
+            type:'string',
+            convert: function (headerName,r) {
+                var name = 'Usuario';
+
+                console.log(headerName);
+                if(headerName && headerName.first_name && headerName.last_name){
+                    name = headerName.first_name + ' ' + headerName.last_name;
+                }
+                return name;
+            }
+        },
+        {
+            name:'headerBios',
+            type:'string'
+        },
+        {
+            name:'emptyStore',
+            type:'string'
+        }],
         proxy: {
             type: 'jsonp',
             url: Cursame.APIURL + 'api/comments.json',
