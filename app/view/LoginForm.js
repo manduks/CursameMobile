@@ -20,7 +20,8 @@
         items: [{
             xtype: 'image',
             margin: '30 0 0 0',
-            height: 80
+            height: 80//,
+            //src: '/resources/images/cursame.png'
         }, {
             xtype: 'fieldset',
             defaults: {

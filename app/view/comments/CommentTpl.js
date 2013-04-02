@@ -33,7 +33,7 @@ Ext.define('Cursame.view.comments.CommentTpl', {
                         '<tpl if="this.validateUserAvatar(user_avatar) == true">',
                             '<img src="'+Cursame.URL+'{user_avatar}">',
                         '<tpl else>',
-                            '<img src="'+Cursame.URL+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png">',
+                            '<img src="'+Cursame.URL+'/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png">',
                         '</tpl>',
                     '</div> ',
                     '<div class="info-user">',

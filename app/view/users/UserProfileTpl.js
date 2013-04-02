@@ -22,7 +22,7 @@
                     '<tpl if="this.validateAvatar(avatar) == true">',
                         '<img src="{avatar}">',
                     '<tpl else>',
-                        '<img src="{avatar}'+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png">',
+                        '<img src="{avatar}'+'/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png">',
                     '</tpl>',
                 '</div>',
                 '<div class="aboutme"><b>{name}</b>',
