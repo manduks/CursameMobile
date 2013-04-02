@@ -175,7 +175,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.getUserContainer().up('list').setCommentableType('User');
                 me.getUserContainer().up('list').setCommentableId(user.id);
                 me.loadCommentsByType('User',user.id);
-                me.getUserContainer().setData(data);
+                //me.getUserContainer().setData(data);
                 break;
             case 1:
                 me.getCardContainer().animateActiveItem(1, {

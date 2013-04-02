@@ -27,7 +27,8 @@ Ext.define('Cursame.controller.phone.Main', {
             courseContainer: 'coursecontainer',
             notificationNavigationView: 'notificationnavigationview',
             userNavigationView: 'usernavigationview',
-            commentsPanel: 'commentspanel'
+            commentsPanel: 'commentspanel',
+            userWall: 'userwall'
         },
         control: {
             'loginform': {
@@ -152,7 +153,7 @@ Ext.define('Cursame.controller.phone.Main', {
      * se ejecuta cuando el usuario selecciona alguna opción del menu
      */
     onMenuTap: function (list, index, target, record, e, eOpts) {
-        var me = this;
+        var me = this, firstComment;
         if(me.getActiveNavigationView()){//Si ya hay un navigation view lo reseteamos
             me.getActiveNavigationView().reset();
         }
@@ -172,10 +173,16 @@ Ext.define('Cursame.controller.phone.Main', {
                     type: 'slide',
                     direction: 'left'
                 });
-                me.getUserContainer().up('list').setCommentableType('User');
-                me.getUserContainer().up('list').setCommentableId(user.id);
+                me.getUserWall().setCommentableType('User');
+                me.getUserWall().setCommentableId(user.id);
                 me.loadCommentsByType('User',user.id);
-                me.getUserContainer().setData(data);
+                firstComment = Ext.getStore('Comments').getAt(0);
+                firstComment.wall = data.wall;
+                firstComment.avatar = data.avatar;
+                firstComment.name = data.name;
+                firstComment.bios = data.bios;
+                firstComment.commit();
+               //me.getUserContainer().setData(data);
                 break;
             case 1:
                 me.getCardContainer().animateActiveItem(1, {

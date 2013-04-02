@@ -10,7 +10,7 @@ Ext.define('Cursame.view.users.UserContainer', {
 	requires:['Cursame.view.users.UserProfileTpl'],
 
     config: {
-		docked: 'top',
+		//docked: 'top',
 		tpl: Ext.create('Cursame.view.users.UserProfileTpl')
     }
 });

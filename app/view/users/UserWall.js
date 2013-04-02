@@ -24,9 +24,9 @@ Ext.define('Cursame.view.users.UserWall', {
             direction: 'vertical',
             directionLock: true
         },
-        items: [{
+        items: [/*{
             xtype:'usercontainer'
-        },{
+        },*/{
             xtype: 'commentbar'
         }],
         plugins: [{
