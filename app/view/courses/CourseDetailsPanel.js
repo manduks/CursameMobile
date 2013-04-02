@@ -27,13 +27,13 @@ Ext.define('Cursame.view.courses.CourseDetailsPanel', {
         tpl: [
         '<div class="course-info">',
             '<b>Nombre:</b>',
-            '<p>{title}</p>',
+            '<p>{headerTitle}</p>',
         '</div>',
         '<div class="course-info"> <b>Duraci&oacute;n:</b>',
-            '<p>{init_date} - {finish_date}</p>',
+            '<p>{headerInitDate} - {headerFinishDate}</p>',
         '</div> ',
         '<div class="course-info"> <b>Acerca de:</b>',
-            '<p>{silabus}<p>',
+            '<p>{headerSilabus}<p>',
         '</div>'
         ]
     }

@@ -88,8 +88,6 @@ Ext.define('Cursame.model.Comment', {
             type:'string',
             convert: function (headerName,r) {
                 var name = 'Usuario';
-
-                console.log(headerName);
                 if(headerName && headerName.first_name && headerName.last_name){
                     name = headerName.first_name + ' ' + headerName.last_name;
                 }

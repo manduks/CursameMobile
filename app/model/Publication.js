@@ -135,22 +135,67 @@ Ext.define('Cursame.model.Publication', {
             type: 'int',
             mapping: 'comments',
             convert: function (comments, r){
-                return comments.length;
+                return comments?comments.length:0;
             }
         },{
             name: 'likes',
             type: 'object',
             mapping: 'publication',
             convert: function (publication, r){
-                var likes;
-                if(publication.votes){
-                    likes =  publication.votes.length
-                } else {
-                    likes = publication;
+                var likes = 0;
+                if(publication){
+                    if(publication.votes){
+                        likes =  publication.votes.length
+                    } else {
+                        likes = publication;
+                    }
                 }
                 return likes;
             }
-        }
+        },
+        {
+            name:'headerAvatar',
+            type:'string',
+            convert:function(headerAvatar, r){
+                var url = Cursame.URL+'/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png';
+                if(headerAvatar){
+                    url = Cursame.URL+headerAvatar
+                }
+                return url;
+            }
+        },
+        {
+            name:'headerTitle',
+            type:'string'
+        },
+        {
+            name:'headerPublicStatus',
+            type:'string'
+        },
+        {
+            name:'emptyStore',
+            type:'string'
+        },
+            {
+                name:'headerInitDate',
+                type:'string'
+            },
+            {
+                name:'headerFinishDate',
+                type:'string'
+            },
+            {
+                name:'headerSilabus',
+                type:'string'
+            },
+            {
+                name:'headerId',
+                type:'int'
+            },
+            {
+                name:'showHeader',
+                type:'string'
+            }
         ],
         proxy: {
             type: 'jsonp',

@@ -18,13 +18,13 @@ Ext.define('Cursame.controller.tablet.Main', {
             commentField: 'commentspanel commentslist commentbar #commentfield',
             commentFieldUser: 'userwall commentbar #commentfield',
             commentFieldObject: 'list commentbar #commentfield',
-            userContainer: 'usercontainer',
+            //userContainer: 'usercontainer',
             menu: 'navigationmenu',
             publicationNavigationView: 'publicationsnavigationview',
             discussionContainer: 'discussioncontainer',
             deliveryContainer: 'deliverycontainer',
             commentContainer: 'commentcontainer',
-            courseContainer: 'coursecontainer',
+            //courseContainer: 'coursecontainer',
             notificationNavigationView: 'notificationnavigationview',
             userNavigationView: 'usernavigationview',
             commentsPanel: 'commentspanel',
@@ -238,7 +238,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
         if (e.getTarget('div.comment')) {
             commentsStore.setParams({
-                commentable_type: record.data.publication_type,
+                commentable_type: Core.toFirstUpperCase(record.data.publication_type),
                 commentable_id: record.data.publication_id
             });
             commentsStore.load();
@@ -253,6 +253,22 @@ Ext.define('Cursame.controller.tablet.Main', {
             });
             Ext.Viewport.add(panel);
             panel.show();
+            return;
+        }
+        if (e.getTarget('div.aboutme-course')) {
+            me.onCourseDetails(me, record.data);
+            return;
+        }
+        if (e.getTarget('div.create-comment')) {
+            me.onCourseCreateComment(me, record.data);
+            return;
+        }
+        if (e.getTarget('div.create-homework')) {
+            me.onCourseCreateHomework(me, record.data);
+            return;
+        }
+        if (e.getTarget('div.create-discussion')) {
+            me.onCourseCreateDiscussion(me, record.data);
             return;
         }
         me.pushPublicationContainer(record);
@@ -341,8 +357,6 @@ Ext.define('Cursame.controller.tablet.Main', {
                 commentable_id: record.get('id')
             });
             cComments.load();
-            //console.info(cComments);
-            //console.info(record);
 
             Ext.Viewport.add(commentsPanel);
             commentsPanel.show();
@@ -425,7 +439,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             publicationsStore = Ext.getStore('Publications');
         view.push({
             xtype: 'coursewall',
-            title: data.id.title,
+            title: data.id.title/*,
             listeners: { //esto no deberia ser asi
                 painted: function (c) {
                     if (!c.addedListener) {
@@ -446,15 +460,15 @@ Ext.define('Cursame.controller.tablet.Main', {
                         c.addedListener = true;
                     }
                 }
-            }
+            }*/
         });
-        me.getCourseContainer().setData(data);
+        //me.getCourseContainer().setData(data);
         publicationsStore.setParams({
             publicacionId: data.id,
             type: 'Course'
         });
         // cargamos las publicaciones del curso
-        publicationsStore.load();
+        publicationsStore.load(me.addHeaderToPublications.bind(me, [data]));
     },
 
     onUserTap:function  (dataview, index, target, record, e, opt) {
@@ -480,7 +494,7 @@ Ext.define('Cursame.controller.tablet.Main', {
      */
     onCourseCreateComment: function (c, data) {
         var panel = Ext.create('Cursame.view.comments.CommentForm', {
-            objectId: data.id
+            objectId: data.headerId
         });
         Ext.Viewport.add(panel);
         panel.show('');
@@ -490,7 +504,7 @@ Ext.define('Cursame.controller.tablet.Main', {
      */
     onCourseCreateHomework: function (c, data) {
         var panel = Ext.create('Cursame.view.deliveries.DeliveryForm', {
-            objectId: data.id
+            objectId: data.headerId
         });
         Ext.Viewport.add(panel);
         panel.show('');
@@ -500,7 +514,7 @@ Ext.define('Cursame.controller.tablet.Main', {
      */
     onCourseCreateDiscussion: function (c, data) {
         var panel = Ext.create('Cursame.view.discussions.DiscussionForm', {
-            objectId: data.id
+            objectId: data.headerId
         });
         Ext.Viewport.add(panel);
         panel.show('');
@@ -658,6 +672,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.onCancelForm(btn);
             }
         });
+        Ext.getStore('Publications').resetCurrentPage();
         Ext.getStore('Publications').setParams({});
         Ext.getStore('Publications').load();
     },
@@ -708,6 +723,35 @@ Ext.define('Cursame.controller.tablet.Main', {
             data.emptyStore = true;
             commentsStore.add(data);
         }
+    },
 
+    addHeaderToPublications:function(params){
+        var publicationsStore = Ext.getStore('Publications'),
+            firstPublicationRecord = publicationsStore.getAt(0),
+            data = {};
+
+        data.headerAvatar = params[0].avatar;
+        data.headerTitle = params[0].title;
+        data.headerPublicStatus = params[0].public_status;
+        data.headerInitDate = params[0].init_date;
+        data.headerFinishDate = params[0].finish_date;
+        data.headerSilabus = params[0].silabus;
+        data.headerId = params[0].id;
+        data.showHeader = true;
+
+        if(firstPublicationRecord){
+            firstPublicationRecord.set('headerAvatar', data.headerAvatar);
+            firstPublicationRecord.set('headerTitle', data.headerTitle);
+            firstPublicationRecord.set('headerPublicStatus', data.headerPublicStatus);
+            firstPublicationRecord.set('headerInitDate', data.headerInitDate);
+            firstPublicationRecord.set('headerFinishDate', data.headerFinishDate);
+            firstPublicationRecord.set('headerSilabus', data.headerSilabus);
+            firstPublicationRecord.set('headerId', data.headerId);
+            firstPublicationRecord.set('showHeader', data.showHeader);
+            firstPublicationRecord.commit();
+        } else {
+            data.emptyStore = true;
+            publicationsStore.add(data);
+        }
     }
 });

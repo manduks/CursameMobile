@@ -9,6 +9,30 @@
     constructor: function () {
         var html;
         html = [
+        '<tpl if = "this.isFirstRecord(values) == true && showHeader">',
+        '<div class="profile-header">',
+            '<div class="img-header">',
+                '<img src="'+Cursame.URL+'/assets/imagecoursex.png">',
+            '</div>',
+            '<div class="profile-info">',
+                '<div class="profile-avatar">',
+                    '<img src="{headerAvatar}">',
+                '</div>',
+                '<div class="aboutme-course"><b>{headerTitle}</b>',
+                    '<p>{headerPublicStatus}</p>',
+                '</div>',
+            '</div>',
+        '</div>',
+        '<tpl if="this.hasPermissions() == true">',
+            '<div class="creation">',
+                '<div class="create-comment">Comentario</div>',
+                '<div class="create-homework">Tarea</div>',
+                '<div class="create-discussion">Discusi&oacute;n</div>',
+            '</div>',
+        '</tpl>',
+        '<div class="clear:both"></div>',
+        '</tpl>',
+        '<tpl if = "!emptyStore">',
         '<div class="publication">',
             '<div class="content">',
                 '<div class="tipe-line-{publication_type}"></div>',
@@ -35,7 +59,26 @@
                     '<div class="comment">Commentar</div>',
                 '</div>',
             '</div>',
-        '</div>'
+        '</div>',
+        '</tpl>',
+            {
+                hasPermissions: function () {
+                    var user = Ext.decode(localStorage.getItem("User"));
+                    if (user.roles[0].id != 2) {
+                        return true;
+                    }
+                    return false;
+                },
+                isFirstRecord: function (values){
+                    var record = Ext.getStore('Publications').getAt(0);
+
+                    if (record.internalId == values.id){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
         ];
         this.callParent(html);
     }

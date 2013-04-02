@@ -341,8 +341,6 @@ Ext.define('Cursame.controller.phone.Main', {
                 commentable_id: record.get('id')
             });
             cComments.load();
-            //console.info(cComments);
-            //console.info(record);
 
             Ext.Viewport.add(commentsPanel);
             commentsPanel.show();

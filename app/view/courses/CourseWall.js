@@ -22,10 +22,6 @@ Ext.define('Cursame.view.courses.CourseWall', {
             direction: 'vertical',
             directionLock: true
         },
-        items: [{
-            xtype:'coursecontainer',
-            itemId:'courseCo'
-        }],
         plugins: [{
             type: 'listpaging',
             autoPaging: true,
