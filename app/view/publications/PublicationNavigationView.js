@@ -15,7 +15,7 @@ Ext.define('Cursame.view.publications.PublicationNavigationView', {
         defaultBackButtonText: lang.back,
 		items: {
 			xtype: 'publicationslist',
-			titlle: lang.courses
+			title: lang.start
 		}
 	},
 	applyLayout: function(config) {

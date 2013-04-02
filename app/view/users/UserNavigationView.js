@@ -15,7 +15,7 @@ Ext.define('Cursame.view.users.UserNavigationView', {
         defaultBackButtonText: lang.back,
 		items: {
 			xtype: 'userslist',
-			titlle: 'Comunidad'
+			title: 'Comunidad'
 		}
 	},
 	applyLayout: function(config) {
