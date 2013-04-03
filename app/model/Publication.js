@@ -148,9 +148,17 @@ Ext.define('Cursame.model.Publication', {
             {
                 name: 'num_comments',
                 type: 'int',
-                mapping: 'comments',
-                convert: function (comments, r) {
-                    return comments ? comments.length : 0;
+                mapping: 'publication',
+                convert: function (publication, r) {
+                    var comments = 0;
+                    if (publication) {
+                        if (publication.comments) {
+                            comments = publication.comments.length
+                        } else {
+                            comments = publication;
+                        }
+                    }
+                    return comments;
                 }
             },
             {
@@ -173,7 +181,7 @@ Ext.define('Cursame.model.Publication', {
                 name: 'headerAvatar',
                 type: 'string',
                 convert: function (headerAvatar, r) {
-                    var url = Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
+                    var url = Cursame.URL + '/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png';
                     if (headerAvatar) {
                         url = Cursame.URL + headerAvatar
                     }
