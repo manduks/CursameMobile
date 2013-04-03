@@ -4,6 +4,7 @@
  * This is the definition class utils of the application
  */
  Ext.define('Core.Utils', {
+    singleton:true,
     user:undefined,
     url:Cursame.APIURL,
     src:'/assets/Cursame/',
@@ -55,6 +56,4 @@
         }
     }
 });
-
-var Core = Ext.create('Core.Utils');
 

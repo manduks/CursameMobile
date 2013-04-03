@@ -14,7 +14,7 @@
         selectedCls :'pressedCls',
         masked: {
             xtype: 'loadmask',
-            message: lang.loading
+            message: Core.Lang.es.loading
         },
         emptyText: 'No hay publicaciones ...',
         scrollable: {
@@ -24,7 +24,7 @@
         plugins: [{
             type: 'listpaging',
             autoPaging: true,
-            loadMoreText: lang.loadMoreText
+            loadMoreText: Core.Lang.es.loadMoreText
         }],
         itemTpl: Ext.create('Cursame.view.publications.PublicationTpl')
     }

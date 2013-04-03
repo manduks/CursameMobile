@@ -18,7 +18,7 @@ Ext.define('Cursame.view.users.UserWall', {
         selectedCls :'pressedCls',
         masked: {
             xtype: 'loadmask',
-            message: lang.loading
+            message: Core.Lang.es.loading
         },
         scrollable: {
             direction: 'vertical',
@@ -30,7 +30,7 @@ Ext.define('Cursame.view.users.UserWall', {
         plugins: [{
             type: 'listpaging',
             autoPaging: true,
-            loadMoreText: lang.loadMoreText
+            loadMoreText: Core.Lang.es.loadMoreText
         }],
         itemTpl: Ext.create('Cursame.view.comments.CommentTpl')
     }
