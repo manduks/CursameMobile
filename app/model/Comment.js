@@ -49,7 +49,6 @@ Ext.define('Cursame.model.Comment', {
             type: 'int',
             mapping: 'comments',
             convert: function (comments, r){
-                console.info(comments);
                 var num_comments = 0;
                     if (comments && comments.length) {
                         num_comments = comments.length;
