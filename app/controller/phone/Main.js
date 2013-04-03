@@ -563,7 +563,7 @@ Ext.define('Cursame.controller.phone.Main', {
                 store = Ext.getStore('CommentsComments');
             }
 
-            me.saveComment(comment, type, id, store);
+            me.saveComment(comment, Core.Utils.toFirstUpperCase(type), id, store);
         }
     },
     /**
@@ -582,7 +582,7 @@ Ext.define('Cursame.controller.phone.Main', {
         }
     },
     saveComment: function (comment, commentableType, commentableId, store, form) {
-        var me = this;
+        var me = this, record, num_comments;
         me.getMain().setMasked({
             xtype: 'loadmask',
             message: Core.Lang.es.saving
@@ -595,17 +595,26 @@ Ext.define('Cursame.controller.phone.Main', {
                 commentable_id: commentableId
             },
             success: function (response) {
+                me.getMain().setMasked(false);
                 if (form){
                     form.hide();
                     form.destroy();
+                } else {
+                    record = me.getUserWall().getSelection()[0];
+                    if (!record){
+                        record = me.getPublicationsList().getSelection()[0];
+                    }
+                    num_comments = record.get('num_comments') + 1;//Cuando se guarda un comentario se le suma al numero de comentarios.
+                    record.set('num_comments',num_comments)
+                    record.commit();
                 }
-                me.getMain().setMasked(false);
                 store.resetCurrentPage();
                 store.setParams({
                     commentable_type: commentableType,
                     commentable_id: commentableId
                 });
                 store.load();
+
             }
         });
     },

@@ -563,7 +563,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 store = Ext.getStore('CommentsComments');
             }
 
-            me.saveComment(comment, Core.toFirstUpperCase(type), id, store);
+            me.saveComment(comment, Core.Utils.toFirstUpperCase(type), id, store);
         }
     },
     /**
@@ -639,9 +639,6 @@ Ext.define('Cursame.controller.tablet.Main', {
             },
             success: function (response) {
                 me.getMain().setMasked(false);
-                //var likes = record.get('likes') + 1;//Cuando se guarda un comentario se le suma al numero de comentarios.
-                //record.set('likes',likes)
-                //record.commit();
                 record.set('likes','1');
                 record.commit();
             }
