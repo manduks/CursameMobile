@@ -49,16 +49,27 @@ Ext.define('Cursame.model.Comment', {
             type: 'int',
             mapping: 'comments',
             convert: function (comments, r){
-                var length = comments? comments.length: 0;
-                return length;
+                console.info(comments);
+                var num_comments = 0;
+                    if (comments && comments.length) {
+                        num_comments = comments.length;
+                    } else if(comments && comments != '') {
+                        num_comments = comments;
+                    }
+                return num_comments;
             }
         },{
             name: 'likes',
             type: 'int',
             mapping: 'votes',
             convert: function (votes, r){
-                var length = votes? votes.length: 0;
-                return length;
+                var likes = 0;
+                    if (votes) {
+                        likes = votes.length
+                    } else {
+                        likes;
+                    }
+                return likes;
             }
         },
         {
