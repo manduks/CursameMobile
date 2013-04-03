@@ -64,10 +64,21 @@
                         },
                         success: function(response) {
                             form.setMasked(false);
-                            localStorage.setItem("Token", response.response.token);
-                            localStorage.setItem("UserId", response.response.user.id);
-                            localStorage.setItem("User", Ext.encode(response.response.user));
-                            form.fireEvent("logeado", form);
+                            if(response.response.success){
+                                localStorage.setItem("Token", response.response.token);
+                                localStorage.setItem("UserId", response.response.user.id);
+                                localStorage.setItem("User", Ext.encode(response.response.user));
+                                form.fireEvent("logeado", form);
+                            }else{
+                                form.setMasked({
+                                    xtype: 'loadmask',
+                                    indicator:false,
+                                    message: "Favor de verificar el usuario o la contraseña"
+                                });
+                                setTimeout(function(){
+                                    form.setMasked(false);
+                                },1000);
+                            }
                         }
                     });
                 }

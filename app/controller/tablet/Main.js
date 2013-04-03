@@ -109,11 +109,60 @@ Ext.define('Cursame.controller.tablet.Main', {
         setTimeout(function(){
             me.onMenuTap(me.getMenu(), 1);
         }, 500);
+
+        me.startPushNotifications();
+    },
+    /**
+     * este metodo iniciliza las push notifications mediante faye 
+     * @return {objet} soy un pinch pro!!
+     */
+    startPushNotifications:function(){
+        var me = this, stores ={}, user;
+
+        user = Ext.decode(localStorage.getItem("User"));
+        stores = {
+            'user_comment_on_network':{
+                'Publications':'Publications'
+            },
+            'user_comment_on_course':{
+                'Publications':'Publications'
+            },
+            'new_delivery_on_course':{
+                'Publications':'Publications'
+            },
+            'new_public_course_on_network':{
+                'Publications':'Publications',
+                'Courses':'Courses'
+            },
+            'new_survey_on_course':{
+                'Publications':'Publications'
+            },
+            'comment_on_comment':{
+                'CommentsComments':'CommentsComments'
+            }
+        };
+        //actviamos faye
+        PrivatePub.sign({
+            "server":"http://localhost:9292/faye",
+            "timestamp":1365016127973,
+            "channel":"/notifications/" + user.id,
+            "signature":"c037745e6e79cd15b521078c7a7848059b5c2565"
+        });
+
+        //metodo que escucha las notificaciones y las setea
+        PrivatePub.subscribe("/notifications/" + user.id, function(data, channel) {
+            console.log(data);
+            store = me.getMenu().getStore().getAt(2).set('numNotifications',data.num);
+            user.notifications.length = data.num;
+            localStorage.setItem("User", Ext.encode(user));
+            console.log(Ext.getStore('Comments').getStoreId());
+            Ext.getStore(stores[kind][currentStore] || 'CommentsComments').load();
+        });
     },
     /**
      *
      */
-    getData: function () {
+    getData: function (numNotifications) {
         var user, userName, avatar;
 
         user = Ext.decode(localStorage.getItem("User"));
