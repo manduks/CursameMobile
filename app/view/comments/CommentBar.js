@@ -12,12 +12,12 @@ Ext.define('Cursame.view.comments.CommentBar', {
         layout: 'hbox',
         items: [{
             xtype: 'textfield',
-            placeHolder: lang.sendComment,
+            placeHolder: Core.Lang.es.sendComment,
             itemId:'commentfield',
             flex: 5
         }, {
             xtype: 'button',
-            text: lang.send,
+            text: Core.Lang.es.send,
             //disabled: true,
             ui: 'accept',
             itemId:'submit',

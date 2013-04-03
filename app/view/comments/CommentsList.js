@@ -16,7 +16,7 @@ Ext.define('Cursame.view.comments.CommentsList', {
         selectedCls :'pressedCls',
         masked: {
             xtype: 'loadmask',
-            message: lang.loading
+            message: Core.Lang.es.loading
         },
         emptyText: 'No hay comentarios ...',
         scrollable: {
@@ -29,7 +29,7 @@ Ext.define('Cursame.view.comments.CommentsList', {
         plugins: [{
             type: 'listpaging',
             autoPaging: true,
-            loadMoreText: lang.loadMoreText
+            loadMoreText: Core.Lang.es.loadMoreText
         }],
         itemTpl: Ext.create('Cursame.view.comments.CommentTpl')
     }

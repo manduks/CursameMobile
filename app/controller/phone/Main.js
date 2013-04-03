@@ -236,7 +236,7 @@ Ext.define('Cursame.controller.phone.Main', {
         }
         if (e.getTarget('div.comment')) {
             commentsStore.setParams({
-                commentable_type: Core.toFirstUpperCase(record.data.publication_type),
+                commentable_type: Core.Utils.toFirstUpperCase(record.data.publication_type),
                 commentable_id: record.data.publication_id
             });
             commentsStore.load();
@@ -291,13 +291,13 @@ Ext.define('Cursame.controller.phone.Main', {
             publication.avatar = user.avatar.url;
         }
         publication.user_name = user.first_name +' '+ user.last_name;
-        publication.timeAgo = Core.timeAgo(publication.created_at);
+        publication.timeAgo = Core.Utils.timeAgo(publication.created_at);
 
         switch (record.get('publication_type')) {
             case 'discussion':
                 me.getActiveNavigationView().push({
                     xtype: 'discussionwall',
-                    title: lang.discussion,
+                    title: Core.Lang.es.discussion,
                     commentableType: 'Discussion',
                     commentableId: publication.id
                 });
@@ -307,18 +307,18 @@ Ext.define('Cursame.controller.phone.Main', {
             case 'delivery':
                 me.getActiveNavigationView().push({
                     xtype: 'deliverywall',
-                    title: lang.delivery,
+                    title: Core.Lang.es.delivery,
                     commentableType: 'Delivery',
                     commentableId: publication.id
                 });
-                publication.end_date = Core.timeAgo(publication.end_date);
+                publication.end_date = Core.Utils.timeAgo(publication.end_date);
                 me.getDeliveryContainer().setData(publication);
                 me.loadCommentsByType('Delivery',publication.id);
                 break;
             case 'comment':
                 me.getActiveNavigationView().push({
                     xtype: 'commentwall',
-                    title:lang.comment,
+                    title:Core.Lang.es.comment,
                     commentableType: 'Comment',
                     commentableId: publication.id
                 });
@@ -381,13 +381,13 @@ Ext.define('Cursame.controller.phone.Main', {
             case 'user_comment_on_network':
                 navigationView.push({
                     xtype: 'commentwall',
-                    title:lang.comment,
+                    title:Core.Lang.es.comment,
                     commentableType: 'Comment',
                     commentableId: data.id
                 });
                 creator = record.get('creator');
                 data.user_name = creator.first_name +' '+ creator.last_name;
-                data.timeAgo = Core.timeAgo(data.created_at);
+                data.timeAgo = Core.Utils.timeAgo(data.created_at);
                 data.avatar = creator.avatar.url;
 
                 me.getCommentContainer().setData(data);
@@ -396,13 +396,13 @@ Ext.define('Cursame.controller.phone.Main', {
             case 'user_comment_on_course':
                 navigationView.push({
                     xtype: 'commentwall',
-                    title:lang.comment,
+                    title:Core.Lang.es.comment,
                     commentableType: 'Comment',
                     commentableId: data.id
                 });
                 creator = record.get('creator');
                 data.user_name = creator.first_name +' '+ creator.last_name;
-                data.timeAgo = Core.timeAgo(data.created_at);
+                data.timeAgo = Core.Utils.timeAgo(data.created_at);
                 data.avatar = creator.avatar.url;
 
                 me.getCommentContainer().setData(data);
@@ -411,7 +411,7 @@ Ext.define('Cursame.controller.phone.Main', {
             case 'new_delivery_on_course':
                 navigationView.push({
                     xtype: 'deliverywall',
-                    title:lang.delivery,
+                    title:Core.Lang.es.delivery,
                     commentableType: 'Delivery',
                     commentableId: data.id
                 });
@@ -585,9 +585,9 @@ Ext.define('Cursame.controller.phone.Main', {
         var me = this;
         me.getMain().setMasked({
             xtype: 'loadmask',
-            message: lang.saving
+            message: Core.Lang.es.saving
         });
-        Core.ajax({
+        Core.Utils.ajax({
             url: 'api/create_comment',
             params: {
                 comment: comment,
@@ -620,9 +620,9 @@ Ext.define('Cursame.controller.phone.Main', {
         var me = this;
         me.getMain().setMasked({
             xtype: 'loadmask',
-            message: lang.saving
+            message: Core.Lang.es.saving
         });
-        Core.ajax({
+        Core.Utils.ajax({
             url: 'api/create_like',
             params: {
                 type: type,
@@ -656,10 +656,10 @@ Ext.define('Cursame.controller.phone.Main', {
 
         form.setMasked({
             xtype: 'loadmask',
-            message: lang.saving
+            message: Core.Lang.es.saving
         });
 
-        Core.ajax({
+        Core.Utils.ajax({
             url: url,
             params: values,
             success: function (response) {
@@ -700,7 +700,7 @@ Ext.define('Cursame.controller.phone.Main', {
                 id = record.data.publication_id;
                 break;
         }
-       me.saveLike(Core.toFirstUpperCase(type),id,record);
+       me.saveLike(Core.Utils.toFirstUpperCase(type),id,record);
     },
 
     addHeaderToComments:function(params){

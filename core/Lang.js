@@ -4,6 +4,7 @@
  * This is the definition class for the languages of the application
  */
  Ext.define('Core.Lang', {
+    singleton:true,
     es:{
         appName: 'Cursame',
         sorryMsg:'¡Lo sentimos, algo salio mal! :(',
@@ -23,7 +24,14 @@
         passwordRecoverEmail:'Escribe tu Email',
         send:'Enviar',
         courses:'Cursos',
-        loading:'Cargando ...'
+        loading:'Cargando ...',
+        back:'Atrás',
+        loadMoreText:'ver más...',
+        discussion:'Discusion',
+        delivery:'Tarea',
+        comment:'Comentario',
+        start:'Inicio',
+        notifications:'Notificaciones'
     }
 });
 

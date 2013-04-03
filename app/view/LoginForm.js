@@ -30,14 +30,14 @@
             items: [{
                 xtype: 'emailfield',
                 name: 'email',
-                placeHolder: lang.email,
+                placeHolder: Core.Lang.es.email,
                 //value: 'info+pasteje@cursa.me',
                 //value: 'iam@armando.mx',
                 clearIcon: true
                 }, {
                     xtype: 'passwordfield',
                     name: 'password',
-                    placeHolder: lang.password,
+                    placeHolder: Core.Lang.es.password,
                     //value: 'cursamepasteje7',
                     //value: 'mmmmmm',
                     clearIcon: true
@@ -46,7 +46,7 @@
             xtype: 'fieldset',
             items: [{
                 xtype: 'button',
-                text: '<div class = "movi-color">' + lang.login + '</div>',
+                text: '<div class = "movi-color">' + Core.Lang.es.login + '</div>',
                 ui: 'accept',
                 scope: this,
                 handler: function (btn) {
@@ -54,9 +54,9 @@
                     obj = form.getValues();
                     form.setMasked({
                         xtype: 'loadmask',
-                        message: lang.starting
+                        message: Core.Lang.es.starting
                     });
-                    Core.ajax({
+                    Core.Utils.ajax({
                         url: 'tokens/create.json',
                         params: {
                             email: obj.email ,
@@ -74,7 +74,7 @@
             }]
         }/*, {
             xtype: 'button',
-            text: '<div class = "movi-color" style = "color:white;">' + lang.passwordRecover + '</div>',
+            text: '<div class = "movi-color" style = "color:white;">' + Core.Lang.es.passwordRecover + '</div>',
             baseCls: 'empty',
             cls: 'empty',
             handler: function (btn) {

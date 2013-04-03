@@ -12,10 +12,10 @@ Ext.define('Cursame.view.notifications.NotificationNavigationView', {
 		'Cursame.view.notifications.NotificationsList'
 	],
 	config: {
-        defaultBackButtonText: lang.back,
+        defaultBackButtonText: Core.Lang.es.back,
 		items: {
 			xtype: 'notificationslist',
-			title: lang.notifications
+			title: Core.Lang.es.notifications
 		}
 	},
 	applyLayout: function(config) {

@@ -16,7 +16,7 @@ Ext.define('Cursame.view.courses.CourseWall', {
         selectedCls :'pressedCls',
         masked: {
             xtype: 'loadmask',
-            message: lang.loading
+            message: Core.Lang.es.loading
         },
         scrollable: {
             direction: 'vertical',
@@ -25,7 +25,7 @@ Ext.define('Cursame.view.courses.CourseWall', {
         plugins: [{
             type: 'listpaging',
             autoPaging: true,
-            loadMoreText: lang.loadMoreText
+            loadMoreText: Core.Lang.es.loadMoreText
         }],
         itemTpl: Ext.create('Cursame.view.publications.PublicationTpl')
     }
