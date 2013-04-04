@@ -16,7 +16,7 @@
             '<div class="profile-info">',
                 '<div class="menu-homework">',
                     '<div class="aboutme-homework description"><b>Descripci&oacute;n</b> <br><i>"{title}"</i> </div>',
-                     '<div class="aboutme-homework date">Entregar en: <b>{end_date}</b></br></div>',
+                     '<div class="aboutme-homework date">Entregar en:<br> <b>{end_date}</b></br></div>',
                      '<div class="aboutme-homework deliver"><b>Entregar</b></br></div>',
                 '</div>',
             '</div>',
