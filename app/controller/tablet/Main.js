@@ -8,6 +8,7 @@ Ext.define('Cursame.controller.tablet.Main', {
 
     config: {
         activeNavigationView: undefined, //Referencia al Navigation View Activo
+        currentStore:undefined,
         refs: {
             main: {
                 selector: 'main'
@@ -180,6 +181,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 });
                 Ext.getStore('Publications').setParams({}, true);
                 Ext.getStore('Publications').load();
+                me.currentStore = 'Publications';
                 me.setActiveNavigationView(me.getPublicationNavigationView());
                 break;
             case 2:
@@ -189,6 +191,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 });
                 Ext.getStore('Notifications').setParams({});
                 Ext.getStore('Notifications').load();
+                me.currentStore = 'Notifications';
                 me.setActiveNavigationView(me.getNotificationNavigationView());
                 break;
             case 3:
@@ -198,6 +201,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 });
                 Ext.getStore('Courses').setParams({});
                 Ext.getStore('Courses').load();
+                me.currentStore = 'Courses';
                 me.setActiveNavigationView(me.getCourseNavigationView());
                 break;
             case 4:
@@ -207,6 +211,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 });
                 Ext.getStore('Users').setParams({});
                 Ext.getStore('Users').load();
+                me.currentStore = 'Users';
                 me.setActiveNavigationView(me.getUserNavigationView());
                 break;
             case 5:
@@ -240,6 +245,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 commentable_id: record.data.publication_id
             });
             commentsStore.load();
+            me.currentStore = 'Comments';
 
             var panel = Ext.create('Cursame.view.comments.CommentsPanel', {
                 objectData: record.getData(),
@@ -358,6 +364,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 commentable_id: record.get('id')
             });
             cComments.load();
+            me.currentStore = 'CommentsComments';
 
             Ext.Viewport.add(commentsPanel);
             commentsPanel.show();
@@ -446,6 +453,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             commentable_id: commentableId
         });
         commentsStore.load(callback);
+        me.currentStore = 'Comments';
     },
     /**
      * push course
@@ -453,6 +461,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     pushCourseToView: function (view, data) {
         var me = this,
             publicationsStore = Ext.getStore('Publications');
+        me.currentStore = 'Publications';
         view.push({
             xtype: 'coursewall',
             title: data.id.title
@@ -614,7 +623,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                     commentable_id: commentableId
                 });
                 store.load();
-
+                me.currentStore = store.getStoreId();
             }
         });
     },
@@ -693,6 +702,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         });
         Ext.getStore('Publications').setParams({});
         Ext.getStore('Publications').load();
+        me.currentStore = 'Publications';
     },
 
     resetCurrentPageOnStores:function(){
