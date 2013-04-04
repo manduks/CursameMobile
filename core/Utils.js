@@ -37,6 +37,9 @@
             diff = now - dateTime,
             str;
 
+            if (diff < 0){
+                diff = diff * -1;
+            }
             if (diff < 60) {
                 return String(diff) + ' segundos';
             } else if (diff < 3600) {
