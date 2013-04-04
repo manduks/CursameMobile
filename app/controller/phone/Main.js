@@ -5,6 +5,7 @@
  */
 Ext.define('Cursame.controller.phone.Main', {
     extend: 'Cursame.controller.Main',
+    requires: 'Ext.MessageBox',
 
     config: {
         activeNavigationView: undefined, //Referencia al Navigation View Activo
@@ -600,9 +601,9 @@ Ext.define('Cursame.controller.phone.Main', {
                     form.hide();
                     form.destroy();
                 } else {
-                    record = me.getUserWall().getSelection()[0];
+                    record = me.getUserWall().getSelection()[0];//Si se accede desde el Wall de Usuario.
                     if (!record){
-                        record = me.getPublicationsList().getSelection()[0];
+                        record = me.getPublicationsList().getSelection()[0];//Si se accede desde el Wall de Publicaciones.
                     }
                     num_comments = record.get('num_comments') + 1;//Cuando se guarda un comentario se le suma al numero de comentarios.
                     record.set('num_comments',num_comments)
@@ -660,8 +661,23 @@ Ext.define('Cursame.controller.phone.Main', {
     addElement:function(btn, url){
         var form = btn.up('formpanel'),
             values = form.getValues(),
-            me = this;
+            me = this,
+            publication = values.publication,
+            deliver = values.deliver;
+
         values.courseId = form.getObjectId();
+        //Validación para el formulario de Creación de Tareas
+        if (values){
+            if (values.title == ''){
+                return Ext.Msg.alert('','Escribe un titulo a la Tarea.');
+            } else if (values.description == ''){
+                return Ext.Msg.alert('','Escribe una descripción a la Tarea.');
+            } else if (deliver <= publication){
+                return Ext.Msg.alert('','La fecha de Publicación no puede ser menor o igual a la fecha de Entrega');
+            }  else if (values.value == null){
+                return Ext.Msg.alert('','Escribe un valor para la Tarea.');
+            }
+        }
 
         form.setMasked({
             xtype: 'loadmask',
