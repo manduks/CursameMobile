@@ -138,8 +138,11 @@ Ext.define('Cursame.controller.tablet.Main', {
             'new_survey_on_course':{
                 'Publications':'Publications'
             },
-            'comment_on_comment':{
+            'user_comment_on_comment':{
                 'CommentsComments':'CommentsComments'
+            },
+            'user_comment_on_user':{
+                'Comments':'Comments'
             }
         };
         //actviamos faye
@@ -156,8 +159,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             store = me.getMenu().getStore().getAt(2).set('numNotifications',data.num);
             user.notifications.length = data.num;
             localStorage.setItem("User", Ext.encode(user));
-            console.log(Ext.getStore('Comments').getStoreId());
-            Ext.getStore(stores[kind][currentStore] || 'CommentsComments').load();
+            Ext.getStore(stores[data.notification.kind][me.currentStore] || 'CommentsComments').load();
         });
     },
     /**
