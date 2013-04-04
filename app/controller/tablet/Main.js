@@ -613,9 +613,11 @@ Ext.define('Cursame.controller.tablet.Main', {
                     if (!record){
                         record = me.getPublicationsList().getSelection()[0];
                     }
-                    num_comments = record.get('num_comments') + 1;//Cuando se guarda un comentario se le suma al numero de comentarios.
-                    record.set('num_comments',num_comments)
-                    record.commit();
+                    if(record){
+                        num_comments = record.get('num_comments') + 1;//Cuando se guarda un comentario se le suma al numero de comentarios.
+                        record.set('num_comments',num_comments)
+                        record.commit();
+                    }
                 }
                 store.resetCurrentPage();
                 store.setParams({
