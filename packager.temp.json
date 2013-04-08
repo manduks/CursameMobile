@@ -1,0 +1,38 @@
+{
+  "applicationName": "Cursame",
+  "applicationId": "com.cursame.Cursame",
+  "bundleSeedId": "KPXFEPZ6EF",
+  "versionString": "1.0",
+  "versionCode": "1",
+  "icon": {
+    "57": "resources/icons/cursame_57.png",
+    "72": "resources/icons/cursame_72.png",
+    "114": "resources/icons/cursame_114.png",
+    "144": "resources/icons/cursame_144.png"
+  },
+  "inputPath": "/Applications/XAMPP/xamppfiles/htdocs/build/Cursame/package",
+  "outputPath": "/Applications/XAMPP/xamppfiles/htdocs/build/Cursame/native",
+  "configuration": "Debug",
+  "platform": "Android",
+  "deviceType": "Universal",
+  "certificatePath": "/path/to/certificate.file",
+  "certificatePassword": "",
+  "provisionProfile": "",
+  "sdkPath": "/Users/lumartin/bin/androidSdk",
+  "androidAPILevel": "15",
+  "permissions": [
+    "INTERNET",
+    "ACCESS_NETWORK_STATE",
+    "CAMERA",
+    "VIBRATE",
+    "ACCESS_FINE_LOCATION",
+    "ACCESS_COARSE_LOCATION",
+    "CALL_PHONE"
+  ],
+  "orientations": [
+    "portrait",
+    "landscapeLeft",
+    "landscapeRight",
+    "portraitUpsideDown"
+  ]
+}
