@@ -51,12 +51,16 @@
                     // '<img src="http://1.bp.blogspot.com/-L3PW_oxd7wE/TlPVPK50HwI/AAAAAAAALn8/RN4UpwowJek/s1600/Paisaje-Monta%25C3%25B1a-1600x1200.jpg">',
                 '</div>',
                 '<div class="likes-comments">',
-                    '<p>{likes} Me Gusta - {num_comments} Comentarios</p>',
+                    '<p>{likes.length} Me Gusta - {num_comments} Comentarios</p>',
                 '</div>',
                 '<div style="clear:both"></div>',
                 '<div class="footer-publication">',
-                    '<div class="like">Me gusta</div>',
-                    '<div class="comment">Commentar</div>',
+                   '<tpl if ="this.validateLike(values) == true">',
+                       '<div class="like">Me gusta</div>',
+                   '<tpl else>',
+                       '<div class="like">Ya no me gusta</div>',
+                   '</tpl>',
+                       '<div class="comment">Commentar</div>',
                 '</div>',
             '</div>',
         '</div>',
@@ -77,6 +81,19 @@
                     } else {
                         return false;
                     }
+                },
+                validateLike: function (values){
+                    var user = Ext.decode(localStorage.getItem("User")),
+                        bandera = true;
+                    if (values && values.likes){
+                        Ext.Array.each(values.likes, function(item,index){
+                            if (item.voter_id == user.id){
+                                bandera = false;
+                            }
+                        });
+                    }
+                    return bandera;
+
                 }
             }
         ];

@@ -60,11 +60,11 @@ Ext.define('Cursame.model.Comment', {
         },{
             name: 'likes',
             type: 'int',
-            mapping: 'votes',
+            mapping: 'likes',
             convert: function (votes, r){
                 var likes = 0;
                     if (votes) {
-                        likes = votes.length
+                        likes = votes;
                     } else {
                         likes;
                     }

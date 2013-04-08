@@ -164,7 +164,8 @@ Ext.define('Cursame.controller.tablet.Main', {
                         headerWall: user.coverphoto.url,
                         headerAvatar: user.avatar.url,
                         headerBios: user.bios,
-                        headerName: user
+                        headerName: user,
+                        userId: user.id
                     };
                 me.getCardContainer().animateActiveItem(0, {
                     type: 'slide',
@@ -481,7 +482,8 @@ Ext.define('Cursame.controller.tablet.Main', {
             headerWall: user.coverphoto,
             headerAvatar: user.avatar,
             headerBios: user.bios,
-            headerName: user
+            headerName: user,
+            userId: user.id
         };
         me.getUserNavigationView().push({
             xtype: 'userwall',
@@ -746,6 +748,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             firstCommentRecord.set('headerAvatar', data.headerAvatar);
             firstCommentRecord.set('headerName', data.headerName);
             firstCommentRecord.set('headerBios', data.headerBios);
+            firstCommentRecord.set('userId', data.userId);
             firstCommentRecord.commit();
         } else {
             data.emptyStore = true;

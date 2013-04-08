@@ -440,10 +440,10 @@ Ext.define('Cursame.controller.phone.Main', {
         }
     },
     /**
-     * 
+     *
      * @param  {string} commentableType
      * @param  {int} commentableId
-     * @return 
+     * @return
      */
     loadCommentsByType: function (commentableType,commentableId, callback) {
         var me = this,
@@ -635,8 +635,8 @@ Ext.define('Cursame.controller.phone.Main', {
      * @param  {object} store el store a recargar para ver los likes
      * @return {object}       el store del like
      */
-    saveLike: function (type, id, record){
-        var me = this;
+    saveLike: function (type, id, record, store){
+        var me = this, store = Ext.getStore(store);
         me.getMain().setMasked({
             xtype: 'loadmask',
             message: Core.Lang.es.saving
@@ -649,8 +649,16 @@ Ext.define('Cursame.controller.phone.Main', {
             },
             success: function (response) {
                 me.getMain().setMasked(false);
-                record.set('likes','1');
-                record.commit();
+                store.resetCurrentPage();
+                if(store.getStoreId() != 'Publications'){
+                    console.info('entro');
+                    store.setParams({
+                       commentable_type: record.get('commentable_type'),
+                       commentable_id: record.get('commentable_id')
+                    });
+                }
+                store.load();
+                me.currentStore = store.getStoreId();
             }
         });
     },
@@ -724,18 +732,20 @@ Ext.define('Cursame.controller.phone.Main', {
 
     onLike:function(record, likeOn){
         var me = this,
-            type, id;
+            type, id, store;
         switch(likeOn){
             case 'comment':
                 type = 'comment';
                 id = record.data.id;
+                store = 'Comments';
                 break;
             case 'publication':
                 type = record.data.publication_type;
                 id = record.data.publication_id;
+                store = 'Publications';
                 break;
         }
-       me.saveLike(Core.Utils.toFirstUpperCase(type),id,record);
+       me.saveLike(Core.Utils.toFirstUpperCase(type),id,record,store);
     },
 
     addHeaderToComments:function(params){

@@ -166,10 +166,11 @@ Ext.define('Cursame.model.Publication', {
                 type: 'object',
                 mapping: 'publication',
                 convert: function (publication, r) {
+                    console.log(publication);
                     var likes = 0;
                     if (publication) {
                         if (publication.votes) {
-                            likes = publication.votes.length
+                            likes = publication.votes;
                         } else {
                             likes = publication;
                         }
