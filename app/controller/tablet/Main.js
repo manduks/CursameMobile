@@ -139,23 +139,21 @@ Ext.define('Cursame.controller.tablet.Main', {
                 'Publications':'Publications'
             },
             'user_comment_on_comment':{
-                'CommentsComments':'CommentsComments'
+                'CommentsComments':'CommentsComments',
+                'Comments':'Comments'
             },
             'user_comment_on_user':{
                 'Comments':'Comments'
             }
         };
-        //actviamos faye
-        PrivatePub.sign({
-            "server":"http://localhost:9292/faye",
-            "timestamp":1365016127973,
-            "channel":"/notifications/" + user.id,
-            "signature":"c037745e6e79cd15b521078c7a7848059b5c2565"
-        });
-
+        me.subscribeToChannels();
+    },
+    subscribeToChannels:function(){
+         //actviamos faye
+        var NotificationsChannel = Ext.decode(localStorage.getItem("NotificationsChannel"));
+        PrivatePub.sign(NotificationsChannel);
         //metodo que escucha las notificaciones y las setea
-        PrivatePub.subscribe("/notifications/" + user.id, function(data, channel) {
-            console.log(data);
+        PrivatePub.subscribe(NotificationsChannel.channel, function(data, channel) {
             store = me.getMenu().getStore().getAt(2).set('numNotifications',data.num);
             user.notifications.length = data.num;
             localStorage.setItem("User", Ext.encode(user));

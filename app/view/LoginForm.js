@@ -68,6 +68,7 @@
                                 localStorage.setItem("Token", response.response.token);
                                 localStorage.setItem("UserId", response.response.user.id);
                                 localStorage.setItem("User", Ext.encode(response.response.user));
+                                localStorage.setItem("NotificationsChannel", Ext.encode(response.response.channel));
                                 form.fireEvent("logeado", form);
                             }else{
                                 form.setMasked({
