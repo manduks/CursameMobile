@@ -118,7 +118,7 @@ Ext.define('Cursame.controller.tablet.Main', {
      * @return {objet} soy un pinch pro!!
      */
     startPushNotifications:function(){
-        var me = this, stores ={}, user;
+        var me = this, stores ={}, user, NotificationsChannel;
 
         user = Ext.decode(localStorage.getItem("User"));
         stores = {
@@ -146,11 +146,8 @@ Ext.define('Cursame.controller.tablet.Main', {
                 'Comments':'Comments'
             }
         };
-        me.subscribeToChannels();
-    },
-    subscribeToChannels:function(){
-         //actviamos faye
-        var NotificationsChannel = Ext.decode(localStorage.getItem("NotificationsChannel"));
+
+        NotificationsChannel = Ext.decode(localStorage.getItem("NotificationsChannel"));
         PrivatePub.sign(NotificationsChannel);
         //metodo que escucha las notificaciones y las setea
         PrivatePub.subscribe(NotificationsChannel.channel, function(data, channel) {
