@@ -9,6 +9,7 @@
         'Ext.field.TextArea',
         'Ext.field.DatePicker',
         'Ext.field.Number',
+        'Ext.MessageBox',
         'Cursame.view.LoginForm',
         'Cursame.view.publications.PublicationNavigationView',
         'Cursame.view.publications.PublicationsList',
