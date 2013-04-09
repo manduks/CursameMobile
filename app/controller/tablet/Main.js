@@ -110,11 +110,57 @@ Ext.define('Cursame.controller.tablet.Main', {
         setTimeout(function () {
             me.onMenuTap(me.getMenu(), 1);
         }, 500);
+
+        me.startPushNotifications();
+    },
+    /**
+     * este metodo iniciliza las push notifications mediante faye 
+     * @return {objet} soy un pinch pro!!
+     */
+    startPushNotifications:function(){
+        var me = this, stores ={}, user, NotificationsChannel;
+
+        user = Ext.decode(localStorage.getItem("User"));
+        stores = {
+            'user_comment_on_network':{
+                'Publications':'Publications'
+            },
+            'user_comment_on_course':{
+                'Publications':'Publications'
+            },
+            'new_delivery_on_course':{
+                'Publications':'Publications'
+            },
+            'new_public_course_on_network':{
+                'Publications':'Publications',
+                'Courses':'Courses'
+            },
+            'new_survey_on_course':{
+                'Publications':'Publications'
+            },
+            'user_comment_on_comment':{
+                'CommentsComments':'CommentsComments',
+                'Comments':'Comments'
+            },
+            'user_comment_on_user':{
+                'Comments':'Comments'
+            }
+        };
+
+        NotificationsChannel = Ext.decode(localStorage.getItem("NotificationsChannel"));
+        PrivatePub.sign(NotificationsChannel);
+        //metodo que escucha las notificaciones y las setea
+        PrivatePub.subscribe(NotificationsChannel.channel, function(data, channel) {
+            store = me.getMenu().getStore().getAt(2).set('numNotifications',data.num);
+            user.notifications.length = data.num;
+            localStorage.setItem("User", Ext.encode(user));
+            Ext.getStore(stores[data.notification.kind][me.currentStore] || 'CommentsComments').load();
+        });
     },
     /**
      *
      */
-    getData: function () {
+    getData: function (numNotifications) {
         var user, userName, avatar;
 
         user = Ext.decode(localStorage.getItem("User"));
