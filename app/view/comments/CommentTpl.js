@@ -38,7 +38,7 @@ Ext.define('Cursame.view.comments.CommentTpl', {
                     '</div> ',
                     '<div class="info-user">',
                         '{user_name}',
-                        '<br> <p class="time">Hace una hora</p>',
+                        '<br> <p class="time">Hace {created}</p>',
                     '</div>',
                 '</div>',
                 '<div style="clear:both"></div>',

@@ -80,6 +80,9 @@ Ext.define('Cursame.controller.phone.Main', {
             },
             'deliverywall': {
                 itemtap: 'onCommentTap'
+            },
+            'discussionwall': {
+                itemtap: 'onCommentTap'
             }
         }
     },
@@ -110,11 +113,57 @@ Ext.define('Cursame.controller.phone.Main', {
         setTimeout(function () {
             me.onMenuTap(me.getMenu(), 1);
         }, 500);
+
+        me.startPushNotifications();
+    },
+    /**
+     * este metodo iniciliza las push notifications mediante faye
+     * @return {objet} soy un pinch pro!!
+     */
+    startPushNotifications:function(){
+        var me = this, stores ={}, user, NotificationsChannel;
+
+        user = Ext.decode(localStorage.getItem("User"));
+        stores = {
+            'user_comment_on_network':{
+                'Publications':'Publications'
+            },
+            'user_comment_on_course':{
+                'Publications':'Publications'
+            },
+            'new_delivery_on_course':{
+                'Publications':'Publications'
+            },
+            'new_public_course_on_network':{
+                'Publications':'Publications',
+                'Courses':'Courses'
+            },
+            'new_survey_on_course':{
+                'Publications':'Publications'
+            },
+            'user_comment_on_comment':{
+                'CommentsComments':'CommentsComments',
+                'Comments':'Comments'
+            },
+            'user_comment_on_user':{
+                'Comments':'Comments'
+            }
+        };
+
+        NotificationsChannel = Ext.decode(localStorage.getItem("NotificationsChannel"));
+        PrivatePub.sign(NotificationsChannel);
+        //metodo que escucha las notificaciones y las setea
+        PrivatePub.subscribe(NotificationsChannel.channel, function(data, channel) {
+            store = me.getMenu().getStore().getAt(2).set('numNotifications',data.num);
+            user.notifications.length = data.num;
+            localStorage.setItem("User", Ext.encode(user));
+            Ext.getStore(stores[data.notification.kind][me.currentStore] || 'CommentsComments').load();
+        });
     },
     /**
      *
      */
-    getData: function () {
+    getData: function (numNotifications) {
         var user, userName, avatar;
 
         user = Ext.decode(localStorage.getItem("User"));
@@ -243,7 +292,7 @@ Ext.define('Cursame.controller.phone.Main', {
             publicationsStore = Ext.getStore('Publications');
         commentsStore.resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'publication');
+            me.onLike(record, 'publication','Publications');
             return;
         }
         if (e.getTarget('div.comment')) {
@@ -351,7 +400,7 @@ Ext.define('Cursame.controller.phone.Main', {
             cComments = Ext.getStore('CommentsComments');
         Ext.getStore('CommentsComments').resetCurrentPage();//Se resetea el store de Comments Comments para inicializar la paginación
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'comment');
+            me.onLike(record, 'comment','Comments');
             return;
         }
         if (e.getTarget('div.comment')) {
@@ -569,7 +618,6 @@ Ext.define('Cursame.controller.phone.Main', {
             me = this,
             type, id, store;
 
-        if (comment) {
             if (data.publication_type && data.publication_id) {
                 type = data.publication_type;
                 id = data.publication_id;
@@ -581,7 +629,6 @@ Ext.define('Cursame.controller.phone.Main', {
             }
 
             me.saveComment(comment, Core.Utils.toFirstUpperCase(type), id, store);
-        }
     },
     /**
      * Metodo generico  para agregar comentarios a discussiones, usuario, surveys ..
@@ -593,16 +640,15 @@ Ext.define('Cursame.controller.phone.Main', {
             list = btn.up('list'),
             comment = list.down('textfield').getValue();
 
-        if (comment && list.getCommentableType && list.getCommentableId
+        if (list.getCommentableType && list.getCommentableId
             && list.getCommentableType() && list.getCommentableId()) {
             me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'));
         }
     },
     saveComment: function (comment, commentableType, commentableId, store, form) {
-        var me = this, record, num_comments,
-            values = form.getValues();
+        var me = this, record, num_comments;
         //Se valida si el formulario para agregar comentarios no esta vacio.
-        if (values && values.comment != '') {
+        if (comment != '') {
             me.getMain().setMasked({
                 xtype: 'loadmask',
                 message: Core.Lang.es.saving
@@ -640,7 +686,7 @@ Ext.define('Cursame.controller.phone.Main', {
                 }
             });
         } else {
-            return Ext.Msg.alert('', 'Escribe un Comentario');
+            Ext.Msg.alert('', 'Escribe un Comentario');
         }
 
     },
@@ -753,26 +799,25 @@ Ext.define('Cursame.controller.phone.Main', {
     },
 
     onCommentTap: function (dataview, index, target, record, e, opt) {
-        var me = this;
-        if (e.getTarget('div.comment-like') || e.getTarget('div.like')) {
-            me.onLike(record, 'comment');
+        var me = this,
+            store = dataview.getStore().getStoreId();
+        if (e.getTarget('div.comment-like') || e.getTarget('div.like') || e.getTarget('div.comment-dislike')) {
+            me.onLike(record, 'comment', store);
             return;
         }
     },
 
-    onLike: function (record, likeOn) {
+    onLike: function (record, likeOn, store) {
         var me = this,
-            type, id, store;
+            type, id;
         switch (likeOn) {
             case 'comment':
                 type = 'comment';
                 id = record.data.id;
-                store = 'Comments';
                 break;
             case 'publication':
                 type = record.data.publication_type;
                 id = record.data.publication_id;
-                store = 'Publications';
                 break;
         }
         me.saveLike(Core.Utils.toFirstUpperCase(type), id, record, store);

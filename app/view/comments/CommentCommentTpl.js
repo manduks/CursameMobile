@@ -20,11 +20,15 @@ Ext.define('Cursame.view.comments.CommentCommentTpl', {
                 '<div class="comment-name">',
                     '{user_name}',
                 '</div>',
+                '<tpl if ="this.validateLike(values) == true">',
+                '<div class="comment-like">Me gusta</div>',
+                '<tpl else>',
+                '<div class="comment-dislike">Ya no me gusta</div>',
+                '</tpl>',
                 '<div class="post-comment">',
                     '<p>{comment_html}</p>',
-                '</div>',
-                '<div class="comment-like">Me gusta</div>',
-                '<div class="comment-time">hace 1 hora</div>',
+                '</div><br><div class="comment-time">{likes.length} Me Gusta - hace {created}</div>',
+                //'<div class="comment-time">{likes.length} Me Gusta hace 1 hora</div>',
                 '<div style="clear:both"></div>',
             '</div>', {
                 validateUserAvatar: function (user_avatar) {
@@ -33,6 +37,19 @@ Ext.define('Cursame.view.comments.CommentCommentTpl', {
                     } else {
                         return false;
                     }
+                },
+                validateLike: function (values){
+                var user = Ext.decode(localStorage.getItem("User")),
+                    bandera = true;
+                if (values && values.likes){
+                    Ext.Array.each(values.likes, function(item,index){
+                    if (item.voter_id == user.id){
+                        bandera = false;
+                    }
+                    });
+                }
+                return bandera;
+
                 }
             }];
         this.callParent(html);

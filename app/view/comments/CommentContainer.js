@@ -33,7 +33,7 @@ Ext.define('Cursame.view.comments.CommentContainer', {
                     '<p>{comment_html}</p>',
                 '</div>',
                 '<div class="likes-comments">',
-                    '<p>12 Me gusta</p>',
+                    '<p>{likes.length} Me gusta</p>',
                 '</div>',
                 '<div style="clear:both"></div>',
             '</div>',

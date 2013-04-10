@@ -43,6 +43,48 @@ Ext.define('Cursame.model.CommentComment', {
             convert: function (comments, r){
                 return comments.length;
             }
+        },{
+            name: 'likes',
+            type: 'int',
+            mapping: 'likes',
+            convert: function (votes, r){
+                var likes = 0;
+                if (votes) {
+                    likes = votes;
+                } else {
+                    likes;
+                }
+                return likes;
+            }
+        },{
+            name: 'created',
+            type: 'date',
+            mapping: 'created_at',
+            convert: function (date, rec) {
+                try {
+                    var now = Math.ceil(Number(new Date()) / 1000),
+                        dateTime = Math.ceil(Number(new Date(date)) / 1000),
+                        diff = now - dateTime,
+                        str;
+
+                    if (diff < 60) {
+                        return String(diff) + ' s';
+                    } else if (diff < 3600) {
+                        str = String(Math.ceil(diff / (60)));
+                        return str + (str == "1" ? ' m' : ' m');
+                    } else if (diff < 86400) {
+                        str = String(Math.ceil(diff / (3600)));
+                        return str + (str == "1" ? ' h' : ' h');
+                    } else if (diff < 60 * 60 * 24 * 365) {
+                        str = String(Math.ceil(diff / (60 * 60 * 24)));
+                        return str + (str == "1" ? ' d' : ' d');
+                    } else {
+                        return Ext.Date.format(new Date(date), 'jS M \'y');
+                    }
+                } catch (e) {
+                    return '';
+                }
+            }
         }],
         proxy: {
             type: 'jsonp',
