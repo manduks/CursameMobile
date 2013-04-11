@@ -28,7 +28,6 @@ Ext.define('Cursame.view.comments.CommentCommentTpl', {
                 '<div class="post-comment">',
                     '<p>{comment_html}</p>',
                 '</div><br><div class="comment-time">{likes.length} Me Gusta - hace {created}</div>',
-                //'<div class="comment-time">{likes.length} Me Gusta hace 1 hora</div>',
                 '<div style="clear:both"></div>',
             '</div>', {
                 validateUserAvatar: function (user_avatar) {
