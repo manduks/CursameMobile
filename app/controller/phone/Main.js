@@ -28,7 +28,8 @@ Ext.define('Cursame.controller.phone.Main', {
             notificationNavigationView: 'notificationnavigationview',
             userNavigationView: 'usernavigationview',
             commentsPanel: 'commentspanel',
-            userWall: 'userwall'
+            userWall: 'userwall',
+            courseWall: 'coursewall'
         },
         control: {
             'loginform': {
@@ -236,6 +237,11 @@ Ext.define('Cursame.controller.phone.Main', {
                     type: 'slide',
                     direction: 'left'
                 });
+                var record = Ext.getStore('Publications').getAt(0);
+                if (record){
+                   record.set('showHeader',null);
+                   record.commit();
+                }
                 Ext.getStore('Publications').setParams({}, true);
                 Ext.getStore('Publications').load();
                 me.currentStore = 'Publications';
@@ -607,7 +613,9 @@ Ext.define('Cursame.controller.phone.Main', {
         var form = btn.up('formpanel'),
             comment = form.down('textareafield').getValue(),
             me = this,
-            list = btn.up('list');
+            list = btn.up('list'),
+            record; //= me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
+
         me.saveComment(comment, 'Course', form.getObjectId(), Ext.getStore('Publications'), form);
     },
     /**
@@ -618,19 +626,27 @@ Ext.define('Cursame.controller.phone.Main', {
             form = btn.up('commentspanel'),
             data = form.getObjectData(),
             me = this,
-            type, id, store;
+            type, id, store, record;
 
             if (data.publication_type && data.publication_id) {
                 type = data.publication_type;
                 id = data.publication_id;
                 store = Ext.getStore('Comments');
+                record = me.getPublicationsList().getSelection()[0];//Si se accede desde el Wall de Publicaciones.
+                if (!record){
+                    record = me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
+                }
             } else {
                 type = 'Comment';
                 id = data.id;
                 store = Ext.getStore('CommentsComments');
+                record = me.getUserWall().getSelection()[0];//Si se accede desde el Wall de Usuario.
+                if (!record){
+                    record = me.getUserNavigationView().down('userwall').getSelection()[0];//Si se accede desde un usuario de la comunidad
+                }
             }
 
-            me.saveComment(comment, Core.Utils.toFirstUpperCase(type), id, store);
+            me.saveComment(comment, Core.Utils.toFirstUpperCase(type), id, store, null, record);
     },
     /**
      * Metodo generico  para agregar comentarios a discussiones, usuario, surveys ..
@@ -638,17 +654,18 @@ Ext.define('Cursame.controller.phone.Main', {
      * @return {comment}     comentario guardado
      */
     onComment: function (btn) {
-        var me = this,
+        var me = this, record,
             list = btn.up('list'),
             comment = list.down('textfield').getValue();
 
         if (list.getCommentableType && list.getCommentableId
             && list.getCommentableType() && list.getCommentableId()) {
-            me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'));
+            record = me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
+            me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'), null, record);
         }
     },
-    saveComment: function (comment, commentableType, commentableId, store, form) {
-        var me = this, record, num_comments;
+    saveComment: function (comment, commentableType, commentableId, store, form, record) {
+        var me = this, num_comments;
         //Se valida si el formulario para agregar comentarios no esta vacio.
         if (comment != '') {
             me.getMain().setMasked({
@@ -676,13 +693,9 @@ Ext.define('Cursame.controller.phone.Main', {
                         });
                         callback = me.addHeaderToPublications.bind(me);
                     } else {
-                        record = me.getUserWall().getSelection()[0];//Si se accede desde el Wall de Usuario.
-                        if (!record) {
-                            record = me.getPublicationsList().getSelection()[0];//Si se accede desde el Wall de Publicaciones.
-                        }
                         if (record) {
                             num_comments = record.get('num_comments') + 1;//Cuando se guarda un comentario se le suma al numero de comentarios.
-                            record.set('num_comments', num_comments)
+                            record.set('num_comments', num_comments);
                             record.commit();
                         }
 
