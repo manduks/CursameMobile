@@ -36,7 +36,8 @@ Ext.define('Cursame.controller.tablet.Main', {
                 logeado: 'onUserLogin'
             },
             'navigationmenu': {
-                itemtap: 'onMenuTap'
+                itemtap: 'onMenuTap',
+                select: 'onMenuSelect'
             },
             'publicationslist': {
                 itemtap: 'onPublicationTap'
@@ -85,6 +86,12 @@ Ext.define('Cursame.controller.tablet.Main', {
             },
             'discussionwall': {
                 itemtap: 'onCommentTap'
+            },
+            'button[action = menuButton]': {
+                tap: 'onMenuButtonTap'
+            },
+            'main #cardcontainer': {
+                dragend: 'onMainContainerDragEnd'
             }
         }
     },
@@ -897,5 +904,72 @@ Ext.define('Cursame.controller.tablet.Main', {
                 publicationsStore.add(data);
             }
         }
+    },
+    /*  Called when an item in the menu is selected.
+     */
+    onMenuSelect:function(list, item, eOpts) {
+        console.log('onselect');
+        Ext.defer(this.closeMenu, 350, this);
+    },
+    closeMenu: function(duration) {
+        var me       = this,
+            duration = duration;
+
+        me.moveMainContainer(me, 0, duration);
+    },
+    moveMainContainer: function(nav, offsetX, duration) {
+        var me = this,
+            duration  = duration ? duration : 200,
+            container = me.getCardContainer(),
+            draggable = container.draggableBehavior.draggable;
+
+        draggable.setOffset(offsetX, 0, {
+            duration: duration
+        });
+
+        if(offsetX === 0){
+            container.setWidth('100%');
+        }
+    },
+    onMenuButtonTap:function(){
+        var me = this,
+            duration = me.getMain().getMenu().duration;
+        if (me.isClosed()) {
+            me.openMenu(duration);
+        } else {
+            me.closeMenu(duration);
+        }
+    },
+    isClosed: function() {
+        return (this.getCardContainer().draggableBehavior.draggable.offset.x == 0);
+    },
+    openMenu: function(duration) {
+        var me       = this,
+            duration = duration ? duration : 200,
+            offsetX  = this.getMain().getMenu().minWidth;
+
+        me.moveMainContainer(me, offsetX, duration);
+    },
+    onMainContainerDragEnd:function(draggable, e, eOpts){
+        var me = this,
+            velocity  = Math.abs(e.deltaX / e.deltaTime),
+            direction = (e.deltaX > 0) ? "right" : "left",
+            offset    = Ext.clone(draggable.offset),
+            threshold = parseInt(me.getMain().getMenu().minWidth * .70),
+            container = me.getCardContainer();
+
+        switch (direction) {
+            case "right":
+                offset.x = (velocity > 0.75 || offset.x > threshold) ? me.getMain().getMenu().minWidth : 0;
+                container.setWidth('85%');
+                break;
+            case "left":
+                offset.x = (velocity > 0.75 || offset.x < threshold) ? 0 : me.getMain().getMenu().minWidth;
+                container.setWidth('100%');
+                break;
+        }
+
+        me.moveMainContainer(me, offset.x);
     }
+
 });
