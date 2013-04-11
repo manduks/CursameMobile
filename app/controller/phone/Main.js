@@ -9,6 +9,7 @@ Ext.define('Cursame.controller.phone.Main', {
     config: {
         activeNavigationView: undefined, //Referencia al Navigation View Activo
         currentStore: undefined,
+        headerPublicationsData:undefined,//Referencia a los datos par mostrar el header
         refs: {
             main: {
                 selector: 'main'
@@ -27,7 +28,8 @@ Ext.define('Cursame.controller.phone.Main', {
             notificationNavigationView: 'notificationnavigationview',
             userNavigationView: 'usernavigationview',
             commentsPanel: 'commentspanel',
-            userWall: 'userwall'
+            userWall: 'userwall',
+            courseWall: 'coursewall'
         },
         control: {
             'loginform': {
@@ -235,6 +237,11 @@ Ext.define('Cursame.controller.phone.Main', {
                     type: 'slide',
                     direction: 'left'
                 });
+                var record = Ext.getStore('Publications').getAt(0);
+                if (record){
+                   record.set('showHeader',null);
+                   record.commit();
+                }
                 Ext.getStore('Publications').setParams({}, true);
                 Ext.getStore('Publications').load();
                 me.currentStore = 'Publications';
@@ -528,8 +535,9 @@ Ext.define('Cursame.controller.phone.Main', {
             publicacionId: data.id,
             type: 'Course'
         });
+        me.setHeaderPublicationsData(data);//Guardamos los datos en la propiedad
         // cargamos las publicaciones del curso
-        publicationsStore.load(me.addHeaderToPublications.bind(me, [data]));
+        publicationsStore.load(me.addHeaderToPublications.bind(me));
     },
 
     onUserTap: function (dataview, index, target, record, e, opt) {
@@ -605,7 +613,9 @@ Ext.define('Cursame.controller.phone.Main', {
         var form = btn.up('formpanel'),
             comment = form.down('textareafield').getValue(),
             me = this,
-            list = btn.up('list');
+            list = btn.up('list'),
+            record; //= me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
+
         me.saveComment(comment, 'Course', form.getObjectId(), Ext.getStore('Publications'), form);
     },
     /**
@@ -616,19 +626,27 @@ Ext.define('Cursame.controller.phone.Main', {
             form = btn.up('commentspanel'),
             data = form.getObjectData(),
             me = this,
-            type, id, store;
+            type, id, store, record;
 
             if (data.publication_type && data.publication_id) {
                 type = data.publication_type;
                 id = data.publication_id;
                 store = Ext.getStore('Comments');
+                record = me.getPublicationsList().getSelection()[0];//Si se accede desde el Wall de Publicaciones.
+                if (!record){
+                    record = me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
+                }
             } else {
                 type = 'Comment';
                 id = data.id;
                 store = Ext.getStore('CommentsComments');
+                record = me.getUserWall().getSelection()[0];//Si se accede desde el Wall de Usuario.
+                if (!record){
+                    record = me.getUserNavigationView().down('userwall').getSelection()[0];//Si se accede desde un usuario de la comunidad
+                }
             }
 
-            me.saveComment(comment, Core.Utils.toFirstUpperCase(type), id, store);
+            me.saveComment(comment, Core.Utils.toFirstUpperCase(type), id, store, null, record);
     },
     /**
      * Metodo generico  para agregar comentarios a discussiones, usuario, surveys ..
@@ -636,17 +654,18 @@ Ext.define('Cursame.controller.phone.Main', {
      * @return {comment}     comentario guardado
      */
     onComment: function (btn) {
-        var me = this,
+        var me = this, record,
             list = btn.up('list'),
             comment = list.down('textfield').getValue();
 
         if (list.getCommentableType && list.getCommentableId
             && list.getCommentableType() && list.getCommentableId()) {
-            me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'));
+            record = me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
+            me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'), null, record);
         }
     },
-    saveComment: function (comment, commentableType, commentableId, store, form) {
-        var me = this, record, num_comments;
+    saveComment: function (comment, commentableType, commentableId, store, form, record) {
+        var me = this, num_comments;
         //Se valida si el formulario para agregar comentarios no esta vacio.
         if (comment != '') {
             me.getMain().setMasked({
@@ -661,27 +680,31 @@ Ext.define('Cursame.controller.phone.Main', {
                     commentable_id: commentableId
                 },
                 success: function (response) {
+                    var callback = {};
                     me.getMain().setMasked(false);
+                    store.resetCurrentPage();
                     if (form) {
                         form.hide();
                         form.destroy();
+
+                        store.setParams({
+                            type: commentableType,
+                            publicacionId: commentableId
+                        });
+                        callback = me.addHeaderToPublications.bind(me);
                     } else {
-                        record = me.getUserWall().getSelection()[0];//Si se accede desde el Wall de Usuario.
-                        if (!record) {
-                            record = me.getPublicationsList().getSelection()[0];//Si se accede desde el Wall de Publicaciones.
-                        }
                         if (record) {
                             num_comments = record.get('num_comments') + 1;//Cuando se guarda un comentario se le suma al numero de comentarios.
-                            record.set('num_comments', num_comments)
+                            record.set('num_comments', num_comments);
                             record.commit();
                         }
+
+                        store.setParams({
+                            commentable_type: commentableType,
+                            commentable_id: commentableId
+                        });
                     }
-                    store.resetCurrentPage();
-                    store.setParams({
-                        commentable_type: commentableType,
-                        commentable_id: commentableId
-                    });
-                    store.load();
+                    store.load(callback);
                     me.currentStore = store.getStoreId();
                 }
             });
@@ -786,7 +809,7 @@ Ext.define('Cursame.controller.phone.Main', {
             }
         });
         Ext.getStore('Publications').setParams({});
-        Ext.getStore('Publications').load();
+        Ext.getStore('Publications').load(me.addHeaderToPublications.bind(me));
         me.currentStore = 'Publications';
     },
 
@@ -839,33 +862,37 @@ Ext.define('Cursame.controller.phone.Main', {
         }
     },
 
-    addHeaderToPublications: function (params) {
-        var publicationsStore = Ext.getStore('Publications'),
+    addHeaderToPublications: function () {
+        var me = this,
+            publicationsStore = Ext.getStore('Publications'),
             firstPublicationRecord = publicationsStore.getAt(0),
+            params = me.getHeaderPublicationsData(),
             data = {};
 
-        data.headerAvatar = params[0].avatar;
-        data.headerTitle = params[0].title;
-        data.headerPublicStatus = params[0].public_status;
-        data.headerInitDate = params[0].init_date;
-        data.headerFinishDate = params[0].finish_date;
-        data.headerSilabus = params[0].silabus;
-        data.headerId = params[0].id;
-        data.showHeader = true;
+        if (params){
+            data.headerAvatar = params.avatar;
+            data.headerTitle = params.title;
+            data.headerPublicStatus = params.public_status;
+            data.headerInitDate = params.init_date;
+            data.headerFinishDate = params.finish_date;
+            data.headerSilabus = params.silabus;
+            data.headerId = params.id;
+            data.showHeader = true;
 
-        if (firstPublicationRecord) {
-            firstPublicationRecord.set('headerAvatar', data.headerAvatar);
-            firstPublicationRecord.set('headerTitle', data.headerTitle);
-            firstPublicationRecord.set('headerPublicStatus', data.headerPublicStatus);
-            firstPublicationRecord.set('headerInitDate', data.headerInitDate);
-            firstPublicationRecord.set('headerFinishDate', data.headerFinishDate);
-            firstPublicationRecord.set('headerSilabus', data.headerSilabus);
-            firstPublicationRecord.set('headerId', data.headerId);
-            firstPublicationRecord.set('showHeader', data.showHeader);
-            firstPublicationRecord.commit();
-        } else {
-            data.emptyStore = true;
-            publicationsStore.add(data);
+            if (firstPublicationRecord) {
+                firstPublicationRecord.set('headerAvatar', data.headerAvatar);
+                firstPublicationRecord.set('headerTitle', data.headerTitle);
+                firstPublicationRecord.set('headerPublicStatus', data.headerPublicStatus);
+                firstPublicationRecord.set('headerInitDate', data.headerInitDate);
+                firstPublicationRecord.set('headerFinishDate', data.headerFinishDate);
+                firstPublicationRecord.set('headerSilabus', data.headerSilabus);
+                firstPublicationRecord.set('headerId', data.headerId);
+                firstPublicationRecord.set('showHeader', data.showHeader);
+                firstPublicationRecord.commit();
+            } else {
+                data.emptyStore = true;
+                publicationsStore.add(data);
+            }
         }
     }
 });
