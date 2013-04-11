@@ -9,6 +9,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     config: {
         activeNavigationView: undefined, //Referencia al Navigation View Activo
         currentStore: undefined,
+        headerPublicationsData:undefined,//Referencia a los datos par mostrar el header
         refs: {
             main: {
                 selector: 'main'
@@ -528,8 +529,9 @@ Ext.define('Cursame.controller.tablet.Main', {
             publicacionId: data.id,
             type: 'Course'
         });
+        me.setHeaderPublicationsData(data);//Guardamos los datos en la propiedad
         // cargamos las publicaciones del curso
-        publicationsStore.load(me.addHeaderToPublications.bind(me, [data]));
+        publicationsStore.load(me.addHeaderToPublications.bind(me));
     },
 
     onUserTap: function (dataview, index, target, record, e, opt) {
@@ -661,10 +663,18 @@ Ext.define('Cursame.controller.tablet.Main', {
                     commentable_id: commentableId
                 },
                 success: function (response) {
+                    var callback = {};
                     me.getMain().setMasked(false);
+                    store.resetCurrentPage();
                     if (form) {
                         form.hide();
                         form.destroy();
+
+                        store.setParams({
+                            type: commentableType,
+                            publicacionId: commentableId
+                        });
+                        callback = me.addHeaderToPublications.bind(me);
                     } else {
                         record = me.getUserWall().getSelection()[0];//Si se accede desde el Wall de Usuario.
                         if (!record) {
@@ -675,13 +685,13 @@ Ext.define('Cursame.controller.tablet.Main', {
                             record.set('num_comments', num_comments)
                             record.commit();
                         }
+
+                        store.setParams({
+                            commentable_type: commentableType,
+                            commentable_id: commentableId
+                        });
                     }
-                    store.resetCurrentPage();
-                    store.setParams({
-                        commentable_type: commentableType,
-                        commentable_id: commentableId
-                    });
-                    store.load();
+                    store.load(callback);
                     me.currentStore = store.getStoreId();
                 }
             });
@@ -786,7 +796,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             }
         });
         Ext.getStore('Publications').setParams({});
-        Ext.getStore('Publications').load();
+        Ext.getStore('Publications').load(me.addHeaderToPublications.bind(me));
         me.currentStore = 'Publications';
     },
 
@@ -839,33 +849,37 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
     },
 
-    addHeaderToPublications: function (params) {
-        var publicationsStore = Ext.getStore('Publications'),
+    addHeaderToPublications: function () {
+        var me = this,
+            publicationsStore = Ext.getStore('Publications'),
             firstPublicationRecord = publicationsStore.getAt(0),
+            params = me.getHeaderPublicationsData(),
             data = {};
 
-        data.headerAvatar = params[0].avatar;
-        data.headerTitle = params[0].title;
-        data.headerPublicStatus = params[0].public_status;
-        data.headerInitDate = params[0].init_date;
-        data.headerFinishDate = params[0].finish_date;
-        data.headerSilabus = params[0].silabus;
-        data.headerId = params[0].id;
-        data.showHeader = true;
+        if (params){
+            data.headerAvatar = params.avatar;
+            data.headerTitle = params.title;
+            data.headerPublicStatus = params.public_status;
+            data.headerInitDate = params.init_date;
+            data.headerFinishDate = params.finish_date;
+            data.headerSilabus = params.silabus;
+            data.headerId = params.id;
+            data.showHeader = true;
 
-        if (firstPublicationRecord) {
-            firstPublicationRecord.set('headerAvatar', data.headerAvatar);
-            firstPublicationRecord.set('headerTitle', data.headerTitle);
-            firstPublicationRecord.set('headerPublicStatus', data.headerPublicStatus);
-            firstPublicationRecord.set('headerInitDate', data.headerInitDate);
-            firstPublicationRecord.set('headerFinishDate', data.headerFinishDate);
-            firstPublicationRecord.set('headerSilabus', data.headerSilabus);
-            firstPublicationRecord.set('headerId', data.headerId);
-            firstPublicationRecord.set('showHeader', data.showHeader);
-            firstPublicationRecord.commit();
-        } else {
-            data.emptyStore = true;
-            publicationsStore.add(data);
+            if (firstPublicationRecord) {
+                firstPublicationRecord.set('headerAvatar', data.headerAvatar);
+                firstPublicationRecord.set('headerTitle', data.headerTitle);
+                firstPublicationRecord.set('headerPublicStatus', data.headerPublicStatus);
+                firstPublicationRecord.set('headerInitDate', data.headerInitDate);
+                firstPublicationRecord.set('headerFinishDate', data.headerFinishDate);
+                firstPublicationRecord.set('headerSilabus', data.headerSilabus);
+                firstPublicationRecord.set('headerId', data.headerId);
+                firstPublicationRecord.set('showHeader', data.showHeader);
+                firstPublicationRecord.commit();
+            } else {
+                data.emptyStore = true;
+                publicationsStore.add(data);
+            }
         }
     }
 });
