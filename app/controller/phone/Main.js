@@ -169,7 +169,12 @@ Ext.define('Cursame.controller.phone.Main', {
         var user, userName, avatar;
 
         user = Ext.decode(localStorage.getItem("User"));
-        userName = user.first_name && user.last_name ? user.first_name + ' ' + user.last_name : 'Usuario';
+        if (user.first_name || user.last_name != null){
+            userName = user.first_name && user.last_name ? user.first_name + ' ' + user.last_name : 'Usuario';
+        } else {
+            userName = 'Usuario';
+        }
+
         avatar = user.avatar.url ? Cursame.URL + user.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
         return [
             {
@@ -659,8 +664,8 @@ Ext.define('Cursame.controller.phone.Main', {
 
         if (list.getCommentableType && list.getCommentableId
             && list.getCommentableType() && list.getCommentableId()) {
-            record = me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
-            me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'), null, record);
+            //record = me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
+            me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'), null);
         }
     },
     saveComment: function (comment, commentableType, commentableId, store, form, record) {
