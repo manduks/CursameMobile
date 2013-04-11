@@ -22,25 +22,29 @@ Ext.define('Cursame.model.Notification', {
                     obj = r.get('notificator_type'),
                     notificator = obj.notificator,
                     creator = obj.creator,
-                    course = obj.course;
+                    course = obj.course,
+                    name = 'Usuario';
+                if(creator && creator.first_name && creator.last_name){
+                    name = creator.first_name + ' ' + creator.last_name;
+                }
 
                 switch(value){
                     case 'user_comment_on_network':
                         avatar = creator.avatar && creator.avatar.url?Cursame.URL+creator.avatar.url: avatar;
-                        text = '<a href="">'+creator.first_name+' '+ creator.last_name+'</a> ha comentado en al red';
+                        text = '<a href="#">'+name+'</a> ha comentado en al red';
                     break;
                     case 'user_comment_on_course':
                         avatar = creator.avatar && creator.avatar.url?Cursame.URL+creator.avatar.url: avatar;
-                        text = '<a href="">'+creator.first_name+' '+ creator.last_name+'</a> ha comentado en el curso';
+                        text = '<a href="#">'+name+'</a> ha comentado en el curso';
                     break;
                     case 'new_delivery_on_course':
-                        text = 'Se cre&oacute; la tarea <a href="">"'+notificator.title+'"</a> en el curso <a href="">'+course.title+'</a>';
+                        text = 'Se cre&oacute; la tarea <a href="#">"'+notificator.title+'"</a> en el curso <a href="#">'+course.title+'</a>';
                     break;
                     case 'new_public_course_on_network':
-                        text = 'Se cre&oacute; el curso <a href="">'+notificator.title+'</a>';
+                        text = 'Se cre&oacute; el curso <a href="#">'+notificator.title+'</a>';
                     break;
                     case 'new_survey_on_course':
-                        text = 'Se ha creado un cuestionario en el curso de Programación';
+                        text = 'Se ha creado un cuestionario en el curso';
                     break;
                 }
 
