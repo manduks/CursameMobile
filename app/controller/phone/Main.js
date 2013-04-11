@@ -613,8 +613,7 @@ Ext.define('Cursame.controller.phone.Main', {
         var form = btn.up('formpanel'),
             comment = form.down('textareafield').getValue(),
             me = this,
-            list = btn.up('list'),
-            record; //= me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
+            list = btn.up('list');
 
         me.saveComment(comment, 'Course', form.getObjectId(), Ext.getStore('Publications'), form);
     },
