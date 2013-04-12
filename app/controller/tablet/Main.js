@@ -910,14 +910,14 @@ Ext.define('Cursame.controller.tablet.Main', {
         }
     },
     closeMenu: function(duration) {
-        var me       = this,
-            duration = duration ? duration : 200;
+        var me = this,
+            duration = duration || me.getMain().getMenu().duration;
 
         me.moveMainContainer(me, 0, duration);
     },
     moveMainContainer: function(nav, offsetX, duration) {
         var me = this,
-            duration  = duration ? duration : 200,
+            duration  = duration || me.getMain().getMenu().duration,
             container = me.getCardContainer(),
             draggable = container.draggableBehavior.draggable;
 
@@ -947,7 +947,7 @@ Ext.define('Cursame.controller.tablet.Main', {
     },
     openMenu: function(duration) {
         var me       = this,
-            duration = duration ? duration : 200,
+            duration =  duration || me.getMain().getMenu().duration,
             offsetX  = this.getMain().getMenu().minWidth;
 
         me.moveMainContainer(me, offsetX, duration);

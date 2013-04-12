@@ -31,7 +31,7 @@
      config:{
          menu:{
              minWidth:190,
-             duration:200
+             duration: Ext.os.is('Android') ? 0 : 200
          }
      },
 

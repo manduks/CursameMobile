@@ -46,6 +46,9 @@ Ext.define('Cursame.model.Notification', {
                     case 'new_survey_on_course':
                         text = 'Se ha creado un cuestionario en el curso';
                     break;
+                    case 'user_comment_on_comment':
+                        text = '<a href="#">'+name+'</a> ha comentado en '+'<a href="#">'+notificator.comment+'</a>';
+                    break;
                 }
 
                 return [
