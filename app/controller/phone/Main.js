@@ -29,7 +29,8 @@ Ext.define('Cursame.controller.phone.Main', {
             userNavigationView: 'usernavigationview',
             commentsPanel: 'commentspanel',
             userWall: 'userwall',
-            courseWall: 'coursewall'
+            courseWall: 'coursewall',
+            navigationView: 'navigationview'
         },
         control: {
             'loginform': {
@@ -92,6 +93,9 @@ Ext.define('Cursame.controller.phone.Main', {
             },
             'main #cardcontainer': {
                 dragend: 'onMainContainerDragEnd'
+            },
+            'navigationView': {
+                back: 'onClickButtonBack'
             }
         }
     },
@@ -181,7 +185,6 @@ Ext.define('Cursame.controller.phone.Main', {
         } else {
             userName = 'Usuario';
         }
-
         avatar = user.avatar.url ? Cursame.URL + user.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
         return [
             {
@@ -671,8 +674,8 @@ Ext.define('Cursame.controller.phone.Main', {
 
         if (list.getCommentableType && list.getCommentableId
             && list.getCommentableType() && list.getCommentableId()) {
-            //record = me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
-            me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'), null);
+            record = me.CourseWall ? me.getCourseWall().getSelection()[0] : null;//Si se accede desde un comentario de Cursos.
+            me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'), null, record);
         }
     },
     saveComment: function (comment, commentableType, commentableId, store, form, record) {
@@ -971,6 +974,14 @@ Ext.define('Cursame.controller.phone.Main', {
         }
 
         me.moveMainContainer(me, offset.x);
+    },
+
+    onClickButtonBack: function(t,e){
+        var record = Ext.getStore('Publications').getAt(0);
+        if (record){
+            record.set('showHeader',null);
+            record.commit();
+        }
     }
 
 });
