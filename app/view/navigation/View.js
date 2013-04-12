@@ -15,7 +15,9 @@ Ext.define('Cursame.view.navigation.View', {
                 {
                     xtype: 'button',
                     action:'menuButton',
-                    text:'<b>...</b>',
+                    text:'<div class="button-menu">|||</div>',
+                    ui:'action',
+                    iconAlign:'center',
                     align: 'left',
                     hideAnimation: Ext.os.is.Android ? false : {
                         type: 'fadeOut',

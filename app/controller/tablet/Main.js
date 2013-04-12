@@ -37,7 +37,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             },
             'navigationmenu': {
                 itemtap: 'onMenuTap',
-                select: 'onMenuSelect'
+                select: 'closeMenu'
             },
             'publicationslist': {
                 itemtap: 'onPublicationTap'
@@ -905,15 +905,9 @@ Ext.define('Cursame.controller.tablet.Main', {
             }
         }
     },
-    /*  Called when an item in the menu is selected.
-     */
-    onMenuSelect:function(list, item, eOpts) {
-        console.log('onselect');
-        Ext.defer(this.closeMenu, 350, this);
-    },
     closeMenu: function(duration) {
         var me       = this,
-            duration = duration;
+            duration = duration ? duration : 200;
 
         me.moveMainContainer(me, 0, duration);
     },
@@ -933,11 +927,15 @@ Ext.define('Cursame.controller.tablet.Main', {
     },
     onMenuButtonTap:function(){
         var me = this,
-            duration = me.getMain().getMenu().duration;
+            duration = me.getMain().getMenu().duration,
+            container = me.getCardContainer();
+
         if (me.isClosed()) {
             me.openMenu(duration);
+            container.setWidth('85%');
         } else {
             me.closeMenu(duration);
+            container.setWidth('100%');
         }
     },
     isClosed: function() {
