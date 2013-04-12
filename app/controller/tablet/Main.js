@@ -130,7 +130,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         me.startPushNotifications();
     },
     /**
-     * este metodo iniciliza las push notifications mediante faye 
+     * este metodo iniciliza las push notifications mediante faye
      * @return {objet} soy un pinch pro!!
      */
     startPushNotifications:function(){
