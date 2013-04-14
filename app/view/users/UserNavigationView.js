@@ -5,24 +5,16 @@
  * @author @manduks
  */
 Ext.define('Cursame.view.users.UserNavigationView', {
-	extend: 'Ext.navigation.View',
+    extend: 'Cursame.view.navigation.View',
 	xtype: 'usernavigationview',
 
 	requires: [
 		'Cursame.view.users.UsersList'
 	],
 	config: {
-        defaultBackButtonText: Core.Lang.es.back,
 		items: {
 			xtype: 'userslist',
 			title: 'Comunidad'
 		}
-	},
-	applyLayout: function(config) {
-		config = config || {};
-		if (Ext.os.is.Android) {
-			config.animation = false;
-		}
-		return config;
 	}
 });

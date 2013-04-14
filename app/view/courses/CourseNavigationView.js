@@ -5,7 +5,7 @@
  * @author @manduks
  */
 Ext.define('Cursame.view.courses.CourseNavigationView', {
-	extend: 'Ext.navigation.View',
+    extend: 'Cursame.view.navigation.View',
 	xtype: 'coursenavigationview',
 
 	requires: [
@@ -13,17 +13,9 @@ Ext.define('Cursame.view.courses.CourseNavigationView', {
 		'Cursame.view.courses.CourseWall'
 	],
 	config: {
-        defaultBackButtonText: Core.Lang.es.back,
 		items: {
 			xtype: 'courseslist',
 			title: Core.Lang.es.courses
 		}
-	},
-	applyLayout: function(config) {
-		config = config || {};
-		if (Ext.os.is.Android) {
-			config.animation = false;
-		}
-		return config;
 	}
 });

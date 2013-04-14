@@ -11,6 +11,8 @@
         'Ext.field.Number',
         'Ext.MessageBox',
         'Cursame.view.LoginForm',
+        'Cursame.view.navigation.View',
+        'Cursame.view.users.ProfileNavigationView',
         'Cursame.view.publications.PublicationNavigationView',
         'Cursame.view.publications.PublicationsList',
         'Cursame.view.comments.CommentsPanel',
@@ -26,35 +28,59 @@
         'Cursame.view.notifications.NotificationNavigationView',
         'Cursame.view.users.UserNavigationView'
     ],
+     config:{
+         menu:{
+             minWidth:190,
+             duration: Ext.os.is('Android') ? 0 : 200
+         }
+     },
 
-    config: {
-        items: [{
-            xtype: 'loginform'
-        }, {
-            xtype:'container',
-            layout:'hbox',
-            items:[
-            {
-                xtype:'navigationmenu',
-                flex:1
-            },{
-                xtype:'container',
-                itemId:'cardcontainer',
-                layout:'card',
-                activeItem:0,
-                items:[{
-                    xtype:'userwall'
-                },{
-                    xtype:'publicationsnavigationview'
-                },{
-                    xtype:'notificationnavigationview'
-                },{
-                    xtype:'coursenavigationview'
-                },{
-                    xtype:'usernavigationview'
-                }],
-                flex:4
-            }]
-        }]
-    }
+     initialize:function(){
+         var me = this;
+         me.setItems([{
+             xtype: 'loginform'
+         }, {
+             xtype:'container',
+             layout:'hbox',
+             items:[
+                 {
+                     xtype:'navigationmenu',
+                     docked: 'left',
+                     cls: 'x-slidenavigation-list',
+                     style: 'position: absolute; top: 0; left: 0; height: 100%; z-index: 2',
+                     width: me.getMenu().minWidth
+                 },{
+                     xtype:'container',
+                     itemId:'cardcontainer',
+                     layout:'card',
+                     cls: 'x-slidenavigation-container',
+                     style: 'width: 100%; height: 100%; position: absolute; opacity: 1; z-index: 5',
+                     draggable: {
+                         direction: 'horizontal',
+                         constraint: {
+                             min: { x: 0, y: 0 },
+                             max: { x: Math.max(screen.width, screen.height), y: 0 }
+                         },
+                         listeners: {
+                             dragend: function(draggable, e, eOpts){me.down('#cardcontainer').fireEvent('dragend', draggable, e)},
+                             scope:   me
+                         }
+                     },
+                     activeItem:0,
+                     items:[{
+                         xtype:'profilenavigationview'
+                     },{
+                         xtype:'publicationsnavigationview'
+                     },{
+                         xtype:'notificationnavigationview'
+                     },{
+                         xtype:'coursenavigationview'
+                     },{
+                         xtype:'usernavigationview'
+                     }]
+                 }]
+         }]);
+
+         me.callParent();
+     }
 });

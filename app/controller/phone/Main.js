@@ -29,14 +29,16 @@ Ext.define('Cursame.controller.phone.Main', {
             userNavigationView: 'usernavigationview',
             commentsPanel: 'commentspanel',
             userWall: 'userwall',
-            courseWall: 'coursewall'
+            courseWall: 'coursewall',
+            navigationView: 'navigationview'
         },
         control: {
             'loginform': {
                 logeado: 'onUserLogin'
             },
             'navigationmenu': {
-                itemtap: 'onMenuTap'
+                itemtap: 'onMenuTap',
+                select: 'closeMenu'
             },
             'publicationslist': {
                 itemtap: 'onPublicationTap'
@@ -85,6 +87,15 @@ Ext.define('Cursame.controller.phone.Main', {
             },
             'discussionwall': {
                 itemtap: 'onCommentTap'
+            },
+            'button[action = menuButton]': {
+                tap: 'onMenuButtonTap'
+            },
+            'main #cardcontainer': {
+                dragend: 'onMainContainerDragEnd'
+            },
+            'navigationView': {
+                back: 'onClickButtonBack'
             }
         }
     },
@@ -169,7 +180,11 @@ Ext.define('Cursame.controller.phone.Main', {
         var user, userName, avatar;
 
         user = Ext.decode(localStorage.getItem("User"));
-        userName = user.first_name + ' ' + user.last_name;
+        if (user.first_name || user.last_name != null){
+            userName = user.first_name && user.last_name ? user.first_name + ' ' + user.last_name : 'Usuario';
+        } else {
+            userName = 'Usuario';
+        }
         avatar = user.avatar.url ? Cursame.URL + user.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
         return [
             {
@@ -613,8 +628,7 @@ Ext.define('Cursame.controller.phone.Main', {
         var form = btn.up('formpanel'),
             comment = form.down('textareafield').getValue(),
             me = this,
-            list = btn.up('list'),
-            record; //= me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
+            list = btn.up('list');
 
         me.saveComment(comment, 'Course', form.getObjectId(), Ext.getStore('Publications'), form);
     },
@@ -660,7 +674,7 @@ Ext.define('Cursame.controller.phone.Main', {
 
         if (list.getCommentableType && list.getCommentableId
             && list.getCommentableType() && list.getCommentableId()) {
-            record = me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
+            record = me.CourseWall ? me.getCourseWall().getSelection()[0] : null;//Si se accede desde un comentario de Cursos.
             me.saveComment(comment, list.getCommentableType(), list.getCommentableId(), Ext.getStore('Comments'), null, record);
         }
     },
@@ -894,5 +908,78 @@ Ext.define('Cursame.controller.phone.Main', {
                 publicationsStore.add(data);
             }
         }
+    },
+    closeMenu: function(duration) {
+        var me = this,
+            duration = duration || me.getMain().getMenu().duration;
+
+        me.moveMainContainer(me, 0, duration);
+    },
+    moveMainContainer: function(nav, offsetX, duration) {
+        var me = this,
+            duration  = duration || me.getMain().getMenu().duration,
+            container = me.getCardContainer(),
+            draggable = container.draggableBehavior.draggable;
+
+        draggable.setOffset(offsetX, 0, {
+            duration: duration
+        });
+
+        if(offsetX === 0){
+            container.setWidth('100%');
+        }
+    },
+    onMenuButtonTap:function(){
+        var me = this,
+            duration = me.getMain().getMenu().duration,
+            container = me.getCardContainer();
+
+        if (me.isClosed()) {
+            me.openMenu(duration);
+            container.setWidth('85%');
+        } else {
+            me.closeMenu(duration);
+            container.setWidth('100%');
+        }
+    },
+    isClosed: function() {
+        return (this.getCardContainer().draggableBehavior.draggable.offset.x == 0);
+    },
+    openMenu: function(duration) {
+        var me       = this,
+            duration =  duration || me.getMain().getMenu().duration,
+            offsetX  = this.getMain().getMenu().minWidth;
+
+        me.moveMainContainer(me, offsetX, duration);
+    },
+    onMainContainerDragEnd:function(draggable, e, eOpts){
+        var me = this,
+            velocity  = Math.abs(e.deltaX / e.deltaTime),
+            direction = (e.deltaX > 0) ? "right" : "left",
+            offset    = Ext.clone(draggable.offset),
+            threshold = parseInt(me.getMain().getMenu().minWidth * .70),
+            container = me.getCardContainer();
+
+        switch (direction) {
+            case "right":
+                offset.x = (velocity > 0.75 || offset.x > threshold) ? me.getMain().getMenu().minWidth : 0;
+                container.setWidth('85%');
+                break;
+            case "left":
+                offset.x = (velocity > 0.75 || offset.x < threshold) ? 0 : me.getMain().getMenu().minWidth;
+                container.setWidth('100%');
+                break;
+        }
+
+        me.moveMainContainer(me, offset.x);
+    },
+
+    onClickButtonBack: function(t,e){
+        var record = Ext.getStore('Publications').getAt(0);
+        if (record){
+            record.set('showHeader',null);
+            record.commit();
+        }
     }
+
 });
