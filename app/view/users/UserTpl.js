@@ -23,7 +23,6 @@
                 '<tpl else>',
                     'Usuario',
                 '</tpl>',
-                   // '{first_name} {last_name}',
                 '</div>',
             '</div>', {
                 validateAvatar: function (avatar) {
