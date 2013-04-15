@@ -913,7 +913,9 @@ Ext.define('Cursame.controller.phone.Main', {
         var me = this,
             duration = duration || me.getMain().getMenu().duration;
 
-        me.moveMainContainer(me, 0, duration);
+        if(!Ext.os.is('Android') && Core.Utils.hideMenu){
+            me.moveMainContainer(me, 0, duration);
+        }
     },
     moveMainContainer: function(nav, offsetX, duration) {
         var me = this,

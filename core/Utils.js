@@ -10,6 +10,7 @@
     src:'/assets/Cursame/',
     requires: ['Ext.data.JsonP'],
     pageSize: 4,
+    hideMenu:false,
 
     ajax :function(obj){
         var token = localStorage.getItem("Token");

@@ -19,6 +19,7 @@ Ext.define('Cursame.view.navigation.View', {
                     ui:'action',
                     iconAlign:'center',
                     align: 'left',
+                    hidden:Ext.os.is('Android') || !Core.Utils.hideMenu,
                     hideAnimation: Ext.os.is.Android ? false : {
                         type: 'fadeOut',
                         duration: 200
