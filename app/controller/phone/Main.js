@@ -374,8 +374,13 @@ Ext.define('Cursame.controller.phone.Main', {
         } else {
             publication.wall = user.coverphoto.url;
             publication.coverphoto = user.coverphoto.url;
+<<<<<<< HEAD
             publication.avatar = user.avatar.url ? Cursame.URL + user.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
             publication.user_name = userName;
+=======
+            publication.avatar = user.avatar.url;
+            publication.user_name = user.first_name + ' ' + user.last_name;
+>>>>>>> origin/master
         }
         publication.timeAgo = Core.Utils.timeAgo(publication.created_at);
 
@@ -979,10 +984,17 @@ Ext.define('Cursame.controller.phone.Main', {
     },
 
     onClickButtonBack: function(t,e){
-        var record = Ext.getStore('Publications').getAt(0);
-        if (record){
-            record.set('showHeader',null);
-            record.commit();
+        var me = this,
+            publicationsStore = Ext.getStore('Publications');
+
+        if (t == me.getPublicationNavigationView() && me.currentStore == 'Publications') {
+            publicationsStore.setParams({}, true); //Se resetean los parametros
+            publicationsStore.load(function(){
+                var record = publicationsStore.getAt(0);
+
+                record.set('showHeader', null);
+                record.commit();
+            });
         }
     }
 
