@@ -49,6 +49,8 @@ Ext.define('Cursame.model.Notification', {
                     case 'user_comment_on_comment':
                         text = '<a href="#">'+name+'</a> ha comentado en '+'<a href="#">'+notificator.comment+'</a>';
                     break;
+                    case 'user_comment_on_user':
+                        text = '<a href="#">'+name+'</a> ha comentado en tu Perfil '+'<a href="#">'+notificator.comment+'</a>';
                 }
 
                 return [

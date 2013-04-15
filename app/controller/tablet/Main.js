@@ -360,21 +360,23 @@ Ext.define('Cursame.controller.tablet.Main', {
      */
     pushPublicationContainer: function (record) {
         var me = this,
-            course, user, publication;
+            course, user, publication, userName,avatar;
         publication = record.get('publication');
         course = record.get('course');
         user = record.get('user');
+        userName = user.first_name && user.last_name ? user.first_name + ' ' + user.last_name : 'Usuario';
         if (course) {
             publication.wall = course.coverphoto.url;
             publication.coverphoto = course.coverphoto.url;
-            publication.avatar = course.avatar.url;
+            publication.avatar = course.avatar.url ? Cursame.URL + course.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
             publication.courseName = 'Programación'; //@todo poner bien el titulo ...
+            publication.user_name = userName;
         } else {
             publication.wall = user.coverphoto.url;
             publication.coverphoto = user.coverphoto.url;
-            publication.avatar = user.avatar.url;
+            publication.avatar = user.avatar.url ? Cursame.URL + user.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
+            publication.user_name = userName;
         }
-        publication.user_name = user.first_name + ' ' + user.last_name;
         publication.timeAgo = Core.Utils.timeAgo(publication.created_at);
 
         switch (record.get('publication_type')) {
