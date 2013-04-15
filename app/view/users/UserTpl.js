@@ -18,7 +18,12 @@
                     '</tpl>',
                 '</div>',
                 '<div class="name">',
+                '<tpl if="this.validateName(first_name,last_name) == true">',
                     '{first_name} {last_name}',
+                '<tpl else>',
+                    'Usuario',
+                '</tpl>',
+                   // '{first_name} {last_name}',
                 '</div>',
             '</div>', {
                 validateAvatar: function (avatar) {
@@ -27,6 +32,14 @@
                     } else {
                         return false;
                     }
+                },
+                validateName: function (first_name,last_name) {
+                    if (first_name !== null && last_name !== null) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
                 }
             }];
         this.callParent(html);
