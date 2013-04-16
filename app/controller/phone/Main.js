@@ -366,7 +366,7 @@ Ext.define('Cursame.controller.phone.Main', {
         user = record.get('user');
         userName = user.first_name && user.last_name ? user.first_name + ' ' + user.last_name : 'Usuario';
         if (course) {
-            publication.wall = course.coverphoto.url;
+            publication.wall = course.coverphoto.url ? Cursame.URL + course.avatar.url : Cursame.URL + '/assets/imagecoursex.png';
             publication.coverphoto = course.coverphoto.url;
             publication.avatar = course.avatar.url ? Cursame.URL + course.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
             publication.courseName = 'Programación'; //@todo poner bien el titulo ...
@@ -461,9 +461,12 @@ Ext.define('Cursame.controller.phone.Main', {
      * se ejecuta cuando se le da click a una notificación
      */
     onNotificationTap: function (dataview, index, target, record, e, opt) {
-        var me = this, creator, course,
+        var me = this, course,
             data = record.get('notificator'),
-            navigationView = me.getNotificationNavigationView();
+            navigationView = me.getNotificationNavigationView(),
+            creator = record.get('creator'),
+            userName = creator.first_name && creator.last_name ? creator.first_name + ' ' + creator.last_name : 'Usuario',
+            avatar = creator.avatar.url ? Cursame.URL + creator.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
         switch (record.get('kind')) {
             case 'user_comment_on_network':
                 navigationView.push({
@@ -472,11 +475,9 @@ Ext.define('Cursame.controller.phone.Main', {
                     commentableType: 'Comment',
                     commentableId: data.id
                 });
-                creator = record.get('creator');
-                data.user_name = creator.first_name + ' ' + creator.last_name;
+                data.user_name = userName;
                 data.timeAgo = Core.Utils.timeAgo(data.created_at);
-                data.avatar = creator.avatar.url;
-
+                data.avatar = avatar;
                 me.getCommentContainer().setData(data);
                 me.loadCommentsByType('Comment', data.id);
                 break;
@@ -487,10 +488,9 @@ Ext.define('Cursame.controller.phone.Main', {
                     commentableType: 'Comment',
                     commentableId: data.id
                 });
-                creator = record.get('creator');
-                data.user_name = creator.first_name + ' ' + creator.last_name;
+                data.user_name = userName;
                 data.timeAgo = Core.Utils.timeAgo(data.created_at);
-                data.avatar = creator.avatar.url;
+                data.avatar = avatar
 
                 me.getCommentContainer().setData(data);
                 me.loadCommentsByType('Comment', data.id);
@@ -502,7 +502,6 @@ Ext.define('Cursame.controller.phone.Main', {
                     commentableType: 'Delivery',
                     commentableId: data.id
                 });
-
                 course = record.get('creator');
                 data.wall = course.coverphoto.url;
                 data.avatar = course.avatar.url;
