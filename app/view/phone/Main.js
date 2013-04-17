@@ -73,7 +73,7 @@
                  itemId:'cardcontainer',
                  layout:'card',
                  cls: 'x-slidenavigation-container',
-                 style: 'width: 85%; height: 100%; position: absolute; opacity: 1; z-index: 5',
+                 style: 'width: 100%; height: 100%; position: absolute; opacity: 1; z-index: 5',
                  draggable: {
                      direction: 'horizontal',
                      constraint: {

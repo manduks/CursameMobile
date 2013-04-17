@@ -47,7 +47,6 @@ Ext.define('Cursame.model.Publication', {
                 name: 'course',
                 mapping: 'courses',
                 convert: function (v, r) {
-                    console.log(v);
                     return v[0] || r.get('publication');
                 }
             },
@@ -100,25 +99,24 @@ Ext.define('Cursame.model.Publication', {
                 convert: function (v, r) {
                     var title = '',
                         course = r.raw.courses[0],
-                        publication = r.get('publication'),
                         user = r.get('user');
                     switch (r.get('publication_type')) {
                         case 'discussion':
                             title = 'Discusión nueva ';
-                            title += publication ? 'en el curso de <b>' + publication.title + '</b>' : '<b>en la red' + '</b>';
+                            title += course ? 'en el curso de <b>' + course.title + '</b>' : '<b>en la red' + '</b>';
                             break;
                         case 'delivery':
-                            title = 'Se ha creado una tarea en el curso <b>' + publication.title + '</b>';
+                            title = 'Se ha creado una tarea en el curso <b>' + course.title + '</b>';
                             break;
                         case 'comment':
                             title = 'Comentario  ';
-                            title += publication ? 'en el curso de <b>' + publication.title + '</b>' : '<b>en la red' + '</b>';
+                            title += course ? 'en el curso de <b>' + course.title + '</b>' : '<b>en la red' + '</b>';
                             break;
                         case 'course':
-                            title = 'Curso nuevo en la red <b>' + publication.title + '</b>';
+                            title = 'Curso nuevo en la red <b>' + course.title + '</b>';
                             break;
                         case 'survey':
-                            title = 'Se ha creado un cuestionario en el curso <b>' + publication.title + '</b>';
+                            title = 'Se ha creado un cuestionario en el curso <b>' + course.title + '</b>';
                             break;
                     }
                     return title;
