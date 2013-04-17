@@ -960,7 +960,7 @@ Ext.define('Cursame.controller.phone.Main', {
             velocity  = Math.abs(e.deltaX / e.deltaTime),
             direction = (e.deltaX > 0) ? "right" : "left",
             offset    = Ext.clone(draggable.offset),
-            threshold = parseInt(me.getMain().getMenu().minWidth * .70),
+            threshold = parseInt(me.getMain().getMenu().minWidth * 0.70,10),
             container = me.getCardContainer();
 
         switch (direction) {
@@ -991,5 +991,4 @@ Ext.define('Cursame.controller.phone.Main', {
             });
         }
     }
-
 });
