@@ -17,12 +17,12 @@ Ext.define('Cursame.view.discussions.DiscussionForm', {
         hideOnMaskTap:true,
         width: 400,
         height: 280,
-        showAnimation: {
+        showAnimation: Ext.os.is.Android ? false : {
             type: 'popIn',
             duration: 250,
             easing: 'ease-out'
         },
-        hideAnimation: {
+        hideAnimation: Ext.os.is.Android ? false : {
             type: 'popOut',
             duration: 250,
             easing: 'ease-out'

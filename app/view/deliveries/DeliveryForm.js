@@ -15,12 +15,12 @@ Ext.define('Cursame.view.deliveries.DeliveryForm',{
         hideOnMaskTap: true,
         width: 400,
         height: 350,
-        showAnimation: {
+        showAnimation: Ext.os.is.Android ? false : {
             type: 'popIn',
             duration: 250,
             easing: 'ease-out'
         },
-        hideAnimation: {
+        hideAnimation: Ext.os.is.Android ? false : {
             type: 'popOut',
             duration: 250,
             easing: 'ease-out'

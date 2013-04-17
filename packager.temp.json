@@ -30,9 +30,7 @@
     "CALL_PHONE"
   ],
   "orientations": [
-    "portrait",
     "landscapeLeft",
-    "landscapeRight",
-    "portraitUpsideDown"
+    "landscapeRight"
   ]
 }

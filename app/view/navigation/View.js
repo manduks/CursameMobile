@@ -19,17 +19,18 @@ Ext.define('Cursame.view.navigation.View', {
                     ui:'action',
                     iconAlign:'center',
                     align: 'left',
-                    hidden:Ext.os.is('Android') || !Core.Utils.hideMenu,
-                    hideAnimation: Ext.os.is.Android ? false : {
-                        type: 'fadeOut',
-                        duration: 200
-                    },
-                    showAnimation: Ext.os.is.Android ? false : {
-                        type: 'fadeIn',
-                        duration: 200
-                    }
+                    hidden:!Core.Utils.hideMenu
                 }
             ]
+        },
+        layout: {
+            type: 'card',
+            animation: Ext.os.is.Android ? false : {
+                duration: 300,
+                easing: 'ease-out',
+                type: 'slide',
+                direction: 'left'
+            }
         }
     },
     applyLayout: function(config) {

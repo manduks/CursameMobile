@@ -162,9 +162,9 @@
 	 * This is orientations that this application can run.
 	 */
 	"orientations": [
-		"portrait",
+		//"portrait",
 		"landscapeLeft",
-		"landscapeRight",
-		"portraitUpsideDown"
+		"landscapeRight"//,
+		//"portraitUpsideDown"
 	]
 }

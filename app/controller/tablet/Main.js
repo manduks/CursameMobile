@@ -37,8 +37,8 @@ Ext.define('Cursame.controller.tablet.Main', {
                 logeado: 'onUserLogin'
             },
             'navigationmenu': {
-                itemtap: 'onMenuTap',
-                select: 'closeMenu'
+                itemtap: 'onMenuTap'/*,
+                select: 'closeMenu'*/
             },
             'publicationslist': {
                 itemtap: 'onPublicationTap'
@@ -117,10 +117,7 @@ Ext.define('Cursame.controller.tablet.Main', {
      */
     loadMainView: function () {
         var me = this;
-        me.getMain().animateActiveItem(1, {
-            type: 'slide',
-            direction: 'left'
-        });
+        me.getMain().setActiveItem(1);
         me.getMenu().setData(me.getData());
         //activamos publicaciones
         setTimeout(function () {
@@ -239,19 +236,13 @@ Ext.define('Cursame.controller.tablet.Main', {
                         headerBios: user.bios,
                         headerName: user
                     };
-                me.getCardContainer().animateActiveItem(0, {
-                    type: 'slide',
-                    direction: 'left'
-                });
+                me.getCardContainer().setActiveItem(0);
                 me.getUserWall().setCommentableType('User');
                 me.getUserWall().setCommentableId(user.id);
                 me.loadCommentsByType('User', user.id, me.addHeaderToComments.bind(me, [data]));
                 break;
             case 1:
-                me.getCardContainer().animateActiveItem(1, {
-                    type: 'slide',
-                    direction: 'left'
-                });
+                me.getCardContainer().setActiveItem(1);
                 var record = Ext.getStore('Publications').getAt(0);
                 if (record){
                    record.set('showHeader',null);
@@ -263,30 +254,21 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.setActiveNavigationView(me.getPublicationNavigationView());
                 break;
             case 2:
-                me.getCardContainer().animateActiveItem(2, {
-                    type: 'slide',
-                    direction: 'left'
-                });
+                me.getCardContainer().setActiveItem(2);
                 Ext.getStore('Notifications').setParams({});
                 Ext.getStore('Notifications').load();
                 me.currentStore = 'Notifications';
                 me.setActiveNavigationView(me.getNotificationNavigationView());
                 break;
             case 3:
-                me.getCardContainer().animateActiveItem(3, {
-                    type: 'slide',
-                    direction: 'left'
-                });
+                me.getCardContainer().setActiveItem(3);
                 Ext.getStore('Courses').setParams({});
                 Ext.getStore('Courses').load();
                 me.currentStore = 'Courses';
                 me.setActiveNavigationView(me.getCourseNavigationView());
                 break;
             case 4:
-                me.getCardContainer().animateActiveItem(4, {
-                    type: 'slide',
-                    direction: 'left'
-                });
+                me.getCardContainer().setActiveItem(4);
                 Ext.getStore('Users').setParams({});
                 Ext.getStore('Users').load();
                 me.currentStore = 'Users';
@@ -296,10 +278,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 localStorage.removeItem('User');
                 localStorage.removeItem('Token');
                 localStorage.removeItem('UserId');
-                me.getMain().animateActiveItem(0, {
-                    type: 'slide',
-                    direction: 'right'
-                });
+                me.getMain().setActiveItem(0);
                 me.getMenu().getStore().removeAll();
                 break;
         }
@@ -910,22 +889,20 @@ Ext.define('Cursame.controller.tablet.Main', {
             }
         }
     },
-    closeMenu: function(duration) {
-        var me = this,
-            duration = duration || me.getMain().getMenu().duration;
+    closeMenu: function() {
+        var me = this;
 
-        if(!Ext.os.is('Android') && Core.Utils.hideMenu){
-            me.moveMainContainer(me, 0, duration);
+        if(Core.Utils.hideMenu){
+            me.moveMainContainer(me, 0);
         }
     },
-    moveMainContainer: function(nav, offsetX, duration) {
+    moveMainContainer: function(nav, offsetX) {
         var me = this,
-            duration  = duration || me.getMain().getMenu().duration,
             container = me.getCardContainer(),
             draggable = container.draggableBehavior.draggable;
 
         draggable.setOffset(offsetX, 0, {
-            duration: duration
+            duration: 0
         });
 
         if(offsetX === 0){
@@ -934,26 +911,24 @@ Ext.define('Cursame.controller.tablet.Main', {
     },
     onMenuButtonTap:function(){
         var me = this,
-            duration = me.getMain().getMenu().duration,
             container = me.getCardContainer();
 
         if (me.isClosed()) {
-            me.openMenu(duration);
+            me.openMenu();
             container.setWidth('85%');
         } else {
-            me.closeMenu(duration);
+            me.closeMenu();
             container.setWidth('100%');
         }
     },
     isClosed: function() {
         return (this.getCardContainer().draggableBehavior.draggable.offset.x == 0);
     },
-    openMenu: function(duration) {
+    openMenu: function() {
         var me       = this,
-            duration =  duration || me.getMain().getMenu().duration,
             offsetX  = this.getMain().getMenu().minWidth;
 
-        me.moveMainContainer(me, offsetX, duration);
+        me.moveMainContainer(me, offsetX);
     },
     onMainContainerDragEnd:function(draggable, e, eOpts){
         var me = this,
