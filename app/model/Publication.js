@@ -104,20 +104,20 @@ Ext.define('Cursame.model.Publication', {
                     switch (r.get('publication_type')) {
                         case 'discussion':
                             title = 'Discusión nueva ';
-                            title += courses ? 'en el curso de <b>' + courses.title + '</b>' : '<b>en la red' + '</b>';
+                            title += courses ? 'en el curso de <b>' + course.title + '</b>' : '<b>en la red' + '</b>';
                             break;
                         case 'delivery':
-                            title = 'Se ha creado una tarea en el curso <b>' + courses.title + '</b>';
+                            title = 'Se ha creado una tarea en el curso <b>' + course.title + '</b>';
                             break;
                         case 'comment':
                             title = 'Comentario  ';
-                            title += courses ? 'en el curso de <b>' + courses.title + '</b>' : '<b>en la red' + '</b>';
+                            title += courses ? 'en el curso de <b>' + course.title + '</b>' : '<b>en la red' + '</b>';
                             break;
                         case 'course':
-                            title = 'Curso nuevo en la red <b>' + courses.title + '</b>';
+                            title = 'Curso nuevo en la red <b>' + course.title + '</b>';
                             break;
                         case 'survey':
-                            title = 'Se ha creado un cuestionario en el curso <b>' + courses.title + '</b>';
+                            title = 'Se ha creado un cuestionario en el curso <b>' + course.title + '</b>';
                             break;
                     }
                     return title;
