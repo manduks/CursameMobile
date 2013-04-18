@@ -47,7 +47,7 @@ Ext.define('Cursame.model.Publication', {
                 name: 'course',
                 mapping: 'courses',
                 convert: function (v, r) {
-                    return v[0] || r.get('publication');
+                    return v ? v[0] : 'sin cursos' || r.get('publication');
                 }
             },
             {
@@ -55,7 +55,7 @@ Ext.define('Cursame.model.Publication', {
                 mapping: 'publication',
                 type: 'object',
                 convert: function (v, r) {
-                    return v.user;
+                    return v ? v.user : 'sin user';
                 }
             },
             {
