@@ -14,12 +14,12 @@ Ext.define('Cursame.view.courses.CourseDetailsPanel', {
         hideOnMaskTap: true,
         width: 500,
         height: 350,
-        showAnimation: {
+        showAnimation: Ext.os.is.Android ? false : {
             type: 'popIn',
             duration: 250,
             easing: 'ease-out'
         },
-        hideAnimation: {
+        hideAnimation: Ext.os.is.Android ? false : {
             type: 'popOut',
             duration: 250,
             easing: 'ease-out'

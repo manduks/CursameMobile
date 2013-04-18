@@ -44,12 +44,19 @@ Ext.define('Cursame.model.Publication', {
                 }
             },
             {
-                name: 'courses',
-                type: 'object'
+                name: 'course',
+                mapping: 'courses',
+                convert: function (v, r) {
+                    return v[0] || r.get('publication');
+                }
             },
             {
                 name: 'user',
-                type: 'object'
+                mapping: 'publication',
+                type: 'object',
+                convert: function (v, r) {
+                    return v.user;
+                }
             },
             {
                 name: 'content',
@@ -92,6 +99,7 @@ Ext.define('Cursame.model.Publication', {
                 convert: function (v, r) {
                     var title = '',
                         courses = r.get('courses'),
+                        course = r.raw.courses[0],
                         user = r.get('user');
                     switch (r.get('publication_type')) {
                         case 'discussion':

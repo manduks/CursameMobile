@@ -30,8 +30,7 @@
     ],
      config:{
          menu:{
-             minWidth:190,
-             duration: Ext.os.is('Android') ? 0 : 200
+             minWidth:190
          }
      },
 
@@ -61,7 +60,7 @@
                  items:cardContainerItems
              };
 
-         if(!Ext.os.is('Android') && Core.Utils.hideMenu){
+         if(Core.Utils.hideMenu){
              navigationMenu = {
                  xtype:'navigationmenu',
                  docked: 'left',
