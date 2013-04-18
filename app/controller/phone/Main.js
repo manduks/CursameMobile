@@ -874,6 +874,7 @@ Ext.define('Cursame.controller.phone.Main', {
             data.showHeader = true;
 
             if (firstPublicationRecord) {
+                Ext.Msg.alert('', 'Bienvenido al curso ' + data.headerTitle);
                 firstPublicationRecord.set('headerAvatar', data.headerAvatar);
                 firstPublicationRecord.set('headerTitle', data.headerTitle);
                 firstPublicationRecord.set('headerPublicStatus', data.headerPublicStatus);
@@ -884,6 +885,7 @@ Ext.define('Cursame.controller.phone.Main', {
                 firstPublicationRecord.set('showHeader', data.showHeader);
                 firstPublicationRecord.commit();
             } else {
+                Ext.Msg.alert('', 'Bienvenido al curso ' + data.headerTitle);
                 data.emptyStore = true;
                 publicationsStore.add(data);
             }
