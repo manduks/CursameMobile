@@ -21,13 +21,13 @@ Ext.define('Cursame.model.Notification', {
                 var text,avatar = Cursame.URL+'/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png',
                     obj = r.get('notificator_type'),
                     notificator = obj.notificator,
+                    owner = obj.owner,
                     creator = obj.creator,
                     course = obj.course,
                     name = 'Usuario';
                 if(creator && creator.first_name && creator.last_name){
                     name = creator.first_name + ' ' + creator.last_name;
                 }
-
                 switch(value){
                     case 'user_comment_on_network':
                         avatar = creator.avatar && creator.avatar.url?Cursame.URL+creator.avatar.url: avatar;
@@ -35,7 +35,7 @@ Ext.define('Cursame.model.Notification', {
                     break;
                     case 'user_comment_on_course':
                         avatar = creator.avatar && creator.avatar.url?Cursame.URL+creator.avatar.url: avatar;
-                        text = '<a href="#">'+name+'</a> ha comentado en el curso';
+                        text = '<a href="#">'+name+'</a> ha comentado en el curso <a href="#">'+course.title+'</a>';
                     break;
                     case 'new_delivery_on_course':
                         text = 'Se cre&oacute; la tarea <a href="#">"'+notificator.title+'"</a> en el curso <a href="#">'+course.title+'</a>';
@@ -47,10 +47,10 @@ Ext.define('Cursame.model.Notification', {
                         text = 'Se ha creado un cuestionario en el curso';
                     break;
                     case 'user_comment_on_comment':
-                        text = '<a href="#">'+name+'</a> ha comentado en '+'<a href="#">'+notificator.comment+'</a>';
+                        text = '<a href="#">'+name+'</a> ha comentado en el comentario '+'<a href="#">'+owner.comment+'</a>';
                     break;
                     case 'user_comment_on_user':
-                        text = '<a href="#">'+name+'</a> ha comentado en tu Perfil '+'<a href="#">'+notificator.comment+'</a>';
+                        text = '<a href="#">'+name+'</a> ha comentado en tu Perfil ';
                 }
 
                 return [
@@ -87,7 +87,11 @@ Ext.define('Cursame.model.Notification', {
             name: 'course',
             type: 'object',
             mapping:'notificator_type.course'
-        } ],
+        } , {
+            name: 'owner',
+            type: 'object',
+            mapping:'notificator_type.owner'
+        }],
         proxy: {
             type: 'jsonp',
             url: Cursame.APIURL + 'api/notifications.json',

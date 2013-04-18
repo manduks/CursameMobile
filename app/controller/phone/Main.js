@@ -362,14 +362,14 @@ Ext.define('Cursame.controller.phone.Main', {
         var me = this,
             course, user, publication, userName,avatar;
         publication = record.get('publication');
-        course = record.get('course');
-        user = record.get('user');
+        course = record.get('courses');
+        user = record.get('publication').user;
         userName = user.first_name && user.last_name ? user.first_name + ' ' + user.last_name : 'Usuario';
         if (course) {
-            publication.wall = course.coverphoto.url ? Cursame.URL + course.avatar.url : Cursame.URL + '/assets/imagecoursex.png';
-            publication.coverphoto = course.coverphoto.url;
-            publication.avatar = course.avatar.url ? Cursame.URL + course.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
-            publication.courseName = 'Programación'; //@todo poner bien el titulo ...
+            publication.wall = course[0].coverphoto.url ? Cursame.URL + course[0].avatar.url : Cursame.URL + '/assets/imagecoursex.png';
+            publication.coverphoto = course[0].coverphoto.url;
+            publication.avatar = course[0].avatar.url ? Cursame.URL + course[0].avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
+            publication.courseName = course[0].title; //@todo poner bien el titulo ...
             publication.user_name = userName;
         } else {
             publication.wall = user.coverphoto.url;
@@ -466,7 +466,7 @@ Ext.define('Cursame.controller.phone.Main', {
             navigationView = me.getNotificationNavigationView(),
             creator = record.get('creator'),
             userName = creator.first_name && creator.last_name ? creator.first_name + ' ' + creator.last_name : 'Usuario',
-            avatar = creator.avatar.url ? Cursame.URL + creator.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
+            avatar = creator.avatar && creator.avatar.url ? Cursame.URL + creator.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
         switch (record.get('kind')) {
             case 'user_comment_on_network':
                 navigationView.push({
@@ -515,6 +515,19 @@ Ext.define('Cursame.controller.phone.Main', {
                 me.pushCourseToView(me.getNotificationNavigationView(), record.get('notificator'));
                 break;
             case 'new_survey_on_course':
+                break;
+            case 'user_comment_on_comment':
+                navigationView.push({
+                    xtype: 'commentwall',
+                    title: Core.Lang.es.comment,
+                    commentableType: 'Comment',
+                    commentableId: data.id
+                });
+                data.user_name = userName;
+                data.timeAgo = Core.Utils.timeAgo(data.created_at);
+                data.avatar = avatar;
+                me.getCommentContainer().setData(data);
+                me.loadCommentsByType('Comment', data.id);
                 break;
         }
     },
