@@ -99,7 +99,7 @@ Ext.define('Cursame.model.Publication', {
                 convert: function (v, r) {
                     var title = '',
                         courses = r.get('courses'),
-                        course = r.raw.courses[0],
+                        course = r.raw.courses && r.raw.courses[0] ? r.raw.courses[0] : {title: 'Sin Titulo'},
                         user = r.get('user');
                     if (course) {
                         switch (r.get('publication_type')) {
