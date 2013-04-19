@@ -9,7 +9,8 @@ Ext.define('Cursame.controller.phone.Main', {
     config: {
         activeNavigationView: undefined, //Referencia al Navigation View Activo
         currentStore: undefined,
-        headerPublicationsData:undefined,//Referencia a los datos par mostrar el header
+        headerPublicationsData: undefined,//Referencia a los datos par mostrar el header
+        headerCommentsData: undefined,//Referencia a los datos para mostrar en el header de Comentarios
         refs: {
             main: {
                 selector: 'main'
@@ -38,7 +39,7 @@ Ext.define('Cursame.controller.phone.Main', {
             },
             'navigationmenu': {
                 itemtap: 'onMenuTap'/*,
-                select: 'closeMenu'*/
+                 select: 'closeMenu'*/
             },
             'publicationslist': {
                 itemtap: 'onPublicationTap'
@@ -130,41 +131,41 @@ Ext.define('Cursame.controller.phone.Main', {
      * este metodo iniciliza las push notifications mediante faye
      * @return {objet} soy un pinch pro!!
      */
-    startPushNotifications:function(){
-        var me = this, stores ={}, user, NotificationsChannel;
+    startPushNotifications: function () {
+        var me = this, stores = {}, user, NotificationsChannel;
 
         user = Ext.decode(localStorage.getItem("User"));
         stores = {
-            'user_comment_on_network':{
-                'Publications':'Publications'
+            'user_comment_on_network': {
+                'Publications': 'Publications'
             },
-            'user_comment_on_course':{
-                'Publications':'Publications'
+            'user_comment_on_course': {
+                'Publications': 'Publications'
             },
-            'new_delivery_on_course':{
-                'Publications':'Publications'
+            'new_delivery_on_course': {
+                'Publications': 'Publications'
             },
-            'new_public_course_on_network':{
-                'Publications':'Publications',
-                'Courses':'Courses'
+            'new_public_course_on_network': {
+                'Publications': 'Publications',
+                'Courses': 'Courses'
             },
-            'new_survey_on_course':{
-                'Publications':'Publications'
+            'new_survey_on_course': {
+                'Publications': 'Publications'
             },
-            'user_comment_on_comment':{
-                'CommentsComments':'CommentsComments',
-                'Comments':'Comments'
+            'user_comment_on_comment': {
+                'CommentsComments': 'CommentsComments',
+                'Comments': 'Comments'
             },
-            'user_comment_on_user':{
-                'Comments':'Comments'
+            'user_comment_on_user': {
+                'Comments': 'Comments'
             }
         };
 
         NotificationsChannel = Ext.decode(localStorage.getItem("NotificationsChannel"));
         PrivatePub.sign(NotificationsChannel);
         //metodo que escucha las notificaciones y las setea
-        PrivatePub.subscribe(NotificationsChannel.channel, function(data, channel) {
-            store = me.getMenu().getStore().getAt(2).set('numNotifications',data.num);
+        PrivatePub.subscribe(NotificationsChannel.channel, function (data, channel) {
+            store = me.getMenu().getStore().getAt(2).set('numNotifications', data.num);
             user.notifications.length = data.num;
             localStorage.setItem("User", Ext.encode(user));
             Ext.getStore(stores[data.notification.kind][me.currentStore] || 'CommentsComments').load();
@@ -177,7 +178,7 @@ Ext.define('Cursame.controller.phone.Main', {
         var user, userName, avatar;
 
         user = Ext.decode(localStorage.getItem("User"));
-        if (user.first_name || user.last_name != null){
+        if (user.first_name || user.last_name != null) {
             userName = user.first_name && user.last_name ? user.first_name + ' ' + user.last_name : 'Usuario';
         } else {
             userName = 'Usuario';
@@ -239,14 +240,15 @@ Ext.define('Cursame.controller.phone.Main', {
                 me.getCardContainer().setActiveItem(0);
                 me.getUserWall().setCommentableType('User');
                 me.getUserWall().setCommentableId(user.id);
-                me.loadCommentsByType('User', user.id, me.addHeaderToComments.bind(me, [data]));
+                me.setHeaderCommentsData(data);
+                me.loadCommentsByType('User', user.id, me.addHeaderToComments.bind(me));
                 break;
             case 1:
                 me.getCardContainer().setActiveItem(1);
                 var record = Ext.getStore('Publications').getAt(0);
-                if (record){
-                   record.set('showHeader',null);
-                   record.commit();
+                if (record) {
+                    record.set('showHeader', null);
+                    record.commit();
                 }
                 Ext.getStore('Publications').setParams({}, true);
                 Ext.getStore('Publications').load();
@@ -293,7 +295,7 @@ Ext.define('Cursame.controller.phone.Main', {
             publicationsStore = Ext.getStore('Publications');
         commentsStore.resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'publication','Publications');
+            me.onLike(record, 'publication', 'Publications');
             return;
         }
         if (e.getTarget('div.comment')) {
@@ -339,7 +341,7 @@ Ext.define('Cursame.controller.phone.Main', {
      */
     pushPublicationContainer: function (record) {
         var me = this,
-            course, user, publication, userName,avatar;
+            course, user, publication, userName, avatar;
         publication = record.get('publication');
         course = record.get('course');
         user = record.get('publication').user;
@@ -403,7 +405,7 @@ Ext.define('Cursame.controller.phone.Main', {
             cComments = Ext.getStore('CommentsComments');
         Ext.getStore('CommentsComments').resetCurrentPage();//Se resetea el store de Comments Comments para inicializar la paginación
         if (e.getTarget('div.like')) {
-            me.onLike(record, 'comment','Comments');
+            me.onLike(record, 'comment', 'Comments');
             return;
         }
         if (e.getTarget('div.comment')) {
@@ -497,7 +499,7 @@ Ext.define('Cursame.controller.phone.Main', {
                 break;
             case 'user_comment_on_comment':
                 var commentOwner = record.get('owner');
-                if(commentOwner){
+                if (commentOwner) {
                     navigationView.push({
                         xtype: 'commentwall',
                         title: Core.Lang.es.comment,
@@ -568,7 +570,8 @@ Ext.define('Cursame.controller.phone.Main', {
         me.getUserNavigationView().down('userwall').setCommentableId(user.id);
 
         Ext.getStore('Comments').resetCurrentPage();
-        me.loadCommentsByType('User', user.id, me.addHeaderToComments.bind(me, [data]));
+        me.setHeaderCommentsData(data);
+        me.loadCommentsByType('User', user.id, me.addHeaderToComments.bind(me));
     },
     /**
      *
@@ -639,25 +642,25 @@ Ext.define('Cursame.controller.phone.Main', {
             me = this,
             type, id, store, record;
 
-            if (data.publication_type && data.publication_id) {
-                type = data.publication_type;
-                id = data.publication_id;
-                store = Ext.getStore('Comments');
-                record = me.getPublicationsList().getSelection()[0];//Si se accede desde el Wall de Publicaciones.
-                if (!record){
-                    record = me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
-                }
-            } else {
-                type = 'Comment';
-                id = data.id;
-                store = Ext.getStore('CommentsComments');
-                record = me.getUserWall().getSelection()[0];//Si se accede desde el Wall de Usuario.
-                if (!record){
-                    record = me.getUserNavigationView().down('userwall').getSelection()[0];//Si se accede desde un usuario de la comunidad
-                }
+        if (data.publication_type && data.publication_id) {
+            type = data.publication_type;
+            id = data.publication_id;
+            store = Ext.getStore('Comments');
+            record = me.getPublicationsList().getSelection()[0];//Si se accede desde el Wall de Publicaciones.
+            if (!record) {
+                record = me.getCourseWall().getSelection()[0];//Si se accede desde un comentario de Cursos.
             }
+        } else {
+            type = 'Comment';
+            id = data.id;
+            store = Ext.getStore('CommentsComments');
+            record = me.getUserWall().getSelection()[0];//Si se accede desde el Wall de Usuario.
+            if (!record) {
+                record = me.getUserNavigationView().down('userwall').getSelection()[0];//Si se accede desde un usuario de la comunidad
+            }
+        }
 
-            me.saveComment(comment, Core.Utils.toFirstUpperCase(type), id, store, null, record);
+        me.saveComment(comment, Core.Utils.toFirstUpperCase(type), id, store, null, record);
     },
     /**
      * Metodo generico  para agregar comentarios a discussiones, usuario, surveys ..
@@ -691,7 +694,7 @@ Ext.define('Cursame.controller.phone.Main', {
                     commentable_id: commentableId
                 },
                 success: function (response) {
-                    var callback = {};
+                    var callback = {}, data;
                     me.getMain().setMasked(false);
                     store.resetCurrentPage();
                     if (form) {
@@ -702,6 +705,7 @@ Ext.define('Cursame.controller.phone.Main', {
                             type: commentableType,
                             publicacionId: commentableId
                         });
+                        ;
                         callback = me.addHeaderToPublications.bind(me);
                     } else {
                         if (record) {
@@ -714,6 +718,9 @@ Ext.define('Cursame.controller.phone.Main', {
                             commentable_type: commentableType,
                             commentable_id: commentableId
                         });
+                        data = me.getUserNavigationView().down('userslist').getSelection()[0].data;
+                        me.setHeaderCommentsData(data);
+                        callback = me.addHeaderToComments.bind(me);
                     }
                     store.load(callback);
                     me.currentStore = store.getStoreId();
@@ -857,19 +864,27 @@ Ext.define('Cursame.controller.phone.Main', {
         me.saveLike(Core.Utils.toFirstUpperCase(type), id, record, store);
     },
 
-    addHeaderToComments: function (params) {
-        var commentsStore = Ext.getStore('Comments'),
+    addHeaderToComments: function () {
+        var me = this,
+            commentsStore = Ext.getStore('Comments'),
             firstCommentRecord = commentsStore.getAt(0),
-            data = params[0];
-        if (firstCommentRecord) {
-            firstCommentRecord.set('headerWall', data.headerWall);
-            firstCommentRecord.set('headerAvatar', data.headerAvatar);
-            firstCommentRecord.set('headerName', data.headerName);
-            firstCommentRecord.set('headerBios', data.headerBios);
-            firstCommentRecord.commit();
-        } else {
-            data.emptyStore = true;
-            commentsStore.add(data);
+            params = me.getHeaderCommentsData(),
+            data = {};
+        if (params) {
+            data.headerWall = params.coverphoto;
+            data.headerAvatar = params.avatar;
+            data.headerName = params.headerName ? params.headerName : params.headerName = {first_name:params.first_name,last_name:params.last_name};
+            data.headerBios = params.bios;
+            if (firstCommentRecord) {
+                firstCommentRecord.set('headerWall', data.headerWall);
+                firstCommentRecord.set('headerAvatar', data.headerAvatar);
+                firstCommentRecord.set('headerName', data.headerName);
+                firstCommentRecord.set('headerBios', data.headerBios);
+                firstCommentRecord.commit();
+            } else {
+                data.emptyStore = true;
+                commentsStore.add(data);
+            }
         }
     },
 
@@ -879,7 +894,7 @@ Ext.define('Cursame.controller.phone.Main', {
             firstPublicationRecord = publicationsStore.getAt(0),
             params = me.getHeaderPublicationsData(),
             data = {};
-        if (params){
+        if (params) {
             data.headerAvatar = params.avatar;
             data.headerTitle = params.title;
             data.headerPublicStatus = params.public_status;
@@ -907,14 +922,14 @@ Ext.define('Cursame.controller.phone.Main', {
             }
         }
     },
-    closeMenu: function() {
+    closeMenu: function () {
         var me = this;
 
-        if(Core.Utils.hideMenu){
+        if (Core.Utils.hideMenu) {
             me.moveMainContainer(me, 0);
         }
     },
-    moveMainContainer: function(nav, offsetX) {
+    moveMainContainer: function (nav, offsetX) {
         var me = this,
             container = me.getCardContainer(),
             draggable = container.draggableBehavior.draggable;
@@ -923,11 +938,11 @@ Ext.define('Cursame.controller.phone.Main', {
             duration: 0
         });
 
-        if(offsetX === 0){
+        if (offsetX === 0) {
             container.setWidth('100%');
         }
     },
-    onMenuButtonTap:function(){
+    onMenuButtonTap: function () {
         var me = this,
             container = me.getCardContainer();
 
@@ -939,21 +954,21 @@ Ext.define('Cursame.controller.phone.Main', {
             container.setWidth('100%');
         }
     },
-    isClosed: function() {
+    isClosed: function () {
         return (this.getCardContainer().draggableBehavior.draggable.offset.x == 0);
     },
-    openMenu: function() {
-        var me       = this,
-            offsetX  = this.getMain().getMenu().minWidth;
+    openMenu: function () {
+        var me = this,
+            offsetX = this.getMain().getMenu().minWidth;
 
         me.moveMainContainer(me, offsetX);
     },
-    onMainContainerDragEnd:function(draggable, e, eOpts){
+    onMainContainerDragEnd: function (draggable, e, eOpts) {
         var me = this,
-            velocity  = Math.abs(e.deltaX / e.deltaTime),
+            velocity = Math.abs(e.deltaX / e.deltaTime),
             direction = (e.deltaX > 0) ? "right" : "left",
-            offset    = Ext.clone(draggable.offset),
-            threshold = parseInt(me.getMain().getMenu().minWidth * 0.70,10),
+            offset = Ext.clone(draggable.offset),
+            threshold = parseInt(me.getMain().getMenu().minWidth * 0.70, 10),
             container = me.getCardContainer();
 
         switch (direction) {
@@ -970,13 +985,13 @@ Ext.define('Cursame.controller.phone.Main', {
         me.moveMainContainer(me, offset.x);
     },
 
-    onClickButtonBack: function(t,e){
+    onClickButtonBack: function (t, e) {
         var me = this,
             publicationsStore = Ext.getStore('Publications');
 
         if (t == me.getPublicationNavigationView() && me.currentStore == 'Publications') {
             publicationsStore.setParams({}, true); //Se resetean los parametros
-            publicationsStore.load(function(){
+            publicationsStore.load(function () {
                 var record = publicationsStore.getAt(0);
 
                 record.set('showHeader', null);
