@@ -496,17 +496,20 @@ Ext.define('Cursame.controller.tablet.Main', {
             case 'new_survey_on_course':
                 break;
             case 'user_comment_on_comment':
-                navigationView.push({
-                    xtype: 'commentwall',
-                    title: Core.Lang.es.comment,
-                    commentableType: 'Comment',
-                    commentableId: data.id
-                });
-                data.user_name = userName;
-                data.timeAgo = Core.Utils.timeAgo(data.created_at);
-                data.avatar = avatar;
-                me.getCommentContainer().setData(data);
-                me.loadCommentsByType('Comment', data.id);
+                var commentOwner = record.get('owner');
+                if(commentOwner){
+                    navigationView.push({
+                        xtype: 'commentwall',
+                        title: Core.Lang.es.comment,
+                        commentableType: 'Comment',
+                        commentableId: commentOwner.id
+                    });
+                    commentOwner.user_name = userName;
+                    commentOwner.timeAgo = Core.Utils.timeAgo(commentOwner.created_at);
+                    commentOwner.avatar = avatar;
+                    me.getCommentContainer().setData(commentOwner);
+                    me.loadCommentsByType('Comment', commentOwner.id);
+                }
                 break;
         }
     },
