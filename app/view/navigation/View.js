@@ -31,6 +31,14 @@ Ext.define('Cursame.view.navigation.View', {
                 type: 'slide',
                 direction: 'left'
             }
+        },
+        listeners:{
+            scope:this,
+            push:function(t, view, eOpts){
+                if(Ext.os.is.Android){
+                    view.doRefresh();
+                }
+            }
         }
     },
     applyLayout: function(config) {
