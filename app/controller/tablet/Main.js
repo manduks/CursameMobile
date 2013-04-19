@@ -534,6 +534,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         var me = this,
             publicationsStore = Ext.getStore('Publications');
         me.currentStore = 'Publications';
+        publicationsStore.resetCurrentPage();
         view.push({
             xtype: 'coursewall',
             title: data.id.title
@@ -875,7 +876,6 @@ Ext.define('Cursame.controller.tablet.Main', {
             firstPublicationRecord = publicationsStore.getAt(0),
             params = me.getHeaderPublicationsData(),
             data = {};
-
         if (params){
             data.headerAvatar = params.avatar;
             data.headerTitle = params.title;
