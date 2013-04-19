@@ -9,7 +9,8 @@ Ext.define('Cursame.controller.tablet.Main', {
     config: {
         activeNavigationView: undefined, //Referencia al Navigation View Activo
         currentStore: undefined,
-        headerPublicationsData:undefined,//Referencia a los datos par mostrar el header
+        headerPublicationsData: undefined,//Referencia a los datos par mostrar el header
+        headerCommentsData: undefined,//Referencia a los datos para mostrar en el header de Comentarios
         refs: {
             main: {
                 selector: 'main'
@@ -174,12 +175,16 @@ Ext.define('Cursame.controller.tablet.Main', {
      *
      */
     getData: function (numNotifications) {
-        var user, userName, avatar;
+        var user, avatar, userName = '';
 
         user = Ext.decode(localStorage.getItem("User"));
-        if (user.first_name || user.last_name != null){
-            userName = user.first_name && user.last_name ? user.first_name + ' ' + user.last_name : 'Usuario';
-        } else {
+        if (!Ext.isEmpty(user.first_name)){
+            userName = user.first_name;
+        }
+        if (!Ext.isEmpty(user.last_name)){
+            userName += ' ' + user.last_name;
+        }
+        if (Ext.isEmpty(userName)){
             userName = 'Usuario';
         }
         avatar = user.avatar.url ? Cursame.URL + user.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
@@ -693,7 +698,8 @@ Ext.define('Cursame.controller.tablet.Main', {
                     commentable_id: commentableId
                 },
                 success: function (response) {
-                    var callback = {}, data;
+                    var callback = {},
+                        data = me.getUserNavigationView().down('userslist').getSelection()[0];//Obtenemos el record seleccionado de la lista de usuarios de comunidad
                     me.getMain().setMasked(false);
                     store.resetCurrentPage();
                     if (form) {
@@ -717,9 +723,10 @@ Ext.define('Cursame.controller.tablet.Main', {
                             commentable_type: commentableType,
                             commentable_id: commentableId
                         });
-                        data = me.getUserNavigationView().down('userslist').getSelection()[0].data;
-                        me.setHeaderCommentsData(data);
-                        callback = me.addHeaderToComments.bind(me);
+                        if (data && data.data) { //Se valida que vengan lso datos que se setearan en el header de un usuario
+                            me.setHeaderCommentsData(data.data);
+                            callback = me.addHeaderToComments.bind(me);
+                        }
                     }
                     store.load(callback);
                     me.currentStore = store.getStoreId();
@@ -953,21 +960,21 @@ Ext.define('Cursame.controller.tablet.Main', {
             container.setWidth('100%');
         }
     },
-    isClosed: function() {
+    isClosed: function () {
         return (this.getCardContainer().draggableBehavior.draggable.offset.x == 0);
     },
-    openMenu: function() {
-        var me       = this,
-            offsetX  = this.getMain().getMenu().minWidth;
+    openMenu: function () {
+        var me = this,
+            offsetX = this.getMain().getMenu().minWidth;
 
         me.moveMainContainer(me, offsetX);
     },
-    onMainContainerDragEnd:function(draggable, e, eOpts){
+    onMainContainerDragEnd: function (draggable, e, eOpts) {
         var me = this,
-            velocity  = Math.abs(e.deltaX / e.deltaTime),
+            velocity = Math.abs(e.deltaX / e.deltaTime),
             direction = (e.deltaX > 0) ? "right" : "left",
-            offset    = Ext.clone(draggable.offset),
-            threshold = parseInt(me.getMain().getMenu().minWidth * 0.70,10),
+            offset = Ext.clone(draggable.offset),
+            threshold = parseInt(me.getMain().getMenu().minWidth * 0.70, 10),
             container = me.getCardContainer();
 
         switch (direction) {
@@ -984,13 +991,13 @@ Ext.define('Cursame.controller.tablet.Main', {
         me.moveMainContainer(me, offset.x);
     },
 
-    onClickButtonBack: function(t,e){
+    onClickButtonBack: function (t, e) {
         var me = this,
             publicationsStore = Ext.getStore('Publications');
 
         if (t == me.getPublicationNavigationView() && me.currentStore == 'Publications') {
             publicationsStore.setParams({}, true); //Se resetean los parametros
-            publicationsStore.load(function(){
+            publicationsStore.load(function () {
                 var record = publicationsStore.getAt(0);
 
                 record.set('showHeader', null);

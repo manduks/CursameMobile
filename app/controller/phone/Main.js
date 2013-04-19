@@ -175,12 +175,16 @@ Ext.define('Cursame.controller.phone.Main', {
      *
      */
     getData: function (numNotifications) {
-        var user, userName, avatar;
+        var user, avatar, userName = '';
 
         user = Ext.decode(localStorage.getItem("User"));
-        if (user.first_name || user.last_name != null) {
-            userName = user.first_name && user.last_name ? user.first_name + ' ' + user.last_name : 'Usuario';
-        } else {
+        if (!Ext.isEmpty(user.first_name)){
+            userName = user.first_name;
+        }
+        if (!Ext.isEmpty(user.last_name)){
+            userName += ' ' + user.last_name;
+        }
+        if (Ext.isEmpty(userName)){
             userName = 'Usuario';
         }
         avatar = user.avatar.url ? Cursame.URL + user.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
@@ -694,7 +698,8 @@ Ext.define('Cursame.controller.phone.Main', {
                     commentable_id: commentableId
                 },
                 success: function (response) {
-                    var callback = {}, data;
+                    var callback = {},
+                        data = me.getUserNavigationView().down('userslist').getSelection()[0];//Obtenemos el record seleccionado de la lista de usuarios de comunidad
                     me.getMain().setMasked(false);
                     store.resetCurrentPage();
                     if (form) {
@@ -718,9 +723,10 @@ Ext.define('Cursame.controller.phone.Main', {
                             commentable_type: commentableType,
                             commentable_id: commentableId
                         });
-                        data = me.getUserNavigationView().down('userslist').getSelection()[0].data;
-                        me.setHeaderCommentsData(data);
-                        callback = me.addHeaderToComments.bind(me);
+                        if (data && data.data) { //Se valida que vengan lso datos que se setearan en el header de un usuario
+                            me.setHeaderCommentsData(data.data);
+                            callback = me.addHeaderToComments.bind(me);
+                        }
                     }
                     store.load(callback);
                     me.currentStore = store.getStoreId();
