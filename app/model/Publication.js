@@ -196,7 +196,10 @@ Ext.define('Cursame.model.Publication', {
                 convert: function (headerAvatar, r) {
                     var url = Cursame.URL + '/assets/course-avatarx-0a909a23b940f3f1701b2e6065c29fe6.png';
                     if (headerAvatar) {
-                        url = Cursame.URL + headerAvatar
+                        url = headerAvatar;
+                        if(headerAvatar.search(Cursame.URL) == -1){
+                            url = Cursame.URL + headerAvatar;
+                        }
                     }
                     return url;
                 }
