@@ -27,7 +27,17 @@ Ext.define('Cursame.model.CommentComment', {
             type: 'string',
             mapping:'user',
             convert: function (user,r) {
-                return user.first_name+' '+user.last_name;
+                var name = '';
+                if (user && !Ext.isEmpty(user.first_name)){
+                    name = user.first_name;
+                }
+                if (user && !Ext.isEmpty(user.last_name)){
+                    name += ' ' + user.last_name;
+                }
+                if (Ext.isEmpty(name)){
+                    name = 'Usuario';
+                }
+                return name;
             }
         }, {
             name: 'user_avatar',

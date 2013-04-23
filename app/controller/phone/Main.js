@@ -175,22 +175,13 @@ Ext.define('Cursame.controller.phone.Main', {
      *
      */
     getData: function (numNotifications) {
-        var user, avatar, userName = '';
+        var user, avatar, me = this;
 
         user = Ext.decode(localStorage.getItem("User"));
-        if (!Ext.isEmpty(user.first_name)){
-            userName = user.first_name;
-        }
-        if (!Ext.isEmpty(user.last_name)){
-            userName += ' ' + user.last_name;
-        }
-        if (Ext.isEmpty(userName)){
-            userName = 'Usuario';
-        }
         avatar = user.avatar.url ? Cursame.URL + user.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
         return [
             {
-                name: userName,
+                name: me.validateUserName(user),
                 icon: avatar,
                 group: 'PERFIL'
             },
@@ -295,8 +286,7 @@ Ext.define('Cursame.controller.phone.Main', {
      */
     onPublicationTap: function (dataview, index, target, record, e, opt) {
         var me = this,
-            commentsStore = Ext.getStore('Comments'),
-            publicationsStore = Ext.getStore('Publications');
+            commentsStore = Ext.getStore('Comments');
         commentsStore.resetCurrentPage();//Se resetean los filtros de paginado para el store de Comentarios.
         if (e.getTarget('div.like')) {
             me.onLike(record, 'publication', 'Publications');
@@ -345,11 +335,12 @@ Ext.define('Cursame.controller.phone.Main', {
      */
     pushPublicationContainer: function (record) {
         var me = this,
-            course, user, publication, userName, avatar;
+            course, user, publication, userName;
         publication = record.get('publication');
         course = record.get('course');
         user = record.get('publication').user;
-        userName = user.first_name && user.last_name ? user.first_name + ' ' + user.last_name : 'Usuario';
+        userName = me.validateUserName(user);
+        Ext.getStore('Publications').resetCurrentPage();
         if (course) {
             publication.wall = course.coverphoto.url ? Cursame.URL + course.avatar.url : Cursame.URL + '/assets/imagecoursex.png';
             publication.coverphoto = course.coverphoto.url;
@@ -450,7 +441,7 @@ Ext.define('Cursame.controller.phone.Main', {
             data = record.get('notificator'),
             navigationView = me.getNotificationNavigationView(),
             creator = record.get('creator'),
-            userName = creator.first_name && creator.last_name ? creator.first_name + ' ' + creator.last_name : 'Usuario',
+            userName = me.validateUserName(creator),
             avatar = creator.avatar && creator.avatar.url ? Cursame.URL + creator.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
         switch (record.get('kind')) {
             case 'user_comment_on_network':
@@ -698,7 +689,7 @@ Ext.define('Cursame.controller.phone.Main', {
                     commentable_id: commentableId
                 },
                 success: function (response) {
-                    var callback = {},
+                    var callback = me.addHeaderToComments.bind(me),
                         data = me.getUserNavigationView().down('userslist').getSelection()[0];//Obtenemos el record seleccionado de la lista de usuarios de comunidad
                     me.getMain().setMasked(false);
                     store.resetCurrentPage();
@@ -710,7 +701,6 @@ Ext.define('Cursame.controller.phone.Main', {
                             type: commentableType,
                             publicacionId: commentableId
                         });
-                        ;
                         callback = me.addHeaderToPublications.bind(me);
                     } else {
                         if (record) {
@@ -1004,5 +994,20 @@ Ext.define('Cursame.controller.phone.Main', {
                 record.commit();
             });
         }
+    },
+
+    validateUserName: function (user) {
+        var userName = '';
+        if (!Ext.isEmpty(user.first_name)){
+            userName = user.first_name;
+        }
+        if (!Ext.isEmpty(user.last_name)){
+            userName += ' ' + user.last_name;
+        }
+        if (Ext.isEmpty(userName)){
+            userName = 'Usuario';
+        }
+
+        return userName;
     }
 });

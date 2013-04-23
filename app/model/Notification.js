@@ -24,18 +24,26 @@ Ext.define('Cursame.model.Notification', {
                     owner = obj.owner,
                     creator = obj.creator,
                     course = obj.course,
-                    name = 'Usuario';
-                if(creator && creator.first_name && creator.last_name){
-                    name = creator.first_name + ' ' + creator.last_name;
+                    userName = '';
+
+                if (creator && !Ext.isEmpty(creator.first_name)){
+                    userName = creator.first_name;
                 }
+                if (creator && !Ext.isEmpty(creator.last_name)){
+                    userName += ' ' + creator.last_name;
+                }
+                if (Ext.isEmpty(userName)){
+                    userName = 'Usuario';
+                }
+
                 switch(value){
                     case 'user_comment_on_network':
                         avatar = creator.avatar && creator.avatar.url?Cursame.URL+creator.avatar.url: avatar;
-                        text = '<a href="#">'+name+'</a> ha comentado en al red';
+                        text = '<a href="#">'+userName+'</a> ha comentado en al red';
                     break;
                     case 'user_comment_on_course':
                         avatar = creator.avatar && creator.avatar.url?Cursame.URL+creator.avatar.url: avatar;
-                        text = '<a href="#">'+name+'</a> ha comentado en el curso <a href="#">'+course.title+'</a>';
+                        text = '<a href="#">'+userName+'</a> ha comentado en el curso <a href="#">'+course.title+'</a>';
                     break;
                     case 'new_delivery_on_course':
                         text = 'Se cre&oacute; la tarea <a href="#">"'+notificator.title+'"</a> en el curso <a href="#">'+course.title+'</a>';
@@ -47,16 +55,16 @@ Ext.define('Cursame.model.Notification', {
                         text = 'Se ha creado un cuestionario en el curso';
                     break;
                     case 'user_comment_on_comment':
-                        text = '<a href="#">'+name+'</a> ha comentado en el comentario '+'<a href="#">'+owner.comment+'</a>';
+                        text = '<a href="#">'+userName+'</a> ha comentado en el comentario '+'<a href="#">'+owner.comment+'</a>';
                     break;
                     case 'user_comment_on_user':
-                        text = '<a href="#">'+name+'</a> ha comentado en tu perfil '+'<a href="#">'+notificator.comment+'</a>';
+                        text = '<a href="#">'+userName+'</a> ha comentado en tu perfil '+'<a href="#">'+notificator.comment+'</a>';
                     break;
                     case 'user_comment_on_discussion':
-                        text = '<a href="#">'+name+'</a> ha comentado en una discusión';
+                        text = '<a href="#">'+userName+'</a> ha comentado en una discusión';
                     break;
                     case 'user_comment_on_delivery':
-                        text = '<a href="#">'+name+'</a> ha comentado en una tarea';
+                        text = '<a href="#">'+userName+'</a> ha comentado en una tarea';
                     break;
                 }
 

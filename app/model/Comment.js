@@ -27,11 +27,17 @@ Ext.define('Cursame.model.Comment', {
             type: 'string',
             mapping:'user',
             convert: function (user,r) {
-                var name = 'Usuario';
-                if(user && user.first_name && user.last_name){
-                    name = user.first_name+' '+user.last_name;
+                var name = '';
+                if (user && !Ext.isEmpty(user.first_name)){
+                    name = user.first_name;
                 }
-				return name;
+                if (user && !Ext.isEmpty(user.last_name)){
+                    name += ' ' + user.last_name;
+                }
+                if (Ext.isEmpty(name)){
+                    name = 'Usuario';
+                }
+                return name;
             }
         },{
             name: 'user_avatar',
@@ -97,9 +103,15 @@ Ext.define('Cursame.model.Comment', {
             name:'headerName',
             type:'string',
             convert: function (headerName,r) {
-                var name = 'Usuario';
-                if(headerName && headerName.first_name && headerName.last_name){
-                    name = headerName.first_name + ' ' + headerName.last_name;
+                var name = '';
+                if (headerName && !Ext.isEmpty(headerName.first_name)){
+                    name = headerName.first_name;
+                }
+                if (headerName && !Ext.isEmpty(headerName.last_name)){
+                    name += ' ' + headerName.last_name;
+                }
+                if (Ext.isEmpty(name)){
+                    name = 'Usuario';
                 }
                 return name;
             }
