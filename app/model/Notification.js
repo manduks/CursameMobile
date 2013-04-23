@@ -18,7 +18,7 @@ Ext.define('Cursame.model.Notification', {
             mapping:'kind',
             type: 'string',
             convert:function  (value,r) {
-                var text,avatar = Cursame.URL+'/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png',
+                var text, avatar = Cursame.URL+'/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png',
                     obj = r.get('notificator_type'),
                     notificator = obj.notificator,
                     owner = obj.owner,
@@ -35,10 +35,9 @@ Ext.define('Cursame.model.Notification', {
                 if (Ext.isEmpty(userName)){
                     userName = 'Usuario';
                 }
-
                 switch(value){
                     case 'user_comment_on_network':
-                        avatar = creator.avatar && creator.avatar.url?Cursame.URL+creator.avatar.url: avatar;
+                        avatar = creator.avatar && creator.avatar.url? Cursame.URL+creator.avatar.url: avatar;
                         text = '<a href="#">'+userName+'</a> ha comentado en al red';
                     break;
                     case 'user_comment_on_course':
@@ -46,18 +45,22 @@ Ext.define('Cursame.model.Notification', {
                         text = '<a href="#">'+userName+'</a> ha comentado en el curso <a href="#">'+course.title+'</a>';
                     break;
                     case 'new_delivery_on_course':
+                        avatar = creator.avatar && creator.avatar.url?Cursame.URL+creator.avatar.url: avatar;
                         text = 'Se cre&oacute; la tarea <a href="#">"'+notificator.title+'"</a> en el curso <a href="#">'+course.title+'</a>';
                     break;
                     case 'new_public_course_on_network':
+                        avatar = creator.avatar && creator.avatar.url?Cursame.URL+creator.avatar.url: avatar;
                         text = 'Se cre&oacute; el curso <a href="#">'+notificator.title+'</a>';
                     break;
                     case 'new_survey_on_course':
                         text = 'Se ha creado un cuestionario en el curso';
                     break;
                     case 'user_comment_on_comment':
+                        avatar = creator.avatar && creator.avatar.url?Cursame.URL+creator.avatar.url: avatar;
                         text = '<a href="#">'+userName+'</a> ha comentado en el comentario '+'<a href="#">'+owner.comment+'</a>';
                     break;
                     case 'user_comment_on_user':
+                        avatar = creator.avatar && creator.avatar.url?Cursame.URL+creator.avatar.url: avatar;
                         text = '<a href="#">'+userName+'</a> ha comentado en tu perfil '+'<a href="#">'+notificator.comment+'</a>';
                     break;
                     case 'user_comment_on_discussion':

@@ -868,7 +868,7 @@ Ext.define('Cursame.controller.phone.Main', {
             data = {};
         if (params) {
             data.headerWall = params.headerWall;
-            data.headerAvatar = params.headerAvatar;
+            data.headerAvatar = params.headerAvatar ? params.headerAvatar : params.avatar;
             data.headerName = params.headerName ? params.headerName : params.headerName = {first_name:params.first_name,last_name:params.last_name};
             data.headerBios = params.headerBios;
             if (firstCommentRecord) {
