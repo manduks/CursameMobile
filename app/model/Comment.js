@@ -93,7 +93,7 @@ Ext.define('Cursame.model.Comment', {
             type:'string',
             convert:function(headerAvatar, r){
                 var url = Cursame.URL+'/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
-                if(headerAvatar){
+                if(headerAvatar && !Ext.isEmpty(headerAvatar)){
                     url = Cursame.URL+headerAvatar
                 }
                 return url;

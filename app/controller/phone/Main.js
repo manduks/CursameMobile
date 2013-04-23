@@ -345,7 +345,7 @@ Ext.define('Cursame.controller.phone.Main', {
             publication.wall = course.coverphoto.url ? Cursame.URL + course.avatar.url : Cursame.URL + '/assets/imagecoursex.png';
             publication.coverphoto = course.coverphoto.url;
             publication.avatar = course.avatar.url ? Cursame.URL + course.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
-            publication.courseName = course.title; //@todo poner bien el titulo ...
+            publication.courseName = course.title;
             publication.user_name = userName;
         } else {
             publication.wall = user.coverphoto.url;
@@ -867,10 +867,10 @@ Ext.define('Cursame.controller.phone.Main', {
             params = me.getHeaderCommentsData(),
             data = {};
         if (params) {
-            data.headerWall = params.coverphoto;
-            data.headerAvatar = params.avatar;
+            data.headerWall = params.headerWall;
+            data.headerAvatar = params.headerAvatar;
             data.headerName = params.headerName ? params.headerName : params.headerName = {first_name:params.first_name,last_name:params.last_name};
-            data.headerBios = params.bios;
+            data.headerBios = params.headerBios;
             if (firstCommentRecord) {
                 firstCommentRecord.set('headerWall', data.headerWall);
                 firstCommentRecord.set('headerAvatar', data.headerAvatar);
