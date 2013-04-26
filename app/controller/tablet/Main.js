@@ -39,7 +39,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             },
             'navigationmenu': {
                 itemtap: 'onMenuTap'/*,
-                select: 'closeMenu'*/
+                 select: 'closeMenu'*/
             },
             'publicationslist': {
                 itemtap: 'onPublicationTap'
@@ -157,6 +157,12 @@ Ext.define('Cursame.controller.tablet.Main', {
                 'Comments': 'Comments'
             },
             'user_comment_on_user': {
+                'Comments': 'Comments'
+            },
+            'user_comment_on_discussion': {
+                'Comments': 'Comments'
+            },
+            'user_comment_on_delivery': {
                 'Comments': 'Comments'
             }
         };
@@ -357,6 +363,9 @@ Ext.define('Cursame.controller.tablet.Main', {
 
         switch (record.get('publication_type')) {
             case 'discussion':
+                if (me.getDiscussionContainer()) {
+                    me.getDiscussionContainer().destroy();
+                }
                 me.getActiveNavigationView().push({
                     xtype: 'discussionwall',
                     title: Core.Lang.es.discussion,
@@ -367,6 +376,9 @@ Ext.define('Cursame.controller.tablet.Main', {
                 me.loadCommentsByType('Discussion', publication.id);
                 break;
             case 'delivery':
+                if (me.getDeliveryContainer()) {
+                    me.getDeliveryContainer().destroy();
+                }
                 me.getActiveNavigationView().push({
                     xtype: 'deliverywall',
                     title: Core.Lang.es.delivery,
@@ -442,7 +454,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             navigationView = me.getNotificationNavigationView(),
             creator = record.get('creator'),
             userName = me.validateUserName(creator),
-            avatar = creator.avatar && creator.avatar.url ? Cursame.URL + creator.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
+            avatar = creator && creator.avatar && creator.avatar.url ? Cursame.URL + creator.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
         switch (record.get('kind')) {
             case 'user_comment_on_network':
                 navigationView.push({
@@ -506,6 +518,50 @@ Ext.define('Cursame.controller.tablet.Main', {
                     commentOwner.avatar = avatar;
                     me.getCommentContainer().setData(commentOwner);
                     me.loadCommentsByType('Comment', commentOwner.id);
+                }
+                break;
+            case 'user_comment_on_discussion':
+                var discussionOwner = record.get('owner');
+                if (discussionOwner) {
+                    if (me.getDiscussionContainer()) {
+                        me.getDiscussionContainer().destroy();
+                    }
+                    navigationView.push({
+                        xtype: 'discussionwall',
+                        title: Core.Lang.es.discussion,
+                        commentableType: data.commentable_type,
+                        commentableId: data.commentable_id
+                    });
+                    course = record.get('creator');
+                    data.wall = course.coverphoto.url;
+                    data.avatar = avatar;
+                    data.title = discussionOwner.title;
+                    data.description = discussionOwner.description;
+
+                    me.getDiscussionContainer().setData(data);
+                    me.loadCommentsByType(data.commentable_type, data.commentable_id);
+                }
+                break;
+            case 'user_comment_on_delivery':
+                var deliveryOwner = record.get('owner');
+                if (deliveryOwner) {
+                    if (me.getDeliveryContainer()) {
+                        me.getDeliveryContainer().destroy();
+                    }
+                    navigationView.push({
+                       xtype: 'deliverywall',
+                       title: Core.Lang.es.delivery,
+                       commentableType: data.commentable_type,
+                       commentableId: data.commentable_id
+                    });
+                    course = record.get('creator');
+                    data.wall = course.coverphoto.url;
+                    data.avatar = avatar;
+                    data.title = deliveryOwner.title;
+                    data.description = deliveryOwner.description;
+                    data.end_date = Core.Utils.timeAgo(deliveryOwner.end_date);
+                    me.getDeliveryContainer().setData(data);
+                    me.loadCommentsByType(data.commentable_type, data.commentable_id);
                 }
                 break;
         }
@@ -869,7 +925,7 @@ Ext.define('Cursame.controller.tablet.Main', {
         if (params) {
             data.headerWall = params.headerWall;
             data.headerAvatar = params.headerAvatar ? params.headerAvatar : params.avatar;
-            data.headerName = params.headerName ? params.headerName : params.headerName = {first_name:params.first_name,last_name:params.last_name};
+            data.headerName = params.headerName ? params.headerName : params.headerName = {first_name: params.first_name, last_name: params.last_name};
             data.headerBios = params.headerBios;
             if (firstCommentRecord) {
                 firstCommentRecord.set('headerWall', data.headerWall);
@@ -998,13 +1054,13 @@ Ext.define('Cursame.controller.tablet.Main', {
 
     validateUserName: function (user) {
         var userName = '';
-        if (!Ext.isEmpty(user.first_name)){
+        if (user && !Ext.isEmpty(user.first_name)) {
             userName = user.first_name;
         }
-        if (!Ext.isEmpty(user.last_name)){
+        if (user && !Ext.isEmpty(user.last_name)) {
             userName += ' ' + user.last_name;
         }
-        if (Ext.isEmpty(userName)){
+        if (Ext.isEmpty(userName)) {
             userName = 'Usuario';
         }
 
