@@ -64,10 +64,10 @@ Ext.define('Cursame.model.Notification', {
                         text = '<a href="#">'+userName+'</a> ha comentado en tu perfil '+'<a href="#">'+notificator.comment+'</a>';
                     break;
                     case 'user_comment_on_discussion':
-                        text = '<a href="#">'+userName+'</a> ha comentado en una discusión';
+                        text = '<a href="#">'+userName+'</a> ha comentado en una discusión '+'<a href="#">'+owner.title+'</a>';
                     break;
                     case 'user_comment_on_delivery':
-                        text = '<a href="#">'+userName+'</a> ha comentado en una tarea';
+                        text = '<a href="#">'+userName+'</a> ha comentado en una tarea '+'<a href="#">'+owner.title+'</a>';
                     break;
                 }
 
