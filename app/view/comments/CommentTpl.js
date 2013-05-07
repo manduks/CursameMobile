@@ -42,6 +42,11 @@ Ext.define('Cursame.view.comments.CommentTpl', {
                     '</div>',
                 '</div>',
                 '<div style="clear:both"></div>',
+                '<tpl if="this.canDelete(values) == true">',
+                    '<div class="delete">',
+                        '<a href="#" style="color: #0097a7; text-decoration: none; margin-right: 20px; float: right;">Eliminar</a>',
+                    '</div>',
+                '</tpl>',
                 '<div class="post">',
                     '<p>{comment_html}</p>',
                 '</div>',
@@ -87,6 +92,14 @@ Ext.define('Cursame.view.comments.CommentTpl', {
                     }
                     return bandera;
 
+                },
+                canDelete:function(values){
+                    var user = Ext.decode(localStorage.getItem("User"));
+                    if((values.user && user.id == values.user.id)
+                        || (user.roles[0].id == 1 || user.roles[0].id == 4)) {
+                        return true;
+                    }
+                    return false;
                 }
             }];
         this.callParent(html);
