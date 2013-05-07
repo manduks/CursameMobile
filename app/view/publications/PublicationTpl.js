@@ -46,6 +46,11 @@
                     '</div>',
                 '</div>',
                 '<div style="clear:both"></div>',
+                '<tpl if="this.canDelete(values) == true">',
+                    '<div class="delete">',
+                        '<a href="#" style="color: #0097a7; text-decoration: none; margin-right: 20px; float: right;">Eliminar</a>',
+                    '</div>',
+                '</tpl>',
                 '<div class="post">',
                     '<p>{content}</p>',
                     // '<img src="http://1.bp.blogspot.com/-L3PW_oxd7wE/TlPVPK50HwI/AAAAAAAALn8/RN4UpwowJek/s1600/Paisaje-Monta%25C3%25B1a-1600x1200.jpg">',
@@ -94,6 +99,14 @@
                     }
                     return bandera;
 
+                },
+                canDelete:function(values){
+                    var user = Ext.decode(localStorage.getItem("User"));
+                    if((values.publication && values.publication.user && user.id == values.publication.user.id)
+                        || (user.roles[0].id == 1 || user.roles[0].id == 4)) {
+                        return true;
+                    }
+                    return false;
                 }
             }
         ];

@@ -338,6 +338,10 @@ Ext.define('Cursame.controller.phone.Main', {
             me.onCourseCreateDiscussion(me, record.data);
             return;
         }
+        if (e.getTarget('div.delete')) {
+            me.onDelete(record, 'Publications');
+            return;
+        }
         me.pushPublicationContainer(record);
     },
     /**
@@ -441,12 +445,21 @@ Ext.define('Cursame.controller.phone.Main', {
             Ext.Viewport.add(commentsPanel);
             commentsPanel.show();
         }
+
+        if (e.getTarget('div.delete')) {
+            me.onDelete(record, 'Comments');
+            return;
+        }
     },
     /**
      * se ejecuta cuando se da click sobre algún curso
      */
     onCourseTap: function (dataview, index, target, record, e, opt) {
         var me = this;
+        if (e.getTarget('div.delete')) {
+            me.onDelete(record, 'Courses');
+            return;
+        }
         me.pushCourseToView(me.getCourseNavigationView(), record.data);
     },
     /**
@@ -553,10 +566,10 @@ Ext.define('Cursame.controller.phone.Main', {
                         me.getDeliveryContainer().destroy();
                     }
                     navigationView.push({
-                        xtype: 'deliverywall',
-                        title: Core.Lang.es.delivery,
-                        commentableType: data.commentable_type,
-                        commentableId: data.commentable_id
+                       xtype: 'deliverywall',
+                       title: Core.Lang.es.delivery,
+                       commentableType: data.commentable_type,
+                       commentableId: data.commentable_id
                     });
                     course = record.get('creator');
                     data.wall = course.coverphoto.url;
@@ -902,6 +915,10 @@ Ext.define('Cursame.controller.phone.Main', {
             me.onLike(record, 'comment', store);
             return;
         }
+        if (e.getTarget('div.delete')) {
+            me.onDelete(record, 'CommentsComments');
+            return;
+        }
     },
 
     onLike: function (record, likeOn, store) {
@@ -1088,6 +1105,54 @@ Ext.define('Cursame.controller.phone.Main', {
                 },
                 success: function (response) {
                     form.destroy();
+                }
+            });
+        }
+    },
+
+    onDelete: function (record, storeId) {
+        var store = Ext.getStore(storeId),
+            toDelete = '',
+            type = '',
+            id = '',
+            values = {};
+
+        switch (storeId) {
+            case 'Comments':
+                type = 'Comment';
+                id = record.get('id');
+                toDelete = record.get('comment');
+                break;
+            case 'CommentsComments':
+                type = 'Comment';
+                id = record.get('id');
+                toDelete = record.get('comment');
+                break;
+            case 'Publications':
+                type = record.get('publication_type');
+                id = record.get('publication_id');
+                toDelete = record.get('content');
+                break;
+            case 'Courses':
+                type = 'Course';
+                id = record.get('id');
+                toDelete = record.get('title');
+                break;
+        }
+
+        if (!Ext.isEmpty(type) && !Ext.isEmpty(id)) {
+            values.type = Core.Utils.toFirstUpperCase(type);
+            values.id = id;
+
+            Ext.Msg.confirm('Confirmación', '¿Estas seguro de querer eliminar <b>' + toDelete + '</b>?', function (b) {
+                if (b == 'yes') {
+                    Core.Utils.ajax({
+                        url: 'api/delete',
+                        params: values,
+                        success: function (response) {
+                            store.load();
+                        }
+                    });
                 }
             });
         }

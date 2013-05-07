@@ -25,6 +25,11 @@ Ext.define('Cursame.view.comments.CommentCommentTpl', {
                 '<tpl else>',
                 '<div class="comment-dislike">Ya no me gusta</div>',
                 '</tpl>',
+                '<tpl if="this.canDelete(values) == true">',
+                    '<div class="delete">',
+                        '<a href="#" style="color: #0097a7; text-decoration: none; margin-right: 20px; float: right;">Eliminar</a>',
+                    '</div>',
+                '</tpl>',
                 '<div class="post-comment">',
                     '<p>{comment_html}</p>',
                 '</div><br><div class="comment-time">{likes.length} Me Gusta - hace {created}</div>',
@@ -49,6 +54,14 @@ Ext.define('Cursame.view.comments.CommentCommentTpl', {
                 }
                 return bandera;
 
+                },
+                canDelete:function(values){
+                    var user = Ext.decode(localStorage.getItem("User"));
+                    if((values.user && user.id == values.user.id)
+                        || (user.roles[0].id == 1 || user.roles[0].id == 4)) {
+                        return true;
+                    }
+                    return false;
                 }
             }];
         this.callParent(html);

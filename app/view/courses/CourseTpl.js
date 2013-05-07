@@ -26,6 +26,11 @@ Ext.define('Cursame.view.courses.CourseTpl', {
                     '</div>',
                 '</div>',
                 '<div style="clear:both"></div>',
+                '<tpl if="this.canDelete(values) == true">',
+                    '<div class="delete">',
+                        '<a href="#" style="color: #0097a7; text-decoration: none; margin-right: 20px; float: right;">Eliminar</a>',
+                    '</div>',
+                '</tpl>',
                 '<div class="post">',
                     '<p>{silabus}</p>',
                 '</div>',
@@ -38,6 +43,20 @@ Ext.define('Cursame.view.courses.CourseTpl', {
                     } else {
                         return false;
                     }
+                },
+                canDelete: function (values) {
+                    var canDelete = false,
+                        user = Ext.decode(localStorage.getItem("User"));
+
+                    if (user.roles[0].id == 1 || user.roles[0].id == 4) {
+                        return true;
+                    }
+                    Ext.each(values.members_in_courses, function (member) {
+                        if (member.owner && member.user_id == user.id) {
+                            return canDelete = true;
+                        }
+                    }, this);
+                    return canDelete;
                 }
             }];
         this.callParent(html);
