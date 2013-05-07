@@ -39,16 +39,18 @@ Ext.define('Cursame.view.deliveries.DeliverDeliveryForm', {
                         text:'Entregar',
                         ui:'accept',
                         scope:this,
-                        handler:function (btn) {
+                        itemId:'delivery'
+                        /*handler:function (btn) {
                             console.log(this.data);
-                        }
+                        }*/
                     }
                 ]
             }, {
                 xtype: 'textareafield',
                 name: 'brief_description',
                 maxRows: 6,
-                placeHolder: 'entregar ...'
+                placeHolder: 'entregar ...',
+                itemId:'descriptionField'
             }
         ]
     }

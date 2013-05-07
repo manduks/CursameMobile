@@ -31,7 +31,8 @@ Ext.define('Cursame.controller.phone.Main', {
             commentsPanel: 'commentspanel',
             userWall: 'userwall',
             courseWall: 'coursewall',
-            navigationView: 'navigationview'
+            navigationView: 'navigationview',
+            descriptionField: 'deliverdeliveryForm #descriptionField'
         },
         control: {
             'loginform': {
@@ -97,6 +98,9 @@ Ext.define('Cursame.controller.phone.Main', {
             },
             'navigationView': {
                 back: 'onClickButtonBack'
+            },
+            'deliverdeliveryForm #delivery': {
+                tap: 'onDelivery'
             }
         }
     },
@@ -549,10 +553,10 @@ Ext.define('Cursame.controller.phone.Main', {
                         me.getDeliveryContainer().destroy();
                     }
                     navigationView.push({
-                       xtype: 'deliverywall',
-                       title: Core.Lang.es.delivery,
-                       commentableType: data.commentable_type,
-                       commentableId: data.commentable_id
+                        xtype: 'deliverywall',
+                        title: Core.Lang.es.delivery,
+                        commentableType: data.commentable_type,
+                        commentableId: data.commentable_id
                     });
                     course = record.get('creator');
                     data.wall = course.coverphoto.url;
@@ -1065,5 +1069,27 @@ Ext.define('Cursame.controller.phone.Main', {
         }
 
         return userName;
+    },
+
+    onDelivery: function (btn) {
+        var me = this,
+            form = btn.up('deliverdeliveryForm'),
+            record = me.getDeliveryContainer().getData(),
+            description = me.getDescriptionField().getValue();
+
+        if (description) {
+            Core.Utils.ajax({
+                url: 'api/assigment_delivery',
+                params: {
+                    deliveryId: record.id,
+                    title: record.title,
+                    description: description,
+                    userId: record.user_id
+                },
+                success: function (response) {
+                    form.destroy();
+                }
+            });
+        }
     }
 });
