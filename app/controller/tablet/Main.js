@@ -59,6 +59,9 @@ Ext.define('Cursame.controller.tablet.Main', {
             'deliveryform titlebar #submit': {
                 tap: 'onAddDelivery'
             },
+            'deliverycontainer':{
+                hola:'onDeliveryContainer'
+            },
             'discussionform titlebar #submit': {
                 tap: 'onAddDiscussion'
             },
@@ -491,7 +494,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 });
                 data.user_name = userName;
                 data.timeAgo = Core.Utils.timeAgo(data.created_at);
-                data.avatar = avatar
+                data.avatar = avatar;
 
                 me.getCommentContainer().setData(data);
                 me.loadCommentsByType('Comment', data.id);
@@ -835,6 +838,9 @@ Ext.define('Cursame.controller.tablet.Main', {
     onAddDelivery: function (btn) {
         this.addElement(btn, 'api/create_delivery', 'delivery');
     },
+    onDeliveryContainer:function (container) {
+        alert(4546);
+    },
     /**
      *
      */
@@ -916,7 +922,6 @@ Ext.define('Cursame.controller.tablet.Main', {
             return;
         }
     },
-
     onLike: function (record, likeOn, store) {
         var me = this,
             type, id;

@@ -7,10 +7,23 @@
 Ext.define('Cursame.view.deliveries.DeliveryContainer', {
     extend: 'Ext.Container',
     xtype: 'deliverycontainer',
-    requires: ['Cursame.view.deliveries.DeliveryTpl'],
+    requires: ['Cursame.view.deliveries.DeliveryTpl','Cursame.view.deliveries.DeliverDeliveryForm'],
     config: {
         docked: 'top',
-        addedListener: false,
-        tpl: Ext.create('Cursame.view.deliveries.DeliveryTpl')
+        tpl: Ext.create('Cursame.view.deliveries.DeliveryTpl'),
+        listeners: {
+            resize: function (container) {
+                container.on({
+                    tap: function (e) {
+                        var panel = Ext.create('Cursame.view.deliveries.DeliverDeliveryForm', {
+                            // data: container.getData()
+                        });
+                        Ext.Viewport.add(panel);
+                        panel.show('');
+                    },
+                    delegate: 'div.deliver'
+                });
+            }
+        }
     }
 });
