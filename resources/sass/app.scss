@@ -122,6 +122,17 @@ $list-active-gradient: matte;
         }
       }
     }
+
+    .delete {
+        a {
+          color: #ccc;
+          text-decoration: none;
+          margin-right: 20px;
+          margin-top: 20px;
+          float: right;
+        }
+    }
+
     .post {
       padding: 0 20px 20px 20px;
       margin-top: 10px;
@@ -335,6 +346,23 @@ $list-active-gradient: matte;
       width: 40px;
     }
   }
+  .delete {
+    a {
+      color: #ccc;
+      text-decoration: none;
+      margin-right: 20px;
+      margin-bottom: 40px;
+      float: right;
+    }
+  }
+
+  .nodelete {
+    p {
+      margin-right: 20px;
+      margin-bottom: 40px;
+      float: right;
+    }
+  }
   .comment-name {
     float: left;
     font-weight: bold;
@@ -348,20 +376,23 @@ $list-active-gradient: matte;
     font-size: 9px;
     color: #a9a9a9;
     margin-left: 14%;
-  }
-  .comment-like {
-    font-size: 9px;
-    float: right;
-    margin-right: 19%;
-    margin-top: 6%;
-    cursor: pointer;
-  }
-  .comment-dislike {
-    font-size: 9px;
-    float: right;
-    margin-right: 15%;
-    margin-top: 6%;
-    cursor: pointer
+
+    .comment-like {
+      font-size: 9px;
+      float: right;
+      color: #000000;
+      //margin-right: 19%;
+      //margin-top: 6%;
+      cursor: pointer;
+    }
+    .comment-dislike {
+      font-size: 9px;
+      float: right;
+      color: #000000;
+      //margin-right: 15%;
+      //margin-top: 6%;
+      cursor: pointer
+    }
   }
 }
 
