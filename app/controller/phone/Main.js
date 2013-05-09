@@ -763,7 +763,7 @@ Ext.define('Cursame.controller.phone.Main', {
                 },
                 success: function (response) {
                     var callback = me.addHeaderToComments.bind(me),
-                        data = me.getUserNavigationView().down('userslist').getSelection()[0];//Obtenemos el record seleccionado de la lista de usuarios de comunidad
+                        data = me.getActiveNavigationView().down('userslist') ? me.getActiveNavigationView().down('userslist').getSelection()[0] : null;//Obtenemos el record seleccionado de la lista de usuarios de comunidad
                     me.getMain().setMasked(false);
                     store.resetCurrentPage();
                     if (form) {
@@ -788,7 +788,8 @@ Ext.define('Cursame.controller.phone.Main', {
                         });
                         if (data && data.data) { //Se valida que vengan lso datos que se setearan en el header de un usuario
                             me.setHeaderCommentsData(data.data);
-                            callback = me.addHeaderToComments.bind(me);
+                        } else {
+                            callback = {};
                         }
                     }
                     store.load(callback);
@@ -916,7 +917,7 @@ Ext.define('Cursame.controller.phone.Main', {
             return;
         }
         if (e.getTarget('div.delete')) {
-            me.onDelete(record, 'CommentsComments');
+            me.onDelete(record, store);
             return;
         }
     },
@@ -948,11 +949,13 @@ Ext.define('Cursame.controller.phone.Main', {
             data.headerAvatar = params.headerAvatar ? params.headerAvatar : params.avatar;
             data.headerName = params.headerName ? params.headerName : params.headerName = {first_name: params.first_name, last_name: params.last_name};
             data.headerBios = params.headerBios;
+            data.showHeader = true;
             if (firstCommentRecord) {
                 firstCommentRecord.set('headerWall', data.headerWall);
                 firstCommentRecord.set('headerAvatar', data.headerAvatar);
                 firstCommentRecord.set('headerName', data.headerName);
                 firstCommentRecord.set('headerBios', data.headerBios);
+                firstCommentRecord.set('showHeader', data.showHeader);
                 firstCommentRecord.commit();
             } else {
                 data.emptyStore = true;
@@ -1111,17 +1114,21 @@ Ext.define('Cursame.controller.phone.Main', {
     },
 
     onDelete: function (record, storeId) {
-        var store = Ext.getStore(storeId),
+        var me = this,
+            store = Ext.getStore(storeId),
             toDelete = '',
             type = '',
             id = '',
-            values = {};
+            values = {},
+            callback = {};
 
+        me.resetCurrentPageOnStores(); //Reseteamos todos los currentPage de los stores
         switch (storeId) {
             case 'Comments':
                 type = 'Comment';
                 id = record.get('id');
                 toDelete = record.get('comment');
+                callback = me.addHeaderToComments.bind(me);
                 break;
             case 'CommentsComments':
                 type = 'Comment';
@@ -1132,6 +1139,7 @@ Ext.define('Cursame.controller.phone.Main', {
                 type = record.get('publication_type');
                 id = record.get('publication_id');
                 toDelete = record.get('content');
+                callback = me.addHeaderToPublications.bind(me);
                 break;
             case 'Courses':
                 type = 'Course';
@@ -1150,7 +1158,7 @@ Ext.define('Cursame.controller.phone.Main', {
                         url: 'api/delete',
                         params: values,
                         success: function (response) {
-                            store.load();
+                            store.load(callback);
                         }
                     });
                 }

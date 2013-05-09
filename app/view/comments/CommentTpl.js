@@ -7,9 +7,9 @@
 Ext.define('Cursame.view.comments.CommentTpl', {
     extend: 'Ext.XTemplate',
     constructor: function () {
-        var html;
+        var me = this, html;
         html = [
-            '<tpl if = "this.isFirstRecord(values) == true">',
+            '<tpl if = "this.isFirstRecord(values) == true && showHeader">',
                 '<div class="profile-header">',
                     '<div class="img-header">',
                         '<img src="{headerWall}">',

@@ -130,6 +130,10 @@ Ext.define('Cursame.model.Comment', {
                 type: 'string'
             },
             {
+                name: 'showHeader',
+                type: 'string'
+            },
+            {
                 name: 'emptyStore',
                 type: 'string'
             },
