@@ -1118,17 +1118,21 @@ Ext.define('Cursame.controller.tablet.Main', {
     },
 
     onDelete: function (record, storeId) {
-        var store = Ext.getStore(storeId),
+        var me = this,
+            store = Ext.getStore(storeId),
             toDelete = '',
             type = '',
             id = '',
-            values = {};
+            values = {},
+            callback = {};
 
+        me.resetCurrentPageOnStores(); //Reseteamos todos los currentPage de los stores
         switch (storeId) {
             case 'Comments':
                 type = 'Comment';
                 id = record.get('id');
                 toDelete = record.get('comment');
+                callback = me.addHeaderToComments.bind(me);
                 break;
             case 'CommentsComments':
                 type = 'Comment';
@@ -1139,6 +1143,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 type = record.get('publication_type');
                 id = record.get('publication_id');
                 toDelete = record.get('content');
+                callback = me.addHeaderToPublications.bind(me);
                 break;
             case 'Courses':
                 type = 'Course';
@@ -1157,7 +1162,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                         url: 'api/delete',
                         params: values,
                         success: function (response) {
-                            store.load();
+                            store.load(callback);
                         }
                     });
                 }
