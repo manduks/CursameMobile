@@ -71,11 +71,11 @@ Ext.define('Cursame.model.Publication', {
                         switch (r.get('publication_type')) {
                             case 'discussion':
                                 content = publication.title + ' </br> ';
-                                content += publication.description;
+                                content += publication.description_html;
                                 break;
                             case 'delivery':
                                 content = publication.title + ' </br> ';
-                                content += publication.description;
+                                content += publication.description_html;
                                 break;
                             case 'comment':
                                 content = publication.comment_html;
