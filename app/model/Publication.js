@@ -130,32 +130,7 @@ Ext.define('Cursame.model.Publication', {
                 type: 'date',
                 mapping: 'created_at',
                 convert: function (date, rec) {
-                    try {
-                        var now = Math.ceil(Number(new Date()) / 1000),
-                            dateTime = Math.ceil(Number(new Date(date)) / 1000),
-                            diff = now - dateTime,
-                            str;
-
-                        if (diff < 0) {
-                            diff = diff * -1;
-                        }
-                        if (diff < 60) {
-                            return String(diff) + ' s';
-                        } else if (diff < 3600) {
-                            str = String(Math.ceil(diff / (60)));
-                            return str + (str == "1" ? ' m' : ' m');
-                        } else if (diff < 86400) {
-                            str = String(Math.ceil(diff / (3600)));
-                            return str + (str == "1" ? ' h' : ' h');
-                        } else if (diff < 60 * 60 * 24 * 365) {
-                            str = String(Math.ceil(diff / (60 * 60 * 24)));
-                            return str + (str == "1" ? ' d' : ' d');
-                        } else {
-                            return Ext.Date.format(new Date(date), 'jS M \'y');
-                        }
-                    } catch (e) {
-                        return '';
-                    }
+                    return Core.Utils.timeAgo(date);
                 }
             },
             {

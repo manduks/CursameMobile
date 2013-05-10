@@ -26,7 +26,9 @@
         'Cursame.view.deliveries.DeliveryWall',
         'Cursame.view.comments.CommentWall',
         'Cursame.view.notifications.NotificationNavigationView',
-        'Cursame.view.users.UserNavigationView'
+        'Cursame.view.users.UserNavigationView',
+        'Cursame.view.assignments.AssignmentsList',
+        'Cursame.view.assignments.AssignmentCalificationForm'
     ],
      config:{
          menu:{

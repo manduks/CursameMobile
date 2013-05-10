@@ -31,7 +31,8 @@
         delivery:'Tarea',
         comment:'Comentario',
         start:'Inicio',
-        notifications:'Notificaciones'
+        notifications:'Notificaciones',
+        assignments:'Entregas'
     }
 });
 

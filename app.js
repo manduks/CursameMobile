@@ -15,7 +15,8 @@ Ext.application({
         'Cursame.view.publications.PublicationTpl',
         'Cursame.view.comments.CommentTpl',
         'Cursame.view.comments.CommentCommentTpl',
-        'Ext.data.Store'
+        'Ext.data.Store',
+        'Cursame.view.assignments.AssignmentTpl'
     ],
 
     profiles: ['Tablet', 'Phone'], //aqui por momento solo activamos las vistas de la tablet
@@ -25,7 +26,8 @@ Ext.application({
             'CommentsComments',
             'Courses',
             'Notifications',
-            'Users'
+            'Users',
+            'Assignments'
     ],
     icon: {
         '57': 'resources/icons/Icon.png',

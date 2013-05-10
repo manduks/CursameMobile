@@ -85,6 +85,7 @@ Ext.define('Cursame.controller.phone.Main', {
                 itemtap: 'onCommentTap'
             },
             'deliverywall': {
+                initialize: 'onInitializeDeliveryWall',
                 itemtap: 'onCommentTap'
             },
             'discussionwall': {
@@ -101,6 +102,12 @@ Ext.define('Cursame.controller.phone.Main', {
             },
             'deliverdeliveryForm #delivery': {
                 tap: 'onDelivery'
+            },
+            'assignmentslist': {
+                itemtap: 'onAssignmentTap'
+            },
+            'assignmentcalificationform button[action=calificar]': {
+                tap: 'onCalificarButtonTap'
             }
         }
     },
@@ -495,7 +502,7 @@ Ext.define('Cursame.controller.phone.Main', {
                 });
                 data.user_name = userName;
                 data.timeAgo = Core.Utils.timeAgo(data.created_at);
-                data.avatar = avatar
+                data.avatar = avatar;
 
                 me.getCommentContainer().setData(data);
                 me.loadCommentsByType('Comment', data.id);
@@ -1155,6 +1162,68 @@ Ext.define('Cursame.controller.phone.Main', {
                     });
                 }
             });
+        }
+    },
+
+    onInitializeDeliveryWall: function (list) {
+        var me = this,
+            user = Ext.decode(localStorage.getItem("User")),
+            role = user.roles[0].id,
+            deliveryContainer = list.down('deliverycontainer');
+
+
+        deliveryContainer.element.on({
+            tap: function (e) {
+                if (role == 3) {
+                    var assignments = Ext.getStore('Assignments'),
+                        record = deliveryContainer.getData();
+                    me.getActiveNavigationView().push({
+                        xtype: 'assignmentslist',
+                        title: Core.Lang.es.assignments
+                    });
+                    assignments.setParams({
+                        course_id : record.id
+                    });
+                    assignments.load();
+                } else {
+                    var panel = Ext.create('Cursame.view.deliveries.DeliverDeliveryForm');
+                    Ext.Viewport.add(panel);
+                    panel.show('');
+                }
+            },
+            delegate: 'div.deliver'
+        });
+    },
+
+    onAssignmentTap:function(list, index, target, record, e, opt){
+        if (e.getTarget('div.calification')) {
+            var panel = Ext.create('Cursame.view.assignments.AssignmentCalificationForm',{
+                assignmentId:record.get('id')
+            });
+            Ext.Viewport.add(panel);
+            panel.show('');
+        }
+    },
+
+    onCalificarButtonTap:function(btn){
+        var assignments = Ext.getStore('Assignments'),
+            form = btn.up('assignmentcalificationform'),
+            calificacion = form.down('numberfield').getValue();
+
+        if (!Ext.isEmpty(calificacion)) {
+            Core.Utils.ajax({
+                url: 'api/qualify_assignment',
+                params: {
+                    assignment_id: form.getAssignmentId(),
+                    calification: calificacion
+                },
+                success: function (response) {
+                    assignments.load();
+                    form.destroy();
+                }
+            });
+        } else {
+            Ext.Msg.alert('', 'Escribe una calificación númerica.');
         }
     }
 });
