@@ -192,10 +192,16 @@ Ext.define('Cursame.controller.phone.Main', {
      *
      */
     getData: function (numNotifications) {
-        var user, avatar, me = this;
+        var user, avatar, me = this, numNotifications = 0;
 
         user = Ext.decode(localStorage.getItem("User"));
         avatar = user.avatar.url ? Cursame.URL + user.avatar.url : Cursame.URL + '/assets/imagex-c0ba274a8613da88126e84b2cd3b80b3.png';
+        Ext.each(user.notifications, function(notification) {
+            if(notification.active) {
+                numNotifications++;
+            }
+        });
+
         return [
             {
                 name: me.validateUserName(user),
@@ -210,7 +216,7 @@ Ext.define('Cursame.controller.phone.Main', {
             {
                 name: 'Notificaciones',
                 icon: Cursame.ASSETSURL + 'resources/images/notification.png',
-                numNotifications: user.notifications.length,
+                numNotifications: numNotifications,
                 group: 'MURO'
             },
             {
