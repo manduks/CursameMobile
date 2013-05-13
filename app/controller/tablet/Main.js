@@ -770,7 +770,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                 },
                 success: function (response) {
                     var callback = me.addHeaderToComments.bind(me),
-                        data = me.getUserNavigationView().down('userslist').getSelection()[0];//Obtenemos el record seleccionado de la lista de usuarios de comunidad
+                        data = me.getActiveNavigationView().down('userslist') ? me.getActiveNavigationView().down('userslist').getSelection()[0] : null;//Obtenemos el record seleccionado de la lista de usuarios de comunidad
                     me.getMain().setMasked(false);
                     store.resetCurrentPage();
                     if (form) {
@@ -795,7 +795,8 @@ Ext.define('Cursame.controller.tablet.Main', {
                         });
                         if (data && data.data) { //Se valida que vengan lso datos que se setearan en el header de un usuario
                             me.setHeaderCommentsData(data.data);
-                            callback = me.addHeaderToComments.bind(me);
+                        } else {
+                            callback = {};
                         }
                     }
                     store.load(callback);
@@ -924,7 +925,7 @@ Ext.define('Cursame.controller.tablet.Main', {
             return;
         }
         if (e.getTarget('div.delete')) {
-            me.onDelete(record, 'CommentsComments');
+            me.onDelete(record, store);
             return;
         }
     },
@@ -955,11 +956,13 @@ Ext.define('Cursame.controller.tablet.Main', {
             data.headerAvatar = params.headerAvatar ? params.headerAvatar : params.avatar;
             data.headerName = params.headerName ? params.headerName : params.headerName = {first_name: params.first_name, last_name: params.last_name};
             data.headerBios = params.headerBios;
+            data.showHeader = true;
             if (firstCommentRecord) {
                 firstCommentRecord.set('headerWall', data.headerWall);
                 firstCommentRecord.set('headerAvatar', data.headerAvatar);
                 firstCommentRecord.set('headerName', data.headerName);
                 firstCommentRecord.set('headerBios', data.headerBios);
+                firstCommentRecord.set('showHeader', data.showHeader);
                 firstCommentRecord.commit();
             } else {
                 data.emptyStore = true;

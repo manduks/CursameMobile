@@ -928,7 +928,6 @@ Ext.define('Cursame.controller.phone.Main', {
             return;
         }
     },
-
     onLike: function (record, likeOn, store) {
         var me = this,
             type, id;
