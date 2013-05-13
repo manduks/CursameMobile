@@ -349,6 +349,9 @@ Ext.define('Cursame.controller.phone.Main', {
             me.onDelete(record, 'Publications');
             return;
         }
+        if (e.getTarget('object')) { //En el caso de los videos de Youtube
+            return;
+        }
         me.pushPublicationContainer(record);
     },
     /**
