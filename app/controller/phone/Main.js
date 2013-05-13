@@ -1190,7 +1190,7 @@ Ext.define('Cursame.controller.phone.Main', {
                         title: Core.Lang.es.assignments
                     });
                     assignments.setParams({
-                        course_id : record.id
+                        delivery_id : record.id
                     });
                     assignments.load();
                 } else {

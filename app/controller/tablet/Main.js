@@ -1187,7 +1187,7 @@ Ext.define('Cursame.controller.tablet.Main', {
                         title: Core.Lang.es.assignments
                     });
                     assignments.setParams({
-                        course_id : record.id
+                        delivery_id : record.id
                     });
                     assignments.load();
                 } else {
