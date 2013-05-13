@@ -98,21 +98,31 @@ Ext.define('Cursame.model.Publication', {
                 mapping: 'publication',
                 convert: function (v, r) {
                     var title = '',
-                        courses = r.get('courses'),
                         course = r.raw.courses && r.raw.courses[0] ? r.raw.courses[0] : {title: 'Sin Titulo'},
-                        user = r.get('user');
+                        user = v && v.user ? v.user : 'Usuario',
+                        name = '';
+
+                        if (user && !Ext.isEmpty(user.first_name)) {
+                            name = user.first_name;
+                        }
+                        if (user && !Ext.isEmpty(user.last_name)) {
+                            name += ' ' + user.last_name;
+                        }
+                        if (Ext.isEmpty(name)) {
+                            name = 'Usuario';
+                        }
                     if (course) {
                         switch (r.get('publication_type')) {
                             case 'discussion':
                                 title = 'Discusión nueva ';
-                                title += courses ? 'en el curso de <b>' + course.title + '</b>' : '<b>en la red' + '</b>';
+                                title += course ? 'en el curso de <b>' + course.title + '</b>' : '<b>en la red' + '</b>';
                                 break;
                             case 'delivery':
                                 title = 'Se ha creado una tarea en el curso <b>' + course.title + '</b>';
                                 break;
                             case 'comment':
-                                title = 'Comentario  ';
-                                title += courses ? 'en el curso de <b>' + course.title + '</b>' : '<b>en la red' + '</b>';
+                                title = '<b>'+name+'</b>'+' ha comentado ';
+                                title += course ? 'en el curso de <b>' + course.title + '</b>' : '<b>en la red' + '</b>';
                                 break;
                             case 'course':
                                 title = 'Curso nuevo en la red <b>' + course.title + '</b>';
